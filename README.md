@@ -2,6 +2,7 @@
 [![Bash Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/bash.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/bash.yml)
 [![Git Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/git.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/git.yml)
 [![Link Check Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/links.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/links.yml)
+[![Woke Workflow](https://github.com/vpayno/gophercises-quizgame/actions/workflows/woke.yml/badge.svg)](https://github.com/vpayno/gophercises-quizgame/actions/workflows/woke.yml)
 
 # "Powerful Cli Applications in Go" Workspace
 
