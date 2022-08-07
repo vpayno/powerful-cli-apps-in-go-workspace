@@ -1,0 +1,30 @@
+#!/bin/bash
+
+main()
+{
+	go generate ./...
+
+	echo gotest -v -covermode=count -coverprofile=./reports/.coverage.out -cover ./...
+	time gotest -v -covermode=count -coverprofile=./reports/.coverage.out -cover ./...
+	printf "\n"
+
+	# go install golang.org/x/tools/cmd/cover@latest
+
+	echo go tool cover -html=./reports/.coverage.out -o=reports/coverage.html
+	time go tool cover -html=./reports/.coverage.out -o=reports/coverage.html
+	printf "\n"
+
+	echo go tool cover -func=./reports/.coverage.out -o=reports/coverage.txt
+	time go tool cover -func=./reports/.coverage.out -o=reports/coverage.txt
+	printf "\n"
+
+	printf "=== ./reports/coverage.txt ===\n"
+	cat reports/coverage.txt
+	printf "\n"
+}
+
+time main
+
+echo git restore ./cmd/*/.version.txt
+time git restore ./cmd/*/.version.txt
+printf "\n"

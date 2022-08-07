@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo go generate ./...
+time go generate ./...
+printf "\n"
+
+time go "$@"
+echo go "$@"
+printf "\n"
+
+echo git restore ./cmd/*/.version.txt
+time git restore ./cmd/*/.version.txt
+printf "\n"
