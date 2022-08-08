@@ -2,6 +2,7 @@ package appwc
 
 import (
 	"bufio"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -16,7 +17,13 @@ func showBanner() {
 
 // RunApp is called my the main function. It's basically the main function of the app.
 func RunApp() {
-	conf := setup()
+	conf, err := setup()
+
+	if err != nil {
+		fmt.Print("Error: ")
+		fmt.Println(err)
+		return
+	}
 
 	if conf.versionMode {
 		showVersion()
@@ -32,17 +39,24 @@ func RunApp() {
 	showCount(count, conf)
 }
 
-func setup() config {
+func setup() (config, error) {
 	byteMode := flag.Bool("b", defaults.lineMode, "count bytes instead of words")
 	lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
 	versionMode := flag.Bool("V", false, "show the app version")
 	flag.Parse()
 
-	return config{
+	conf := config{
 		byteMode:    *byteMode,
 		lineMode:    *lineMode,
 		versionMode: *versionMode,
 	}
+
+	if conf.byteMode && conf.lineMode {
+		err := errors.New("-b (byte count mode) and -l (line count mode) can't be used at the same time")
+		return config{}, err
+	}
+
+	return conf, nil
 }
 
 func getCount(r io.Reader, c config) int {

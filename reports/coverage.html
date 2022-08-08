@@ -107,6 +107,7 @@ func main() <span class="cov8" title="1">{
 
 import (
         "bufio"
+        "errors"
         "flag"
         "fmt"
         "io"
@@ -120,10 +121,16 @@ func showBanner() <span class="cov3" title="2">{
 }</span>
 
 // RunApp is called my the main function. It's basically the main function of the app.
-func RunApp() <span class="cov3" title="2">{
-        conf := setup()
+func RunApp() <span class="cov5" title="3">{
+        conf, err := setup()
 
-        if conf.versionMode </span><span class="cov1" title="1">{
+        if err != nil </span><span class="cov1" title="1">{
+                fmt.Print("Error: ")
+                fmt.Println(err)
+                return
+        }</span>
+
+        <span class="cov3" title="2">if conf.versionMode </span><span class="cov1" title="1">{
                 showVersion()
                 return
         }</span>
@@ -137,18 +144,25 @@ func RunApp() <span class="cov3" title="2">{
         showCount(count, conf)</span>
 }
 
-func setup() config <span class="cov6" title="4">{
+func setup() (config, error) <span class="cov7" title="5">{
         byteMode := flag.Bool("b", defaults.lineMode, "count bytes instead of words")
         lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
         versionMode := flag.Bool("V", false, "show the app version")
         flag.Parse()
 
-        return config{
+        conf := config{
                 byteMode:    *byteMode,
                 lineMode:    *lineMode,
                 versionMode: *versionMode,
         }
-}</span>
+
+        if conf.byteMode &amp;&amp; conf.lineMode </span><span class="cov1" title="1">{
+                err := errors.New("-b (byte count mode) and -l (line count mode) can't be used at the same time")
+                return config{}, err
+        }</span>
+
+        <span class="cov6" title="4">return conf, nil</span>
+}
 
 func getCount(r io.Reader, c config) int <span class="cov6" title="4">{
         scanner := bufio.NewScanner(r)

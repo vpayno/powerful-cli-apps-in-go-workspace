@@ -57,7 +57,11 @@ func TestSetupFlags(t *testing.T) {
 	// -l
 	os.Args = []string{"test", "-l"}
 
-	got := setup()
+	got, err := setup()
+
+	if err != nil {
+		t.Error(err)
+	}
 
 	if want.lineMode != got.lineMode {
 		t.Errorf("setup() returned the wrong line mode value. want: %v, got %v", want.lineMode, got.lineMode)
@@ -69,7 +73,11 @@ func TestSetupFlags(t *testing.T) {
 func TestSetupFlagVersion(t *testing.T) {
 	// -V
 	os.Args = []string{"test", "-V"}
-	conf := setup()
+	conf, err := setup()
+
+	if err != nil {
+		t.Error(err)
+	}
 
 	if !conf.versionMode {
 		t.Errorf("versionMode: want %v, got %v", true, conf.versionMode)
@@ -252,8 +260,6 @@ func TestRunApp(t *testing.T) {
 }
 
 func TestRunAppFlagVersion(t *testing.T) {
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
-
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -270,6 +276,41 @@ func TestRunAppFlagVersion(t *testing.T) {
 	want := "\nWord Count Version: " + metadata.version + "\n\n\n"
 
 	os.Args = []string{"test", "-V"}
+	RunApp()
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("RunApp (Flag -V): want %q, got %q", want, got)
+	}
+
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
+}
+
+func TestRunAppFlagByteAndLine(t *testing.T) {
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	want := "Error: -b (byte count mode) and -l (line count mode) can't be used at the same time\n"
+
+	os.Args = []string{"test", "-b", "-l"}
 	RunApp()
 
 	// Stop capturing stdout.
