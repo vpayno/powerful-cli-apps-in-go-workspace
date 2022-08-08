@@ -57,7 +57,7 @@
 				
 				<option value="file0">github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go (100.0%)</option>
 				
-				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (91.7%)</option>
+				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (92.9%)</option>
 				
 				<option value="file2">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go (100.0%)</option>
 				
@@ -111,6 +111,7 @@ import (
         "fmt"
         "io"
         "os"
+        "unicode/utf8"
 )
 
 func showBanner() <span class="cov3" title="2">{
@@ -137,38 +138,47 @@ func RunApp() <span class="cov1" title="1">{
 }
 
 func setup() config <span class="cov5" title="3">{
+        byteMode := flag.Bool("b", defaults.lineMode, "count bytes instead of words")
         lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
         versionMode := flag.Bool("V", false, "show the app version")
         flag.Parse()
 
         return config{
+                byteMode:    *byteMode,
                 lineMode:    *lineMode,
                 versionMode: *versionMode,
         }
 }</span>
 
-func getCount(r io.Reader, c config) int <span class="cov5" title="3">{
+func getCount(r io.Reader, c config) int <span class="cov6" title="4">{
         scanner := bufio.NewScanner(r)
 
-        if !c.lineMode </span><span class="cov1" title="1">{
+        var count int
+
+        if !c.lineMode </span><span class="cov3" title="2">{
                 scanner.Split(bufio.ScanWords)
         }</span>
 
-        <span class="cov5" title="3">var count int
+        <span class="cov6" title="4">for scanner.Scan() </span><span class="cov10" title="11">{
+                if c.byteMode </span><span class="cov1" title="1">{
+                        count += utf8.RuneCountInString(scanner.Text())
+                }</span> else<span class="cov9" title="10"> {
+                        count++
+                }</span>
+        }
 
-        for scanner.Scan() </span><span class="cov10" title="10">{
-                count++
-        }</span>
-
-        <span class="cov5" title="3">return count</span>
+        <span class="cov6" title="4">return count</span>
 }
 
-func showCount(n int, conf config) <span class="cov5" title="3">{
-        if conf.lineMode </span><span class="cov3" title="2">{
-                fmt.Printf("line count: %d\n", n)
-        }</span> else<span class="cov1" title="1"> {
-                fmt.Printf("word count: %d\n", n)
-        }</span>
+func showCount(n int, conf config) <span class="cov6" title="4">{
+        switch </span>{
+        case conf.byteMode:<span class="cov1" title="1">
+                fmt.Printf("byte count: %d\n", n)</span>
+        case conf.lineMode:<span class="cov3" title="2">
+                fmt.Printf("line count: %d\n", n)</span>
+        default:<span class="cov1" title="1">
+                fmt.Printf("word count: %d\n", n)</span>
+        }
 }
 </pre>
 		
@@ -194,11 +204,13 @@ var metadata = appInfo{
 }
 
 type config struct {
+        byteMode    bool
         lineMode    bool
         versionMode bool
 }
 
 var defaults = config{
+        byteMode:    false,
         lineMode:    false,
         versionMode: false,
 }

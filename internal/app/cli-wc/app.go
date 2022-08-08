@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"unicode/utf8"
 )
 
 func showBanner() {
@@ -32,11 +33,13 @@ func RunApp() {
 }
 
 func setup() config {
+	byteMode := flag.Bool("b", defaults.lineMode, "count bytes instead of words")
 	lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
 	versionMode := flag.Bool("V", false, "show the app version")
 	flag.Parse()
 
 	return config{
+		byteMode:    *byteMode,
 		lineMode:    *lineMode,
 		versionMode: *versionMode,
 	}
@@ -45,23 +48,30 @@ func setup() config {
 func getCount(r io.Reader, c config) int {
 	scanner := bufio.NewScanner(r)
 
+	var count int
+
 	if !c.lineMode {
 		scanner.Split(bufio.ScanWords)
 	}
 
-	var count int
-
 	for scanner.Scan() {
-		count++
+		if c.byteMode {
+			count += utf8.RuneCountInString(scanner.Text())
+		} else {
+			count++
+		}
 	}
 
 	return count
 }
 
 func showCount(n int, conf config) {
-	if conf.lineMode {
+	switch {
+	case conf.byteMode:
+		fmt.Printf("byte count: %d\n", n)
+	case conf.lineMode:
 		fmt.Printf("line count: %d\n", n)
-	} else {
+	default:
 		fmt.Printf("word count: %d\n", n)
 	}
 }

@@ -108,6 +108,21 @@ func TestGetLineCount(t *testing.T) {
 	}
 }
 
+func TestGetByteCount(t *testing.T) {
+	b := bytes.NewBufferString("0123456789")
+
+	conf := config{
+		byteMode: true,
+	}
+
+	want := 10
+	got := getCount(b, conf)
+
+	if want != got {
+		t.Errorf("Expected byte count %d, got %d.\n", want, got)
+	}
+}
+
 func TestShowWordCount(t *testing.T) {
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
@@ -185,6 +200,46 @@ func TestShowLineCount(t *testing.T) {
 	got := buf.String()
 	if got != want {
 		t.Errorf("show line count: want %q, got %q", want, got)
+	}
+}
+
+func TestShowByteCount(t *testing.T) {
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	count := 5
+
+	conf := config{
+		byteMode: true,
+	}
+
+	// It's a silly test but I need the practice.
+	want := fmt.Sprintf("byte count: %d\n", count)
+
+	// Run the function who's output we want to capture.
+	showCount(count, conf)
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("show byte count: want %q, got %q", want, got)
 	}
 }
 

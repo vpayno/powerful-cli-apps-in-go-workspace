@@ -20,11 +20,13 @@ var metadata = appInfo{
 }
 
 type config struct {
+	byteMode    bool
 	lineMode    bool
 	versionMode bool
 }
 
 var defaults = config{
+	byteMode:    false,
 	lineMode:    false,
 	versionMode: false,
 }
