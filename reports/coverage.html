@@ -82,7 +82,8 @@
 		</div>
 		<div id="content">
 		
-		<pre class="file" id="file0" style="display: none">package main
+		<pre class="file" id="file0" style="display: none">// Package main is the main module for the wc application.
+package main
 
 import (
         appwc "github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc"
@@ -103,7 +104,8 @@ func main() <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file1" style="display: none">package appwc
+		<pre class="file" id="file1" style="display: none">// Package appwc is the module with the cli logic for the wc main application.
+package appwc
 
 import (
         "bufio"
@@ -135,11 +137,11 @@ func RunApp() <span class="cov5" title="3">{
                 return
         }</span>
 
-        <span class="cov1" title="1">showBanner()
+        <span class="cov1" title="1">if logVerbose </span><span class="cov1" title="1">{
+                showBanner()
+        }</span>
 
-        var count int
-
-        count = getCount(os.Stdin, conf)
+        <span class="cov1" title="1">count := getCount(os.Stdin, conf)
 
         showCount(count, conf)</span>
 }
@@ -147,14 +149,18 @@ func RunApp() <span class="cov5" title="3">{
 func setup() (config, error) <span class="cov7" title="5">{
         byteMode := flag.Bool("b", defaults.lineMode, "count bytes instead of words")
         lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
+        verboseMode := flag.Bool("v", false, "verbose mode")
         versionMode := flag.Bool("V", false, "show the app version")
         flag.Parse()
 
         conf := config{
                 byteMode:    *byteMode,
                 lineMode:    *lineMode,
+                verboseMode: *verboseMode,
                 versionMode: *versionMode,
         }
+
+        logVerbose = conf.verboseMode
 
         if conf.byteMode &amp;&amp; conf.lineMode </span><span class="cov1" title="1">{
                 err := errors.New("-b (byte count mode) and -l (line count mode) can't be used at the same time")
@@ -169,7 +175,7 @@ func getCount(r io.Reader, c config) int <span class="cov6" title="4">{
 
         var count int
 
-        if !c.lineMode </span><span class="cov3" title="2">{
+        if !c.lineMode </span><span class="cov5" title="3">{
                 scanner.Split(bufio.ScanWords)
         }</span>
 
@@ -184,15 +190,22 @@ func getCount(r io.Reader, c config) int <span class="cov6" title="4">{
         <span class="cov6" title="4">return count</span>
 }
 
-func showCount(n int, conf config) <span class="cov6" title="4">{
-        switch </span>{
-        case conf.byteMode:<span class="cov1" title="1">
-                fmt.Printf("byte count: %d\n", n)</span>
-        case conf.lineMode:<span class="cov3" title="2">
-                fmt.Printf("line count: %d\n", n)</span>
-        default:<span class="cov1" title="1">
-                fmt.Printf("word count: %d\n", n)</span>
+func showCount(n int, conf config) <span class="cov8" title="7">{
+        var prompt string
+
+        if logVerbose </span><span class="cov6" title="4">{
+                switch </span>{
+                case conf.byteMode:<span class="cov1" title="1">
+                        prompt = "byte count: "</span>
+                case conf.lineMode:<span class="cov1" title="1">
+                        prompt = "line count: "</span>
+                default:<span class="cov3" title="2">
+                        prompt = "word count: "</span>
+                }
         }
+
+        <span class="cov8" title="7">fmt.Print(prompt)
+        fmt.Printf("%d\n", n)</span>
 }
 </pre>
 		
@@ -203,6 +216,8 @@ import (
         "os"
         "strings"
 )
+
+var logVerbose = false
 
 type appInfo struct {
         name       string
@@ -220,12 +235,14 @@ var metadata = appInfo{
 type config struct {
         byteMode    bool
         lineMode    bool
+        verboseMode bool
         versionMode bool
 }
 
 var defaults = config{
         byteMode:    false,
         lineMode:    false,
+        verboseMode: false,
         versionMode: false,
 }
 
@@ -274,10 +291,13 @@ func showVersion() <span class="cov10" title="2">{
 var OSExit = os.Exit
 
 // Exit is used to prematurely end the application with an exit code and message to stdout.
-func Exit(code int, msg string) <span class="cov1" title="1">{
-        fmt.Println(msg)
-        OSExit(code)
-}</span>
+func Exit(code int, msg string) <span class="cov10" title="2">{
+        if logVerbose </span><span class="cov1" title="1">{
+                fmt.Println(msg)
+        }</span>
+
+        <span class="cov10" title="2">OSExit(code)</span>
+}
 </pre>
 		
 		</div>

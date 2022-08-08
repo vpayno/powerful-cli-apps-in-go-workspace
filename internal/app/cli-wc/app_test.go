@@ -131,6 +131,141 @@ func TestGetByteCount(t *testing.T) {
 	}
 }
 
+func TestShowWordCountVerbose(t *testing.T) {
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	count := 5
+
+	conf := config{
+		lineMode:    false,
+		verboseMode: true,
+	}
+
+	logVerbose = true
+
+	// It's a silly test but I need the practice.
+	want := fmt.Sprintf("word count: %d\n", count)
+
+	// Run the function who's output we want to capture.
+	showCount(count, conf)
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("show word count: want %q, got %q", want, got)
+	}
+
+	logVerbose = false
+}
+
+func TestShowLineCountVerbose(t *testing.T) {
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	count := 5
+
+	conf := config{
+		lineMode:    true,
+		verboseMode: true,
+	}
+
+	logVerbose = true
+
+	// It's a silly test but I need the practice.
+	want := fmt.Sprintf("line count: %d\n", count)
+
+	// Run the function who's output we want to capture.
+	showCount(count, conf)
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("show line count: want %q, got %q", want, got)
+	}
+
+	logVerbose = false
+}
+
+func TestShowByteCountVerbose(t *testing.T) {
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	count := 5
+
+	conf := config{
+		byteMode:    true,
+		verboseMode: true,
+	}
+
+	logVerbose = true
+
+	// It's a silly test but I need the practice.
+	want := fmt.Sprintf("byte count: %d\n", count)
+
+	// Run the function who's output we want to capture.
+	showCount(count, conf)
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("show byte count: want %q, got %q", want, got)
+	}
+
+	logVerbose = false
+}
+
 func TestShowWordCount(t *testing.T) {
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
@@ -148,11 +283,14 @@ func TestShowWordCount(t *testing.T) {
 	count := 5
 
 	conf := config{
-		lineMode: false,
+		lineMode:    false,
+		verboseMode: true,
 	}
 
+	logVerbose = false
+
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("word count: %d\n", count)
+	want := fmt.Sprintf("%d\n", count)
 
 	// Run the function who's output we want to capture.
 	showCount(count, conf)
@@ -188,11 +326,14 @@ func TestShowLineCount(t *testing.T) {
 	count := 5
 
 	conf := config{
-		lineMode: true,
+		lineMode:    true,
+		verboseMode: true,
 	}
 
+	logVerbose = false
+
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("line count: %d\n", count)
+	want := fmt.Sprintf("%d\n", count)
 
 	// Run the function who's output we want to capture.
 	showCount(count, conf)
@@ -228,11 +369,14 @@ func TestShowByteCount(t *testing.T) {
 	count := 5
 
 	conf := config{
-		byteMode: true,
+		byteMode:    true,
+		verboseMode: true,
 	}
 
+	logVerbose = false
+
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("byte count: %d\n", count)
+	want := fmt.Sprintf("%d\n", count)
 
 	// Run the function who's output we want to capture.
 	showCount(count, conf)
@@ -252,7 +396,7 @@ func TestShowByteCount(t *testing.T) {
 }
 
 func TestRunApp(t *testing.T) {
-	os.Args = []string{"test", "-l"}
+	os.Args = []string{"test", "-v"}
 
 	RunApp()
 

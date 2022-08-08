@@ -15,7 +15,7 @@ import (
   https://github.com/joncalhoun/algorithmswithgo.com/blob/master/module01/fizz_buzz_test.go
 */
 
-func TestExit(t *testing.T) {
+func TestExitVerbose(t *testing.T) {
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -33,10 +33,55 @@ func TestExit(t *testing.T) {
 	code := 123
 	msg := "testing Exit()"
 	want := fmt.Sprintf("%s\nCalling os.Exit(%d)...\n", msg, code)
+	logVerbose = true
+
 	OSExitBackup := OSExit
 	OSExit = func(code int) { fmt.Printf("Calling os.Exit(%d)...\n", code) }
 	Exit(code, msg)
 	OSExit = OSExitBackup
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	logVerbose = false
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("Exit(); want %q, got %q", want, got)
+	}
+}
+
+func TestExit(t *testing.T) {
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	// It's a silly test but I need the practice mocking.
+	code := 123
+	msg := "testing Exit()"
+	want := fmt.Sprintf("Calling os.Exit(%d)...\n", code)
+	logVerbose = false
+
+	OSExitBackup := OSExit
+	OSExit = func(code int) { fmt.Printf("Calling os.Exit(%d)...\n", code) }
+	Exit(code, msg)
+	OSExit = OSExitBackup
+
+	logVerbose = false
 
 	// Stop capturing stdout.
 	writer.Close()

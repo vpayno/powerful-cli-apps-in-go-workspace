@@ -1,3 +1,4 @@
+// Package main is the main module for the wc application.
 package main
 
 import (

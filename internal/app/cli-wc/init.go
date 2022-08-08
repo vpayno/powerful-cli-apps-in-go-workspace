@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+var logVerbose = false
+
 type appInfo struct {
 	name       string
 	version    string
@@ -22,12 +24,14 @@ var metadata = appInfo{
 type config struct {
 	byteMode    bool
 	lineMode    bool
+	verboseMode bool
 	versionMode bool
 }
 
 var defaults = config{
 	byteMode:    false,
 	lineMode:    false,
+	verboseMode: false,
 	versionMode: false,
 }
 
@@ -77,6 +81,9 @@ var OSExit = os.Exit
 
 // Exit is used to prematurely end the application with an exit code and message to stdout.
 func Exit(code int, msg string) {
-	fmt.Println(msg)
+	if logVerbose {
+		fmt.Println(msg)
+	}
+
 	OSExit(code)
 }

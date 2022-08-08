@@ -1,3 +1,4 @@
+// Package appwc is the module with the cli logic for the wc main application.
 package appwc
 
 import (
@@ -30,11 +31,11 @@ func RunApp() {
 		return
 	}
 
-	showBanner()
+	if logVerbose {
+		showBanner()
+	}
 
-	var count int
-
-	count = getCount(os.Stdin, conf)
+	count := getCount(os.Stdin, conf)
 
 	showCount(count, conf)
 }
@@ -42,14 +43,18 @@ func RunApp() {
 func setup() (config, error) {
 	byteMode := flag.Bool("b", defaults.lineMode, "count bytes instead of words")
 	lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
+	verboseMode := flag.Bool("v", false, "verbose mode")
 	versionMode := flag.Bool("V", false, "show the app version")
 	flag.Parse()
 
 	conf := config{
 		byteMode:    *byteMode,
 		lineMode:    *lineMode,
+		verboseMode: *verboseMode,
 		versionMode: *versionMode,
 	}
+
+	logVerbose = conf.verboseMode
 
 	if conf.byteMode && conf.lineMode {
 		err := errors.New("-b (byte count mode) and -l (line count mode) can't be used at the same time")
@@ -80,12 +85,19 @@ func getCount(r io.Reader, c config) int {
 }
 
 func showCount(n int, conf config) {
-	switch {
-	case conf.byteMode:
-		fmt.Printf("byte count: %d\n", n)
-	case conf.lineMode:
-		fmt.Printf("line count: %d\n", n)
-	default:
-		fmt.Printf("word count: %d\n", n)
+	var prompt string
+
+	if logVerbose {
+		switch {
+		case conf.byteMode:
+			prompt = "byte count: "
+		case conf.lineMode:
+			prompt = "line count: "
+		default:
+			prompt = "word count: "
+		}
 	}
+
+	fmt.Print(prompt)
+	fmt.Printf("%d\n", n)
 }
