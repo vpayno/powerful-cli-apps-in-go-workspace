@@ -20,11 +20,13 @@ var metadata = appInfo{
 }
 
 type config struct {
-	lineMode bool
+	lineMode    bool
+	versionMode bool
 }
 
 var defaults = config{
-	lineMode: false,
+	lineMode:    false,
+	versionMode: false,
 }
 
 // SetVersion is used my the main package to pass version information to the app package.

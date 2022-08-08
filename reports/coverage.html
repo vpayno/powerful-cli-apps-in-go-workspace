@@ -55,9 +55,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (100.0%)</option>
-				
-				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go (100.0%)</option>
+				<option value="file0">github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -80,149 +78,24 @@
 		</div>
 		<div id="content">
 		
-		<pre class="file" id="file0" style="display: none">package appwc
+		<pre class="file" id="file0" style="display: none">package main
 
 import (
-        "bufio"
-        "flag"
-        "fmt"
-        "io"
-        "os"
+        appwc "github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc"
+
+        _ "embed"
 )
 
-func showBanner() <span class="cov4" title="2">{
-        fmt.Println(metadata.name + " Version " + metadata.version)
-        fmt.Println()
+//go:generate bash ../../scripts/go-generate-helper-git-version-info
+//go:embed .version.txt
+var version []byte
+
+func init() <span class="cov8" title="1">{
+        appwc.SetVersion(version)
 }</span>
 
-// RunApp is called my the main function. It's basically the main function of the app.
-func RunApp() <span class="cov1" title="1">{
-        conf := setup()
-
-        showBanner()
-
-        var count int
-
-        count = getCount(os.Stdin, conf)
-
-        showCount(count, conf)
-}</span>
-
-func setup() config <span class="cov7" title="3">{
-        lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
-        version := flag.Bool("V", false, "show the app version")
-        flag.Parse()
-
-        if *version </span><span class="cov1" title="1">{
-                showVersion()
-                Exit(0, "")
-        }</span>
-
-        <span class="cov7" title="3">return config{
-                lineMode: *lineMode,
-        }</span>
-}
-
-func getCount(r io.Reader, c config) int <span class="cov4" title="2">{
-        scanner := bufio.NewScanner(r)
-
-        scanner.Split(bufio.ScanWords)
-
-        var count int
-
-        for scanner.Scan() </span><span class="cov10" title="5">{
-                count++
-        }</span>
-
-        <span class="cov4" title="2">return count</span>
-}
-
-func showCount(n int, conf config) <span class="cov4" title="2">{
-        if conf.lineMode </span><span class="cov1" title="1">{
-                fmt.Printf("line count: %d\n", n)
-        }</span> else<span class="cov1" title="1"> {
-                fmt.Printf("word count: %d\n", n)
-        }</span>
-}
-</pre>
-		
-		<pre class="file" id="file1" style="display: none">package appwc
-
-import (
-        "fmt"
-        "os"
-        "strings"
-)
-
-type appInfo struct {
-        name       string
-        version    string
-        gitVersion string
-        gitHash    string
-        buildTime  string
-}
-
-var metadata = appInfo{
-        name:    "Word Count",
-        version: "0.0.0",
-}
-
-type config struct {
-        lineMode bool
-}
-
-var defaults = config{
-        lineMode: false,
-}
-
-// SetVersion is used my the main package to pass version information to the app package.
-func SetVersion(b []byte) <span class="cov10" title="2">{
-        slice := strings.Split(string(b), "\n")
-        slice = slice[:len(slice)-1]
-
-        if slice[0] != "" </span><span class="cov10" title="2">{
-                metadata.version = slice[0]
-        }</span>
-
-        <span class="cov10" title="2">if len(slice) &gt; 1 </span><span class="cov10" title="2">{
-                if slice[1] != "" </span><span class="cov10" title="2">{
-                        metadata.gitVersion = slice[1]
-                }</span>
-                <span class="cov10" title="2">if slice[2] != "" </span><span class="cov10" title="2">{
-                        metadata.gitHash = slice[2]
-                }</span>
-                <span class="cov10" title="2">if slice[3] != "" </span><span class="cov10" title="2">{
-                        metadata.buildTime = slice[3]
-                }</span>
-        }
-}
-
-func showVersion() <span class="cov10" title="2">{
-        fmt.Println()
-        fmt.Printf("%s Version: %s\n\n", metadata.name, metadata.version)
-
-        if metadata.gitVersion != "" </span><span class="cov10" title="2">{
-                fmt.Printf("git version: %s\n", metadata.gitVersion)
-        }</span>
-
-        <span class="cov10" title="2">if metadata.gitHash != "" </span><span class="cov10" title="2">{
-                fmt.Printf("   git hash: %s\n", metadata.gitHash)
-        }</span>
-
-        <span class="cov10" title="2">if metadata.buildTime != "" </span><span class="cov10" title="2">{
-                fmt.Printf(" build time: %s\n", metadata.buildTime)
-        }</span>
-
-        <span class="cov10" title="2">fmt.Println()</span>
-}
-
-// OSExit is used to Money Patch the Exit function during testing.
-var OSExit = os.Exit
-
-// Exit is used to prematurely end the application with an exit code and message to stdout.
-func Exit(code int, msg string) <span class="cov10" title="2">{
-        fmt.Println(msg)
-        OSExit(code)
+func main() <span class="cov8" title="1">{
+        appwc.RunApp()
 }</span>
 </pre>
 		

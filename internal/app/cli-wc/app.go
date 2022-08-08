@@ -17,6 +17,11 @@ func showBanner() {
 func RunApp() {
 	conf := setup()
 
+	if conf.versionMode {
+		showVersion()
+		return
+	}
+
 	showBanner()
 
 	var count int
@@ -28,16 +33,12 @@ func RunApp() {
 
 func setup() config {
 	lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
-	version := flag.Bool("V", false, "show the app version")
+	versionMode := flag.Bool("V", false, "show the app version")
 	flag.Parse()
 
-	if *version {
-		showVersion()
-		Exit(0, "")
-	}
-
 	return config{
-		lineMode: *lineMode,
+		lineMode:    *lineMode,
+		versionMode: *versionMode,
 	}
 }
 

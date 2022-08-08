@@ -67,6 +67,18 @@ func TestSetupFlags(t *testing.T) {
 }
 
 func TestSetupFlagVersion(t *testing.T) {
+	// -V
+	os.Args = []string{"test", "-V"}
+	conf := setup()
+
+	if !conf.versionMode {
+		t.Errorf("versionMode: want %v, got %v", true, conf.versionMode)
+	}
+
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
+}
+
+func TestShowWordCount(t *testing.T) {
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
