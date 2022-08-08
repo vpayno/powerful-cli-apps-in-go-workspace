@@ -57,7 +57,7 @@
 				
 				<option value="file0">github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go (100.0%)</option>
 				
-				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (92.9%)</option>
+				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (100.0%)</option>
 				
 				<option value="file2">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go (100.0%)</option>
 				
@@ -120,10 +120,10 @@ func showBanner() <span class="cov3" title="2">{
 }</span>
 
 // RunApp is called my the main function. It's basically the main function of the app.
-func RunApp() <span class="cov1" title="1">{
+func RunApp() <span class="cov3" title="2">{
         conf := setup()
 
-        if conf.versionMode </span><span class="cov0" title="0">{
+        if conf.versionMode </span><span class="cov1" title="1">{
                 showVersion()
                 return
         }</span>
@@ -137,7 +137,7 @@ func RunApp() <span class="cov1" title="1">{
         showCount(count, conf)</span>
 }
 
-func setup() config <span class="cov5" title="3">{
+func setup() config <span class="cov6" title="4">{
         byteMode := flag.Bool("b", defaults.lineMode, "count bytes instead of words")
         lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
         versionMode := flag.Bool("V", false, "show the app version")
@@ -237,7 +237,7 @@ func SetVersion(b []byte) <span class="cov10" title="2">{
         }
 }
 
-func showVersion() <span class="cov1" title="1">{
+func showVersion() <span class="cov10" title="2">{
         fmt.Println()
         fmt.Printf("%s Version: %s\n\n", metadata.name, metadata.version)
 
@@ -245,15 +245,15 @@ func showVersion() <span class="cov1" title="1">{
                 fmt.Printf("git version: %s\n", metadata.gitVersion)
         }</span>
 
-        <span class="cov1" title="1">if metadata.gitHash != "" </span><span class="cov1" title="1">{
+        <span class="cov10" title="2">if metadata.gitHash != "" </span><span class="cov1" title="1">{
                 fmt.Printf("   git hash: %s\n", metadata.gitHash)
         }</span>
 
-        <span class="cov1" title="1">if metadata.buildTime != "" </span><span class="cov1" title="1">{
+        <span class="cov10" title="2">if metadata.buildTime != "" </span><span class="cov1" title="1">{
                 fmt.Printf(" build time: %s\n", metadata.buildTime)
         }</span>
 
-        <span class="cov1" title="1">fmt.Println()</span>
+        <span class="cov10" title="2">fmt.Println()</span>
 }
 
 // OSExit is used to Money Patch the Exit function during testing.

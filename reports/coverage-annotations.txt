@@ -1,19 +1,1 @@
 
-18     	func RunApp() {
-19     		conf := setup()
-20     	
-21     		if conf.versionMode {
-22 MISS			showVersion()
-23 MISS			return
-24     		}
-25     	
-26     		showBanner()
-27     	
-28     		var count int
-29     	
-30     		count = getCount(os.Stdin, conf)
-31     	
-32     		showCount(count, conf)
-33     	}
-
-

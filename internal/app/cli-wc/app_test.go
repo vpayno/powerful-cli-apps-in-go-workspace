@@ -247,4 +247,43 @@ func TestRunApp(t *testing.T) {
 	os.Args = []string{"test", "-l"}
 
 	RunApp()
+
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
+}
+
+func TestRunAppFlagVersion(t *testing.T) {
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
+
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	want := "\nWord Count Version: " + metadata.version + "\n\n\n"
+
+	os.Args = []string{"test", "-V"}
+	RunApp()
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("RunApp (Flag -V): want %q, got %q", want, got)
+	}
+
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
