@@ -78,56 +78,6 @@ func TestSetupFlagVersion(t *testing.T) {
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
 
-func TestShowWordCount(t *testing.T) {
-	testStdout, writer, err := os.Pipe()
-	if err != nil {
-		t.Errorf("os.Pipe() err %v; want %v", err, nil)
-	}
-
-	osStdout := os.Stdout // keep backup of the real stdout
-	os.Stdout = writer
-
-	defer func() {
-		// Undo what we changed when this test is done.
-		os.Stdout = osStdout
-	}()
-
-	metadata.gitVersion = "1.2.3-456-abcdef"
-	metadata.gitHash = "abcdefabcdefabcdefabcdefabcdefabcdef"
-	metadata.buildTime = "date-time"
-
-	want := "\n"
-	want += fmt.Sprintf("%s Version: %s\n\n", metadata.name, metadata.version)
-	want += fmt.Sprintf("git version: %s\n", metadata.gitVersion)
-	want += fmt.Sprintf("   git hash: %s\n", metadata.gitHash)
-	want += fmt.Sprintf(" build time: %s\n", metadata.buildTime)
-	want += "\n"
-	want += "\n"
-
-	// -V
-	os.Args = []string{"test", "-V"}
-	OSExitBackup := OSExit
-	OSExit = func(code int) { _ = code }
-	// It's not going to exit, it will return a value we don't want.
-	_ = setup()
-	OSExit = OSExitBackup
-
-	// Stop capturing stdout.
-	writer.Close()
-
-	var buf bytes.Buffer
-	_, err = io.Copy(&buf, testStdout)
-	if err != nil {
-		t.Error(err)
-	}
-	got := buf.String()
-	if got != want {
-		t.Errorf("Exit(); want %q, got %q", want, got)
-	}
-
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
-}
-
 func TestGetWordCount(t *testing.T) {
 	b := bytes.NewBufferString("one two three four five\n")
 
@@ -140,6 +90,21 @@ func TestGetWordCount(t *testing.T) {
 
 	if want != got {
 		t.Errorf("Expected word count %d, got %d.\n", want, got)
+	}
+}
+
+func TestGetLineCount(t *testing.T) {
+	b := bytes.NewBufferString("one\ntwo\nthree\nfour\nfive\n")
+
+	conf := config{
+		lineMode: true,
+	}
+
+	want := 5
+	got := getCount(b, conf)
+
+	if want != got {
+		t.Errorf("Expected line count %d, got %d.\n", want, got)
 	}
 }
 
@@ -180,6 +145,46 @@ func TestShowWordCount(t *testing.T) {
 	got := buf.String()
 	if got != want {
 		t.Errorf("show word count: want %q, got %q", want, got)
+	}
+}
+
+func TestShowLineCount(t *testing.T) {
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	count := 5
+
+	conf := config{
+		lineMode: true,
+	}
+
+	// It's a silly test but I need the practice.
+	want := fmt.Sprintf("line count: %d\n", count)
+
+	// Run the function who's output we want to capture.
+	showCount(count, conf)
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("show line count: want %q, got %q", want, got)
 	}
 }
 

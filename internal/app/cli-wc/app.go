@@ -45,7 +45,9 @@ func setup() config {
 func getCount(r io.Reader, c config) int {
 	scanner := bufio.NewScanner(r)
 
-	scanner.Split(bufio.ScanWords)
+	if !c.lineMode {
+		scanner.Split(bufio.ScanWords)
+	}
 
 	var count int
 
