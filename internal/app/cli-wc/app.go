@@ -31,7 +31,7 @@ func RunApp() {
 		return
 	}
 
-	if logVerbose {
+	if conf.verboseMode {
 		showBanner()
 	}
 
@@ -53,8 +53,6 @@ func setup() (config, error) {
 		verboseMode: *verboseMode,
 		versionMode: *versionMode,
 	}
-
-	logVerbose = conf.verboseMode
 
 	if conf.byteMode && conf.lineMode {
 		err := errors.New("-b (byte count mode) and -l (line count mode) can't be used at the same time")
@@ -87,7 +85,7 @@ func getCount(r io.Reader, c config) int {
 func showCount(n int, conf config) {
 	var prompt string
 
-	if logVerbose {
+	if conf.verboseMode {
 		switch {
 		case conf.byteMode:
 			prompt = "byte count: "

@@ -6,8 +6,6 @@ import (
 	"strings"
 )
 
-var logVerbose = false
-
 type appInfo struct {
 	name       string
 	version    string
@@ -81,9 +79,6 @@ var OSExit = os.Exit
 
 // Exit is used to prematurely end the application with an exit code and message to stdout.
 func Exit(code int, msg string) {
-	if logVerbose {
-		fmt.Println(msg)
-	}
-
+	fmt.Println(msg)
 	OSExit(code)
 }

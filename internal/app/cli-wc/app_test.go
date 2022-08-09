@@ -152,8 +152,6 @@ func TestShowWordCountVerbose(t *testing.T) {
 		verboseMode: true,
 	}
 
-	logVerbose = true
-
 	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("word count: %d\n", count)
 
@@ -172,8 +170,6 @@ func TestShowWordCountVerbose(t *testing.T) {
 	if got != want {
 		t.Errorf("show word count: want %q, got %q", want, got)
 	}
-
-	logVerbose = false
 }
 
 func TestShowLineCountVerbose(t *testing.T) {
@@ -197,8 +193,6 @@ func TestShowLineCountVerbose(t *testing.T) {
 		verboseMode: true,
 	}
 
-	logVerbose = true
-
 	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("line count: %d\n", count)
 
@@ -217,8 +211,6 @@ func TestShowLineCountVerbose(t *testing.T) {
 	if got != want {
 		t.Errorf("show line count: want %q, got %q", want, got)
 	}
-
-	logVerbose = false
 }
 
 func TestShowByteCountVerbose(t *testing.T) {
@@ -242,8 +234,6 @@ func TestShowByteCountVerbose(t *testing.T) {
 		verboseMode: true,
 	}
 
-	logVerbose = true
-
 	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("byte count: %d\n", count)
 
@@ -262,8 +252,6 @@ func TestShowByteCountVerbose(t *testing.T) {
 	if got != want {
 		t.Errorf("show byte count: want %q, got %q", want, got)
 	}
-
-	logVerbose = false
 }
 
 func TestShowWordCount(t *testing.T) {
@@ -284,10 +272,8 @@ func TestShowWordCount(t *testing.T) {
 
 	conf := config{
 		lineMode:    false,
-		verboseMode: true,
+		verboseMode: false,
 	}
-
-	logVerbose = false
 
 	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d\n", count)
@@ -327,10 +313,8 @@ func TestShowLineCount(t *testing.T) {
 
 	conf := config{
 		lineMode:    true,
-		verboseMode: true,
+		verboseMode: false,
 	}
-
-	logVerbose = false
 
 	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d\n", count)
@@ -370,10 +354,8 @@ func TestShowByteCount(t *testing.T) {
 
 	conf := config{
 		byteMode:    true,
-		verboseMode: true,
+		verboseMode: false,
 	}
-
-	logVerbose = false
 
 	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d\n", count)

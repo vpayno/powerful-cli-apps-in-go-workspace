@@ -137,7 +137,7 @@ func RunApp() <span class="cov5" title="3">{
                 return
         }</span>
 
-        <span class="cov1" title="1">if logVerbose </span><span class="cov1" title="1">{
+        <span class="cov1" title="1">if conf.verboseMode </span><span class="cov1" title="1">{
                 showBanner()
         }</span>
 
@@ -159,8 +159,6 @@ func setup() (config, error) <span class="cov7" title="5">{
                 verboseMode: *verboseMode,
                 versionMode: *versionMode,
         }
-
-        logVerbose = conf.verboseMode
 
         if conf.byteMode &amp;&amp; conf.lineMode </span><span class="cov1" title="1">{
                 err := errors.New("-b (byte count mode) and -l (line count mode) can't be used at the same time")
@@ -193,7 +191,7 @@ func getCount(r io.Reader, c config) int <span class="cov6" title="4">{
 func showCount(n int, conf config) <span class="cov8" title="7">{
         var prompt string
 
-        if logVerbose </span><span class="cov6" title="4">{
+        if conf.verboseMode </span><span class="cov6" title="4">{
                 switch </span>{
                 case conf.byteMode:<span class="cov1" title="1">
                         prompt = "byte count: "</span>
@@ -216,8 +214,6 @@ import (
         "os"
         "strings"
 )
-
-var logVerbose = false
 
 type appInfo struct {
         name       string
@@ -291,13 +287,10 @@ func showVersion() <span class="cov10" title="2">{
 var OSExit = os.Exit
 
 // Exit is used to prematurely end the application with an exit code and message to stdout.
-func Exit(code int, msg string) <span class="cov10" title="2">{
-        if logVerbose </span><span class="cov1" title="1">{
-                fmt.Println(msg)
-        }</span>
-
-        <span class="cov10" title="2">OSExit(code)</span>
-}
+func Exit(code int, msg string) <span class="cov1" title="1">{
+        fmt.Println(msg)
+        OSExit(code)
+}</span>
 </pre>
 		
 		</div>
