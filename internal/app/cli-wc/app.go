@@ -41,7 +41,7 @@ func RunApp() {
 }
 
 func setup() (config, error) {
-	byteMode := flag.Bool("b", defaults.lineMode, "count bytes instead of words")
+	byteMode := flag.Bool("b", defaults.byteMode, "count bytes instead of words")
 	lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
 	verboseMode := flag.Bool("v", false, "verbose mode")
 	versionMode := flag.Bool("V", false, "show the app version")
