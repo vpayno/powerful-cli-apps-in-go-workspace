@@ -141,5 +141,5 @@ $ printf "%s\n" one two three four five | ./cli-wc -b
 $ printf "%s\n" one two three four five | ./cli-wc -b -v
 Word Count Version v0.0.0
 
-byte count: 19
+byte count: 24
 ```
