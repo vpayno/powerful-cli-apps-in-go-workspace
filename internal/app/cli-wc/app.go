@@ -59,20 +59,23 @@ func setup() (config, error) {
 		return config{}, err
 	}
 
+	// setting this after testing if both -b and -l are set simplifies this step.
+	conf.wordMode = !(conf.byteMode || conf.lineMode)
+
 	return conf, nil
 }
 
-func getCount(r io.Reader, c config) int {
+func getCount(r io.Reader, conf config) int {
 	scanner := bufio.NewScanner(r)
 
 	var count int
 
-	if !c.lineMode {
+	if conf.wordMode {
 		scanner.Split(bufio.ScanWords)
 	}
 
 	for scanner.Scan() {
-		if c.byteMode {
+		if conf.byteMode {
 			count += utf8.RuneCountInString(scanner.Text())
 		} else {
 			count++
