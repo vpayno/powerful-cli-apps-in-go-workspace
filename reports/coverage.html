@@ -109,12 +109,12 @@ package appwc
 
 import (
         "bufio"
+        "bytes"
         "errors"
         "flag"
         "fmt"
         "io"
         "os"
-        "unicode/utf8"
 )
 
 func showBanner() <span class="cov3" title="2">{
@@ -171,6 +171,19 @@ func setup() (config, error) <span class="cov8" title="7">{
         return conf, nil</span>
 }
 
+type readCounter struct {
+        io.Reader
+        bytesRead int
+}
+
+// Read returns the number of bytes counted or an error code.
+func (r *readCounter) Read(b []byte) (int, error) <span class="cov3" title="2">{
+        count, err := r.Reader.Read(b)
+        r.bytesRead += count
+
+        return count, err
+}</span>
+
 func getCount(r io.Reader, conf config) int <span class="cov6" title="4">{
         scanner := bufio.NewScanner(r)
 
@@ -182,13 +195,27 @@ func getCount(r io.Reader, conf config) int <span class="cov6" title="4">{
 
         <span class="cov6" title="4">for scanner.Scan() </span><span class="cov10" title="11">{
                 if conf.byteMode </span><span class="cov1" title="1">{
-                        count += utf8.RuneCountInString(scanner.Text())
+                        count += getCountBytes(scanner.Text())
                 }</span> else<span class="cov9" title="10"> {
                         count++
                 }</span>
         }
 
         <span class="cov6" title="4">return count</span>
+}
+
+func getCountBytes(s string) int <span class="cov1" title="1">{
+        b := &amp;readCounter{Reader: bytes.NewBufferString(s)}
+
+        scanner := bufio.NewScanner(b)
+
+        var count int
+
+        for scanner.Scan() </span><span class="cov1" title="1">{
+                count += b.bytesRead
+        }</span>
+
+        <span class="cov1" title="1">return count</span>
 }
 
 func showCount(n int, conf config) <span class="cov8" title="7">{

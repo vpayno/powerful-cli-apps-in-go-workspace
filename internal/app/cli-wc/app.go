@@ -3,12 +3,12 @@ package appwc
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"flag"
 	"fmt"
 	"io"
 	"os"
-	"unicode/utf8"
 )
 
 func showBanner() {
@@ -65,6 +65,19 @@ func setup() (config, error) {
 	return conf, nil
 }
 
+type readCounter struct {
+	io.Reader
+	bytesRead int
+}
+
+// Read returns the number of bytes counted or an error code.
+func (r *readCounter) Read(b []byte) (int, error) {
+	count, err := r.Reader.Read(b)
+	r.bytesRead += count
+
+	return count, err
+}
+
 func getCount(r io.Reader, conf config) int {
 	scanner := bufio.NewScanner(r)
 
@@ -76,10 +89,24 @@ func getCount(r io.Reader, conf config) int {
 
 	for scanner.Scan() {
 		if conf.byteMode {
-			count += utf8.RuneCountInString(scanner.Text())
+			count += getCountBytes(scanner.Text())
 		} else {
 			count++
 		}
+	}
+
+	return count
+}
+
+func getCountBytes(s string) int {
+	b := &readCounter{Reader: bytes.NewBufferString(s)}
+
+	scanner := bufio.NewScanner(b)
+
+	var count int
+
+	for scanner.Scan() {
+		count += b.bytesRead
 	}
 
 	return count
