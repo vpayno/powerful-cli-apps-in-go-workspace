@@ -43,6 +43,7 @@ func RunApp() {
 func setup() (config, error) {
 	byteMode := flag.Bool("b", defaults.byteMode, "count bytes instead of words")
 	lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
+	wordMode := flag.Bool("w", defaults.wordMode, "count words (default)")
 	verboseMode := flag.Bool("v", false, "verbose mode")
 	versionMode := flag.Bool("V", false, "show the app version")
 	flag.Parse()
@@ -50,6 +51,7 @@ func setup() (config, error) {
 	conf := config{
 		byteMode:    *byteMode,
 		lineMode:    *lineMode,
+		wordMode:    *wordMode,
 		verboseMode: *verboseMode,
 		versionMode: *versionMode,
 	}
@@ -57,10 +59,8 @@ func setup() (config, error) {
 	if conf.byteMode && conf.lineMode {
 		err := errors.New("-b (byte count mode) and -l (line count mode) can't be used at the same time")
 		return config{}, err
+		conf.wordMode = false // byte and line count can override word count since it's enabled by default
 	}
-
-	// setting this after testing if both -b and -l are set simplifies this step.
-	conf.wordMode = !(conf.byteMode || conf.lineMode)
 
 	return conf, nil
 }

@@ -30,7 +30,7 @@ type config struct {
 var defaults = config{
 	byteMode:    false,
 	lineMode:    false,
-	wordMode:    false,
+	wordMode:    true,
 	verboseMode: false,
 	versionMode: false,
 }
