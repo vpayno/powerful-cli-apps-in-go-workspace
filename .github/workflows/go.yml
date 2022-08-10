@@ -113,12 +113,6 @@ jobs:
         go install github.com/go-critic/go-critic/cmd/gocritic@latest
         gocritic check -enableAll ./... |& reviewdog -efm="%f:%l:%c: %m" -name="gocritic" -reporter=github-pr-check
 
-    - name: Testing with golangci-lint
-      id: go-test-golangci-lint
-      run: |
-        go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-        golangci-lint run --out-format=line-number ./... | reviewdog -f=golangci-lint -name="golangci-lint" -filter-mode=added -reporter=github-pr-check
-
     - name: Testing with gocyclo
       id: go-test-gocyclo
       run: |
@@ -136,6 +130,12 @@ jobs:
       run: |
         go install github.com/quasilyte/go-consistent@latest
         go-consistent -v ./... | reviewdog -efm="%f:%l:%c: %m" -name="go-consistent" -reporter=github-pr-check
+
+    - name: Testing with golangci-lint
+      id: go-test-golangci-lint
+      run: |
+        go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+        golangci-lint run --out-format=line-number ./... | reviewdog -f=golangci-lint -name="golangci-lint" -filter-mode=added -reporter=github-pr-check
 
     - name: Testing with gosec
       id: go-test-security
