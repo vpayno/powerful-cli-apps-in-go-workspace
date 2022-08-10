@@ -3,12 +3,12 @@ package appwc
 
 import (
 	"bufio"
-	"bytes"
 	"errors"
 	"flag"
 	"fmt"
 	"io"
 	"os"
+	"unicode/utf8"
 )
 
 func showBanner() {
@@ -43,6 +43,7 @@ func RunApp() {
 func setup() (config, error) {
 	byteMode := flag.Bool("b", defaults.byteMode, "count bytes instead of words")
 	lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
+	runeMode := flag.Bool("r", defaults.byteMode, "count runes instead of words")
 	wordMode := flag.Bool("w", defaults.wordMode, "count words (default)")
 	verboseMode := flag.Bool("v", false, "verbose mode")
 	versionMode := flag.Bool("V", false, "show the app version")
@@ -51,36 +52,35 @@ func setup() (config, error) {
 	conf := config{
 		byteMode:    *byteMode,
 		lineMode:    *lineMode,
+		runeMode:    *runeMode,
 		wordMode:    *wordMode,
 		verboseMode: *verboseMode,
 		versionMode: *versionMode,
 	}
 
-	if conf.byteMode && conf.lineMode {
-		err := errors.New("-b (byte count mode) and -l (line count mode) can't be used at the same time")
+	// If line mode is set, disable the other modes.
+	if conf.lineMode {
+		conf.byteMode = false
+		conf.runeMode = false
+	}
+
+	// fail if both byte and rune modes are set.
+	if conf.byteMode && conf.runeMode {
+		err := errors.New("-b (byte count mode) and -r (rune count mode) can't be used at the same time")
 		return config{}, err
-		conf.wordMode = false // byte and line count can override word count since it's enabled by default
+	}
+
+	// byte, rune and line mode can override word mode since it's enabled by default
+	if conf.byteMode || conf.runeMode || conf.lineMode {
+		conf.wordMode = false
 	}
 
 	return conf, nil
 }
 
-type readCounter struct {
-	io.Reader
-	bytesRead int
-}
-
-// Read returns the number of bytes counted or an error code.
-func (r *readCounter) Read(b []byte) (int, error) {
-	count, err := r.Reader.Read(b)
-	r.bytesRead += count
-
-	return count, err
-}
-
 func getCount(r io.Reader, conf config) int {
-	if conf.byteMode {
-		return getCountBytes(r)
+	if conf.byteMode || conf.runeMode {
+		return getCountBytes(r, conf)
 	}
 
 	scanner := bufio.NewScanner(r)
@@ -98,7 +98,7 @@ func getCount(r io.Reader, conf config) int {
 	return count
 }
 
-func getCountBytes(input io.Reader) int {
+func getCountBytes(input io.Reader, conf config) int {
 	r := bufio.NewReader(input)
 
 	var err error
@@ -110,21 +110,12 @@ func getCountBytes(input io.Reader) int {
 		// instead of using /n, using null
 		str, err = r.ReadString('\x00')
 
-		count += len(str)
-	}
-
-	return count
-}
-
-func getCountRunes(s string) int {
-	b := &readCounter{Reader: bytes.NewBufferString(s)}
-
-	scanner := bufio.NewScanner(b)
-
-	var count int
-
-	for scanner.Scan() {
-		count += b.bytesRead
+		switch {
+		case conf.byteMode:
+			count += len(str)
+		case conf.runeMode:
+			count += utf8.RuneCountInString(str)
+		}
 	}
 
 	return count
@@ -139,7 +130,9 @@ func showCount(n int, conf config) {
 			prompt = "byte count: "
 		case conf.lineMode:
 			prompt = "line count: "
-		default:
+		case conf.runeMode:
+			prompt = "rune count: "
+		case conf.wordMode:
 			prompt = "word count: "
 		}
 	}

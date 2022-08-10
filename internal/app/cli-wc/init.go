@@ -22,6 +22,7 @@ var metadata = appInfo{
 type config struct {
 	byteMode    bool
 	lineMode    bool
+	runeMode    bool
 	wordMode    bool
 	verboseMode bool
 	versionMode bool
@@ -30,6 +31,7 @@ type config struct {
 var defaults = config{
 	byteMode:    false,
 	lineMode:    false,
+	runeMode:    false,
 	wordMode:    true,
 	verboseMode: false,
 	versionMode: false,

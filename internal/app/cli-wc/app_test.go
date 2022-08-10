@@ -159,17 +159,32 @@ func TestGetLineCount(t *testing.T) {
 }
 
 func TestGetByteCount(t *testing.T) {
-	b := bytes.NewBufferString("0123456789")
+	b := bytes.NewBufferString("0123456789\n0123456789\n")
 
 	conf := config{
 		byteMode: true,
 	}
 
-	want := 10
+	want := 22
 	got := getCount(b, conf)
 
 	if want != got {
 		t.Errorf("Expected byte count %d, got %d.\n", want, got)
+	}
+}
+
+func TestGetRuneCount(t *testing.T) {
+	b := bytes.NewBufferString("0123456789\n0123456789\n")
+
+	conf := config{
+		runeMode: true,
+	}
+
+	want := 22
+	got := getCount(b, conf)
+
+	if want != got {
+		t.Errorf("Expected rune count %d, got %d.\n", want, got)
 	}
 }
 
@@ -190,7 +205,7 @@ func TestShowWordCountVerbose(t *testing.T) {
 	count := 5
 
 	conf := config{
-		lineMode:    false,
+		wordMode:    true,
 		verboseMode: true,
 	}
 
@@ -278,6 +293,47 @@ func TestShowByteCountVerbose(t *testing.T) {
 
 	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("byte count: %d\n", count)
+
+	// Run the function who's output we want to capture.
+	showCount(count, conf)
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("show byte count: want %q, got %q", want, got)
+	}
+}
+
+func TestShowRuneCountVerbose(t *testing.T) {
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	count := 5
+
+	conf := config{
+		runeMode:    true,
+		verboseMode: true,
+	}
+
+	// It's a silly test but I need the practice.
+	want := fmt.Sprintf("rune count: %d\n", count)
 
 	// Run the function who's output we want to capture.
 	showCount(count, conf)
@@ -419,6 +475,47 @@ func TestShowByteCount(t *testing.T) {
 	}
 }
 
+func TestShowRuneCount(t *testing.T) {
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	count := 5
+
+	conf := config{
+		runeMode:    true,
+		verboseMode: false,
+	}
+
+	// It's a silly test but I need the practice.
+	want := fmt.Sprintf("%d\n", count)
+
+	// Run the function who's output we want to capture.
+	showCount(count, conf)
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("show rune count: want %q, got %q", want, got)
+	}
+}
+
 func TestRunApp(t *testing.T) {
 	os.Args = []string{"test", "-v"}
 
@@ -462,7 +559,7 @@ func TestRunAppFlagVersion(t *testing.T) {
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
 
-func TestRunAppFlagByteAndLine(t *testing.T) {
+func TestRunAppFlagByteAndRune(t *testing.T) {
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -476,9 +573,9 @@ func TestRunAppFlagByteAndLine(t *testing.T) {
 		os.Stdout = osStdout
 	}()
 
-	want := "Error: -b (byte count mode) and -l (line count mode) can't be used at the same time\n"
+	want := "Error: -b (byte count mode) and -r (rune count mode) can't be used at the same time\n"
 
-	os.Args = []string{"test", "-b", "-l"}
+	os.Args = []string{"test", "-b", "-r"}
 	RunApp()
 
 	// Stop capturing stdout.
@@ -491,7 +588,7 @@ func TestRunAppFlagByteAndLine(t *testing.T) {
 	}
 	got := buf.String()
 	if got != want {
-		t.Errorf("RunApp (Flag -V): want %q, got %q", want, got)
+		t.Errorf("RunApp (Flag !-V): want %q, got %q", want, got)
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
