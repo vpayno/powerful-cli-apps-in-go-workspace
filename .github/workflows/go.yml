@@ -119,17 +119,17 @@ jobs:
         go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
         gocyclo -over "${GOCYCLO_OVER_THRESHOLD}" .
 
-    - name: Testing with staticcheck
-      id: go-test-staticcheck
-      run: |
-        go install honnef.co/go/tools/cmd/staticcheck@latest
-        staticcheck ./... | reviewdog -efm="%f:%l:%c: %m" -name="staticcheck" -reporter=github-pr-check
-
     - name: Testing with go-consistent
       id: go-test-go-consistent
       run: |
         go install github.com/quasilyte/go-consistent@latest
         go-consistent -v ./... | reviewdog -efm="%f:%l:%c: %m" -name="go-consistent" -reporter=github-pr-check
+
+    - name: Testing with staticcheck
+      id: go-test-staticcheck
+      run: |
+        go install honnef.co/go/tools/cmd/staticcheck@latest
+        staticcheck ./... | reviewdog -efm="%f:%l:%c: %m" -name="staticcheck" -reporter=github-pr-check
 
     - name: Testing with golangci-lint
       id: go-test-golangci-lint
