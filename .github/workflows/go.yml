@@ -165,6 +165,12 @@ jobs:
         go install honnef.co/go/tools/cmd/staticcheck@latest
         staticcheck ./... | reviewdog -efm="%f:%l:%c: %m" -name="staticcheck" -reporter=github-pr-check
 
+    - name: Testing with go-consistent
+      id: go-test-go-consistent
+      run: |
+        go install github.com/quasilyte/go-consistent@latest
+        go-consistent -v ./... | reviewdog -efm="%f:%l:%c: %m" -name="go-consistent" -reporter=github-pr-check
+
     - name: Install octocov
       id: octocov-install
       if: false && matrix.os == 'ubuntu-latest'
