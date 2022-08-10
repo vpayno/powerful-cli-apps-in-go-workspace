@@ -95,34 +95,6 @@ jobs:
       run: |
         go vet ./... | reviewdog -efm="%f:%l:%c: %m" -name="go vet" -reporter=github-pr-check
 
-    - name: Testing with gotest
-      id: go-test-run
-      run: |
-        go install github.com/rakyll/gotest@latest
-        go install golang.org/x/tools/cmd/cover@latest
-        gotest -v -covermode=count -coverprofile=./reports/.coverage.out ./...
-
-    - name: Test Coverage Report (txt)
-      id: go-test-coverage-txt
-      run: |
-        go tool cover -func=./reports/.coverage.out | tee reports/coverage.txt
-
-    - name: Test Coverage Report (html)
-      id: go-test-coverage-html
-      run: |
-        go tool cover -html=./reports/.coverage.out -o=reports/coverage.html
-
-    - name: Show Missing Coverage
-      id: go-test-coverage-annotate
-      run: |
-        go install github.com/axw/gocov/gocov@latest
-        gocov convert ./reports/.coverage.out | gocov annotate -ceiling=100 -color - | tee reports/coverage-annotations.txt
-
-    - name: gocov Coverage Report
-      id: go-test-coverage-report
-      run: |
-        gocov convert ./reports/.coverage.out | gocov report | tee reports/coverage-summary.txt
-
     - name: Testing with gosec
       id: go-test-security
       run: |
@@ -170,6 +142,34 @@ jobs:
       run: |
         go install github.com/quasilyte/go-consistent@latest
         go-consistent -v ./... | reviewdog -efm="%f:%l:%c: %m" -name="go-consistent" -reporter=github-pr-check
+
+    - name: Testing with gotest
+      id: go-test-run
+      run: |
+        go install github.com/rakyll/gotest@latest
+        go install golang.org/x/tools/cmd/cover@latest
+        gotest -v -covermode=count -coverprofile=./reports/.coverage.out ./...
+
+    - name: Test Coverage Report (txt)
+      id: go-test-coverage-txt
+      run: |
+        go tool cover -func=./reports/.coverage.out | tee reports/coverage.txt
+
+    - name: Test Coverage Report (html)
+      id: go-test-coverage-html
+      run: |
+        go tool cover -html=./reports/.coverage.out -o=reports/coverage.html
+
+    - name: Show Missing Coverage
+      id: go-test-coverage-annotate
+      run: |
+        go install github.com/axw/gocov/gocov@latest
+        gocov convert ./reports/.coverage.out | gocov annotate -ceiling=100 -color - | tee reports/coverage-annotations.txt
+
+    - name: gocov Coverage Report
+      id: go-test-coverage-report
+      run: |
+        gocov convert ./reports/.coverage.out | gocov report | tee reports/coverage-summary.txt
 
     - name: Install octocov
       id: octocov-install
