@@ -159,6 +159,12 @@ jobs:
       run: |
         gocyclo -over "${GOCYCLO_OVER_THRESHOLD}" .
 
+    - name: Testing with staticcheck
+      id: go-test-staticcheck
+      run: |
+        go install honnef.co/go/tools/cmd/staticcheck@latest
+        staticcheck ./... | reviewdog -efm="%f:%l:%c: %m" -name="staticcheck" -reporter=github-pr-check
+
     - name: Install octocov
       id: octocov-install
       if: false && matrix.os == 'ubuntu-latest'
