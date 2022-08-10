@@ -95,12 +95,6 @@ jobs:
       run: |
         go vet ./... | reviewdog -efm="%f:%l:%c: %m" -name="go vet" -reporter=github-pr-check
 
-    - name: Testing with gosec
-      id: go-test-security
-      run: |
-        go install github.com/securego/gosec/v2/cmd/gosec@latest
-        gosec ./... | reviewdog -efm="%f:%l:%c: %m" -name="gosec" -reporter=github-pr-check
-
     - name: Testing with misspell
       id: go-test-misspell
       run: |
@@ -142,6 +136,12 @@ jobs:
       run: |
         go install github.com/quasilyte/go-consistent@latest
         go-consistent -v ./... | reviewdog -efm="%f:%l:%c: %m" -name="go-consistent" -reporter=github-pr-check
+
+    - name: Testing with gosec
+      id: go-test-security
+      run: |
+        go install github.com/securego/gosec/v2/cmd/gosec@latest
+        gosec ./... | reviewdog -efm="%f:%l:%c: %m" -name="gosec" -reporter=github-pr-check
 
     - name: Testing with gotest
       id: go-test-run
