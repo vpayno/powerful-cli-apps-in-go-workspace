@@ -76,27 +76,18 @@ jobs:
     - name: Install Go Tools
       id: install-go-tools
       run: |
-        go install github.com/axw/gocov/gocov@latest
-        go install github.com/client9/misspell/cmd/misspell@latest
-        go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
-        go install github.com/go-critic/go-critic/cmd/gocritic@latest
-        go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-        go install github.com/gordonklaus/ineffassign@latest
-        go install github.com/mgechev/revive@latest
-        go install github.com/rakyll/gotest@latest
         go install github.com/reviewdog/reviewdog/cmd/reviewdog@latest
-        go install github.com/securego/gosec/v2/cmd/gosec@latest
-        go install golang.org/x/lint/golint@latest
-        go install golang.org/x/tools/cmd/cover@latest
 
     - name: Analysing the code with golint
       id: golint
       run: |
+        go install golang.org/x/lint/golint@latest
         golint -set_exit_status ./... | reviewdog -efm="%f:%l:%c: %m" -name="golint" -reporter=github-pr-check
 
     - name: Testing with revive
       id: go-test-revive
       run: |
+        go install github.com/mgechev/revive@latest
         revive ./... | reviewdog -efm="%f:%l:%c: %m" -name="revive" -reporter=github-pr-check
 
     - name: Analysing the code with go vet
@@ -107,6 +98,8 @@ jobs:
     - name: Testing with gotest
       id: go-test-run
       run: |
+        go install github.com/rakyll/gotest@latest
+        go install golang.org/x/tools/cmd/cover@latest
         gotest -v -covermode=count -coverprofile=./reports/.coverage.out ./...
 
     - name: Test Coverage Report (txt)
@@ -122,6 +115,7 @@ jobs:
     - name: Show Missing Coverage
       id: go-test-coverage-annotate
       run: |
+        go install github.com/axw/gocov/gocov@latest
         gocov convert ./reports/.coverage.out | gocov annotate -ceiling=100 -color - | tee reports/coverage-annotations.txt
 
     - name: gocov Coverage Report
@@ -132,31 +126,37 @@ jobs:
     - name: Testing with gosec
       id: go-test-security
       run: |
+        go install github.com/securego/gosec/v2/cmd/gosec@latest
         gosec ./... | reviewdog -efm="%f:%l:%c: %m" -name="gosec" -reporter=github-pr-check
 
     - name: Testing with misspell
       id: go-test-misspell
       run: |
+        go install github.com/client9/misspell/cmd/misspell@latest
         misspell -error . | reviewdog -efm="%f:%l:%c: %m" -name="misspell" -reporter=github-pr-check
 
     - name: Testing with ineffassign
       id: go-test-ineffassign
       run: |
+        go install github.com/gordonklaus/ineffassign@latest
         ineffassign ./... | reviewdog -efm="%f:%l:%c: %m" -name="ineffassign" -reporter=github-pr-check
 
     - name: Testing with gocritic
       id: go-test-gocritic
       run: |
+        go install github.com/go-critic/go-critic/cmd/gocritic@latest
         gocritic check -enableAll ./... |& reviewdog -efm="%f:%l:%c: %m" -name="gocritic" -reporter=github-pr-check
 
     - name: Testing with golangci-lint
       id: go-test-golangci-lint
       run: |
+        go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
         golangci-lint run --out-format=line-number ./... | reviewdog -f=golangci-lint -name="golangci-lint" -filter-mode=added -reporter=github-pr-check
 
     - name: Testing with gocyclo
       id: go-test-gocyclo
       run: |
+        go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
         gocyclo -over "${GOCYCLO_OVER_THRESHOLD}" .
 
     - name: Testing with staticcheck
