@@ -79,6 +79,10 @@ func (r *readCounter) Read(b []byte) (int, error) {
 }
 
 func getCount(r io.Reader, conf config) int {
+	if conf.byteMode {
+		return getCountBytes(r)
+	}
+
 	scanner := bufio.NewScanner(r)
 
 	var count int
@@ -88,17 +92,31 @@ func getCount(r io.Reader, conf config) int {
 	}
 
 	for scanner.Scan() {
-		if conf.byteMode {
-			count += getCountBytes(scanner.Text())
-		} else {
-			count++
-		}
+		count++
 	}
 
 	return count
 }
 
-func getCountBytes(s string) int {
+func getCountBytes(input io.Reader) int {
+	r := bufio.NewReader(input)
+
+	var err error
+	var count int
+	var str string
+
+	// assuing err is io.EOF
+	for err == nil {
+		// instead of using /n, using null
+		str, err = r.ReadString('\x00')
+
+		count += len(str)
+	}
+
+	return count
+}
+
+func getCountRunes(s string) int {
 	b := &readCounter{Reader: bytes.NewBufferString(s)}
 
 	scanner := bufio.NewScanner(b)

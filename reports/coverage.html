@@ -57,7 +57,7 @@
 				
 				<option value="file0">github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go (100.0%)</option>
 				
-				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (100.0%)</option>
+				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (85.0%)</option>
 				
 				<option value="file2">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go (100.0%)</option>
 				
@@ -168,7 +168,7 @@ func setup() (config, error) <span class="cov8" title="7">{
                 conf.wordMode = false // byte and line count can override word count since it's enabled by default
         }</span>
 
-        <span class="cov7" title="6">return conf, nil</span>
+        <span class="cov8" title="6">return conf, nil</span>
 }
 
 type readCounter struct {
@@ -177,7 +177,7 @@ type readCounter struct {
 }
 
 // Read returns the number of bytes counted or an error code.
-func (r *readCounter) Read(b []byte) (int, error) <span class="cov3" title="2">{
+func (r *readCounter) Read(b []byte) (int, error) <span class="cov0" title="0">{
         count, err := r.Reader.Read(b)
         r.bytesRead += count
 
@@ -185,7 +185,11 @@ func (r *readCounter) Read(b []byte) (int, error) <span class="cov3" title="2">{
 }</span>
 
 func getCount(r io.Reader, conf config) int <span class="cov6" title="4">{
-        scanner := bufio.NewScanner(r)
+        if conf.byteMode </span><span class="cov1" title="1">{
+                return getCountBytes(r)
+        }</span>
+
+        <span class="cov5" title="3">scanner := bufio.NewScanner(r)
 
         var count int
 
@@ -193,29 +197,43 @@ func getCount(r io.Reader, conf config) int <span class="cov6" title="4">{
                 scanner.Split(bufio.ScanWords)
         }</span>
 
-        <span class="cov6" title="4">for scanner.Scan() </span><span class="cov10" title="11">{
-                if conf.byteMode </span><span class="cov1" title="1">{
-                        count += getCountBytes(scanner.Text())
-                }</span> else<span class="cov9" title="10"> {
-                        count++
-                }</span>
-        }
+        <span class="cov5" title="3">for scanner.Scan() </span><span class="cov10" title="10">{
+                count++
+        }</span>
 
-        <span class="cov6" title="4">return count</span>
+        <span class="cov5" title="3">return count</span>
 }
 
-func getCountBytes(s string) int <span class="cov1" title="1">{
+func getCountBytes(input io.Reader) int <span class="cov1" title="1">{
+        r := bufio.NewReader(input)
+
+        var err error = nil
+        var count int
+        var str string
+
+        // assuing err is io.EOF
+        for err == nil </span><span class="cov1" title="1">{
+                // instead of using /n, using null
+                str, err = r.ReadString('\x00')
+
+                count += len(str)
+        }</span>
+
+        <span class="cov1" title="1">return count</span>
+}
+
+func getCountRunes(s string) int <span class="cov0" title="0">{
         b := &amp;readCounter{Reader: bytes.NewBufferString(s)}
 
         scanner := bufio.NewScanner(b)
 
         var count int
 
-        for scanner.Scan() </span><span class="cov1" title="1">{
+        for scanner.Scan() </span><span class="cov0" title="0">{
                 count += b.bytesRead
         }</span>
 
-        <span class="cov1" title="1">return count</span>
+        <span class="cov0" title="0">return count</span>
 }
 
 func showCount(n int, conf config) <span class="cov8" title="7">{
