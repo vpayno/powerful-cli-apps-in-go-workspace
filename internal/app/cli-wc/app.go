@@ -40,6 +40,11 @@ func RunApp() {
 	showCount(count, conf)
 }
 
+func Usage() {
+	fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
+	flag.PrintDefaults()
+}
+
 func setup() (config, error) {
 	byteMode := flag.Bool("b", defaults.byteMode, "count bytes instead of words")
 	lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
@@ -47,6 +52,9 @@ func setup() (config, error) {
 	wordMode := flag.Bool("w", defaults.wordMode, "count words (default)")
 	verboseMode := flag.Bool("v", false, "verbose mode")
 	versionMode := flag.Bool("V", false, "show the app version")
+
+	flag.Usage = Usage
+
 	flag.Parse()
 
 	conf := config{

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -14,6 +15,45 @@ import (
   https://courses.calhoun.io/lessons/les_algo_m01_08
   https://github.com/joncalhoun/algorithmswithgo.com/blob/master/module01/fizz_buzz_test.go
 */
+
+func TestShowUsage(t *testing.T) {
+	testStderr, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStderr := os.Stderr // keep backup of the real stdout
+	os.Stderr = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stderr = osStderr
+	}()
+
+	// It's a silly test but I need the practice.
+	want := "Usage: cli [OPTION]..."
+
+	// Run the function who's output we want to capture.
+	os.Args = []string{"cli", "-h"}
+	// We need the flag to keep flag.Parse() from calling os.Exit()
+	fs := flag.NewFlagSet("cli", flag.ContinueOnError)
+	fs.Usage = Usage
+	fs.Parse(os.Args[1:])
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStderr)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	got = strings.Split(got, "\n")[0]
+	if got != want {
+		t.Errorf("Usage(); want %q, got %q", want, got)
+	}
+}
 
 func TestShowBanner(t *testing.T) {
 	testStdout, writer, err := os.Pipe()
@@ -54,7 +94,6 @@ func TestSetupFlags(t *testing.T) {
 		wordMode: true,
 	}
 
-	// -l
 	os.Args = []string{"test"}
 
 	got, err := setup()

@@ -37,6 +37,20 @@ var defaults = config{
 	versionMode: false,
 }
 
+const (
+	usage = `Usage: %s [OPTION]...
+
+Print newline, word, and byte counts for stdin input.
+
+A word is a non-zero-length sequence of characters delimited by white space.
+
+The options below may be used to select which counts are printed, always in
+the following order: newline, word, character, byte.
+
+Options:
+`
+)
+
 // SetVersion is used my the main package to pass version information to the app package.
 func SetVersion(b []byte) {
 	slice := strings.Split(string(b), "\n")

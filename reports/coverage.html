@@ -146,6 +146,11 @@ func RunApp() <span class="cov5" title="3">{
         showCount(count, conf)</span>
 }
 
+func Usage() <span class="cov1" title="1">{
+        fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
+        flag.PrintDefaults()
+}</span>
+
 func setup() (config, error) <span class="cov8" title="7">{
         byteMode := flag.Bool("b", defaults.byteMode, "count bytes instead of words")
         lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
@@ -153,6 +158,9 @@ func setup() (config, error) <span class="cov8" title="7">{
         wordMode := flag.Bool("w", defaults.wordMode, "count words (default)")
         verboseMode := flag.Bool("v", false, "verbose mode")
         versionMode := flag.Bool("V", false, "show the app version")
+
+        flag.Usage = Usage
+
         flag.Parse()
 
         conf := config{
@@ -207,7 +215,7 @@ func getCount(r io.Reader, conf config) int <span class="cov7" title="5">{
 func getCountBytes(input io.Reader, conf config) int <span class="cov3" title="2">{
         r := bufio.NewReader(input)
 
-        var err error = nil
+        var err error
         var count int
         var str string
 
@@ -286,6 +294,20 @@ var defaults = config{
         verboseMode: false,
         versionMode: false,
 }
+
+const (
+        usage = `Usage: %s [OPTION]...
+
+Print newline, word, and byte counts for stdin input.
+
+A word is a non-zero-length sequence of characters delimited by white space.
+
+The options below may be used to select which counts are printed, always in
+the following order: newline, word, character, byte.
+
+Options:
+`
+)
 
 // SetVersion is used my the main package to pass version information to the app package.
 func SetVersion(b []byte) <span class="cov10" title="2">{
