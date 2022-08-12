@@ -24,18 +24,12 @@ type config struct {
 	lineMode    bool
 	runeMode    bool
 	wordMode    bool
+	modes       map[string]bool
 	verboseMode bool
 	versionMode bool
 }
 
-var defaults = config{
-	byteMode:    false,
-	lineMode:    false,
-	runeMode:    false,
-	wordMode:    true,
-	verboseMode: false,
-	versionMode: false,
-}
+type results map[string]int
 
 const (
 	usage = `Usage: %s [OPTION]...
@@ -50,6 +44,14 @@ the following order: newline, word, character, byte.
 Options:
 `
 )
+
+// Printing order: line, word, byte, rune
+var printOrder = []string{
+	"line",
+	"word",
+	"byte",
+	"rune",
+}
 
 // SetVersion is used my the main package to pass version information to the app package.
 func SetVersion(b []byte) {

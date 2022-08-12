@@ -3,11 +3,11 @@ package appwc
 
 import (
 	"bufio"
-	"errors"
 	"flag"
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -35,116 +35,156 @@ func RunApp() {
 		showBanner()
 	}
 
-	count := getCount(os.Stdin, conf)
+	counts := getCounts(os.Stdin, conf)
 
-	showCount(count, conf)
+	showCount(counts, conf)
 }
 
+// Usage prints the command-line usage help message.
 func Usage() {
 	fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
 	flag.PrintDefaults()
 }
 
 func setup() (config, error) {
-	byteMode := flag.Bool("b", defaults.byteMode, "count bytes instead of words")
-	lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
-	runeMode := flag.Bool("r", defaults.byteMode, "count runes instead of words")
-	wordMode := flag.Bool("w", defaults.wordMode, "count words (default)")
-	verboseMode := flag.Bool("v", false, "verbose mode")
-	versionMode := flag.Bool("V", false, "show the app version")
+	fs := flag.NewFlagSet("cli", flag.ContinueOnError)
 
-	flag.Usage = Usage
+	lineMode := fs.Bool("l", false, "count newlines")
+	wordMode := fs.Bool("w", false, "count words")
+	runeMode := fs.Bool("r", false, "count runes/characters")
+	byteMode := fs.Bool("b", false, "count bytes")
+	verboseMode := fs.Bool("v", false, "verbose mode")
+	versionMode := fs.Bool("V", false, "show the app version")
 
-	flag.Parse()
+	fs.Usage = Usage
+
+	err := fs.Parse(os.Args[1:])
+
+	if err != nil {
+		return config{}, err
+	}
 
 	conf := config{
-		byteMode:    *byteMode,
-		lineMode:    *lineMode,
-		runeMode:    *runeMode,
-		wordMode:    *wordMode,
 		verboseMode: *verboseMode,
 		versionMode: *versionMode,
 	}
 
-	// If line mode is set, disable the other modes.
-	if conf.lineMode {
-		conf.byteMode = false
+	usingDefaults := true
+
+	// order for flag overrides: newline, word, character, byte.
+	if *byteMode {
+		usingDefaults = false
+
+		conf.byteMode = true
+		conf.lineMode = false
 		conf.runeMode = false
-	}
-
-	// fail if both byte and rune modes are set.
-	if conf.byteMode && conf.runeMode {
-		err := errors.New("-b (byte count mode) and -r (rune count mode) can't be used at the same time")
-		return config{}, err
-	}
-
-	// byte, rune and line mode can override word mode since it's enabled by default
-	if conf.byteMode || conf.runeMode || conf.lineMode {
 		conf.wordMode = false
+	}
+
+	if *runeMode {
+		usingDefaults = false
+
+		conf.byteMode = false
+		conf.lineMode = false
+		conf.runeMode = true
+		conf.wordMode = false
+	}
+
+	if *wordMode {
+		usingDefaults = false
+
+		conf.byteMode = false
+		conf.lineMode = false
+		conf.runeMode = false
+		conf.wordMode = true
+	}
+
+	if *lineMode {
+		usingDefaults = false
+
+		conf.byteMode = false
+		conf.lineMode = true
+		conf.runeMode = false
+		conf.wordMode = false
+	}
+
+	if usingDefaults {
+		conf.byteMode = true
+		conf.lineMode = true
+		conf.runeMode = false
+		conf.wordMode = true
+	}
+
+	conf.modes = map[string]bool{
+		"byte": conf.byteMode,
+		"line": conf.lineMode,
+		"rune": conf.runeMode,
+		"word": conf.wordMode,
 	}
 
 	return conf, nil
 }
 
-func getCount(r io.Reader, conf config) int {
-	if conf.byteMode || conf.runeMode {
-		return getCountBytes(r, conf)
+func getCounts(r io.Reader, conf config) results {
+	counts := results{
+		"byte": 0,
+		"rune": 0,
+		"line": 0,
+		"word": 0,
 	}
 
 	scanner := bufio.NewScanner(r)
 
-	var count int
-
-	if conf.wordMode {
-		scanner.Split(bufio.ScanWords)
-	}
-
 	for scanner.Scan() {
-		count++
-	}
+		text := scanner.Text() + "\n"
 
-	return count
-}
+		if conf.byteMode {
+			counts["byte"] += len(text)
+		}
 
-func getCountBytes(input io.Reader, conf config) int {
-	r := bufio.NewReader(input)
+		if conf.runeMode {
+			counts["rune"] += utf8.RuneCountInString(text)
+		}
 
-	var err error
-	var count int
-	var str string
+		if conf.wordMode {
+			counts["word"] += len(strings.Fields(text))
+		}
 
-	// assuing err is io.EOF
-	for err == nil {
-		// instead of using /n, using null
-		str, err = r.ReadString('\x00')
-
-		switch {
-		case conf.byteMode:
-			count += len(str)
-		case conf.runeMode:
-			count += utf8.RuneCountInString(str)
+		if conf.lineMode {
+			counts["line"]++
 		}
 	}
 
-	return count
+	return counts
 }
 
-func showCount(n int, conf config) {
-	var prompt string
+func showCount(counts results, conf config) {
+	first := true
+	fieldSize := "0"
 
 	if conf.verboseMode {
-		switch {
-		case conf.byteMode:
-			prompt = "byte count: "
-		case conf.lineMode:
-			prompt = "line count: "
-		case conf.runeMode:
-			prompt = "rune count: "
-		case conf.wordMode:
-			prompt = "word count: "
-		}
+		fieldSize = "8"
 	}
 
-	fmt.Print(prompt)
-	fmt.Printf("%d\n", n)
+	for _, mode := range printOrder {
+		if !conf.modes[mode] {
+			continue
+		}
+
+		if !first {
+			fieldSize = "9"
+		}
+
+		first = false
+
+		var label string
+
+		if conf.verboseMode {
+			label = " (" + mode + ")"
+		}
+
+		fmt.Printf("%"+fieldSize+"d%s", counts[mode], label)
+	}
+
+	fmt.Println()
 }

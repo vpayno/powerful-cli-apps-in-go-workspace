@@ -109,30 +109,30 @@ package appwc
 
 import (
         "bufio"
-        "errors"
         "flag"
         "fmt"
         "io"
         "os"
+        "strings"
         "unicode/utf8"
 )
 
-func showBanner() <span class="cov3" title="2">{
+func showBanner() <span class="cov2" title="2">{
         fmt.Println(metadata.name + " Version " + metadata.version)
         fmt.Println()
 }</span>
 
 // RunApp is called my the main function. It's basically the main function of the app.
-func RunApp() <span class="cov5" title="3">{
+func RunApp() <span class="cov4" title="4">{
         conf, err := setup()
 
-        if err != nil </span><span class="cov1" title="1">{
+        if err != nil </span><span class="cov2" title="2">{
                 fmt.Print("Error: ")
                 fmt.Println(err)
                 return
         }</span>
 
-        <span class="cov3" title="2">if conf.versionMode </span><span class="cov1" title="1">{
+        <span class="cov2" title="2">if conf.versionMode </span><span class="cov1" title="1">{
                 showVersion()
                 return
         }</span>
@@ -141,118 +141,158 @@ func RunApp() <span class="cov5" title="3">{
                 showBanner()
         }</span>
 
-        <span class="cov1" title="1">count := getCount(os.Stdin, conf)
+        <span class="cov1" title="1">counts := getCounts(os.Stdin, conf)
 
-        showCount(count, conf)</span>
+        showCount(counts, conf)</span>
 }
 
-func Usage() <span class="cov1" title="1">{
+// Usage prints the command-line usage help message.
+func Usage() <span class="cov2" title="2">{
         fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
         flag.PrintDefaults()
 }</span>
 
-func setup() (config, error) <span class="cov8" title="7">{
-        byteMode := flag.Bool("b", defaults.byteMode, "count bytes instead of words")
-        lineMode := flag.Bool("l", defaults.lineMode, "count lines instead of words")
-        runeMode := flag.Bool("r", defaults.byteMode, "count runes instead of words")
-        wordMode := flag.Bool("w", defaults.wordMode, "count words (default)")
-        verboseMode := flag.Bool("v", false, "verbose mode")
-        versionMode := flag.Bool("V", false, "show the app version")
+func setup() (config, error) <span class="cov7" title="11">{
+        fs := flag.NewFlagSet("cli", flag.ContinueOnError)
 
-        flag.Usage = Usage
+        lineMode := fs.Bool("l", false, "count newlines")
+        wordMode := fs.Bool("w", false, "count words")
+        runeMode := fs.Bool("r", false, "count runes/characters")
+        byteMode := fs.Bool("b", false, "count bytes")
+        verboseMode := fs.Bool("v", false, "verbose mode")
+        versionMode := fs.Bool("V", false, "show the app version")
 
-        flag.Parse()
+        fs.Usage = Usage
 
-        conf := config{
-                byteMode:    *byteMode,
-                lineMode:    *lineMode,
-                runeMode:    *runeMode,
-                wordMode:    *wordMode,
+        err := fs.Parse(os.Args[1:])
+
+        if err != nil </span><span class="cov2" title="2">{
+                return config{}, err
+        }</span>
+
+        <span class="cov6" title="9">conf := config{
                 verboseMode: *verboseMode,
                 versionMode: *versionMode,
         }
 
-        // If line mode is set, disable the other modes.
-        if conf.lineMode </span><span class="cov1" title="1">{
-                conf.byteMode = false
+        usingDefaults := true
+
+        // order for flag overrides: newline, word, character, byte.
+        if *byteMode </span><span class="cov3" title="3">{
+                usingDefaults = false
+
+                conf.byteMode = true
+                conf.lineMode = false
                 conf.runeMode = false
-        }</span>
-
-        // fail if both byte and rune modes are set.
-        <span class="cov8" title="7">if conf.byteMode &amp;&amp; conf.runeMode </span><span class="cov1" title="1">{
-                err := errors.New("-b (byte count mode) and -r (rune count mode) can't be used at the same time")
-                return config{}, err
-        }</span>
-
-        // byte, rune and line mode can override word mode since it's enabled by default
-        <span class="cov8" title="6">if conf.byteMode || conf.runeMode || conf.lineMode </span><span class="cov3" title="2">{
                 conf.wordMode = false
         }</span>
 
-        <span class="cov8" title="6">return conf, nil</span>
-}
+        <span class="cov6" title="9">if *runeMode </span><span class="cov1" title="1">{
+                usingDefaults = false
 
-func getCount(r io.Reader, conf config) int <span class="cov7" title="5">{
-        if conf.byteMode || conf.runeMode </span><span class="cov3" title="2">{
-                return getCountBytes(r, conf)
+                conf.byteMode = false
+                conf.lineMode = false
+                conf.runeMode = true
+                conf.wordMode = false
         }</span>
 
-        <span class="cov5" title="3">scanner := bufio.NewScanner(r)
+        <span class="cov6" title="9">if *wordMode </span><span class="cov2" title="2">{
+                usingDefaults = false
 
-        var count int
-
-        if conf.wordMode </span><span class="cov3" title="2">{
-                scanner.Split(bufio.ScanWords)
+                conf.byteMode = false
+                conf.lineMode = false
+                conf.runeMode = false
+                conf.wordMode = true
         }</span>
 
-        <span class="cov5" title="3">for scanner.Scan() </span><span class="cov10" title="10">{
-                count++
+        <span class="cov6" title="9">if *lineMode </span><span class="cov1" title="1">{
+                usingDefaults = false
+
+                conf.byteMode = false
+                conf.lineMode = true
+                conf.runeMode = false
+                conf.wordMode = false
         }</span>
 
-        <span class="cov5" title="3">return count</span>
-}
+        <span class="cov6" title="9">if usingDefaults </span><span class="cov4" title="4">{
+                conf.byteMode = true
+                conf.lineMode = true
+                conf.runeMode = false
+                conf.wordMode = true
+        }</span>
 
-func getCountBytes(input io.Reader, conf config) int <span class="cov3" title="2">{
-        r := bufio.NewReader(input)
-
-        var err error
-        var count int
-        var str string
-
-        // assuing err is io.EOF
-        for err == nil </span><span class="cov3" title="2">{
-                // instead of using /n, using null
-                str, err = r.ReadString('\x00')
-
-                switch </span>{
-                case conf.byteMode:<span class="cov1" title="1">
-                        count += len(str)</span>
-                case conf.runeMode:<span class="cov1" title="1">
-                        count += utf8.RuneCountInString(str)</span>
-                }
+        <span class="cov6" title="9">conf.modes = map[string]bool{
+                "byte": conf.byteMode,
+                "line": conf.lineMode,
+                "rune": conf.runeMode,
+                "word": conf.wordMode,
         }
 
-        <span class="cov3" title="2">return count</span>
+        return conf, nil</span>
 }
 
-func showCount(n int, conf config) <span class="cov9" title="9">{
-        var prompt string
-
-        if conf.verboseMode </span><span class="cov7" title="5">{
-                switch </span>{
-                case conf.byteMode:<span class="cov1" title="1">
-                        prompt = "byte count: "</span>
-                case conf.lineMode:<span class="cov1" title="1">
-                        prompt = "line count: "</span>
-                case conf.runeMode:<span class="cov1" title="1">
-                        prompt = "rune count: "</span>
-                case conf.wordMode:<span class="cov3" title="2">
-                        prompt = "word count: "</span>
-                }
+func getCounts(r io.Reader, conf config) results <span class="cov5" title="5">{
+        counts := results{
+                "byte": 0,
+                "rune": 0,
+                "line": 0,
+                "word": 0,
         }
 
-        <span class="cov9" title="9">fmt.Print(prompt)
-        fmt.Printf("%d\n", n)</span>
+        scanner := bufio.NewScanner(r)
+
+        for scanner.Scan() </span><span class="cov6" title="10">{
+                text := scanner.Text() + "\n"
+
+                if conf.byteMode </span><span class="cov2" title="2">{
+                        counts["byte"] += len(text)
+                }</span>
+
+                <span class="cov6" title="10">if conf.runeMode </span><span class="cov2" title="2">{
+                        counts["rune"] += utf8.RuneCountInString(text)
+                }</span>
+
+                <span class="cov6" title="10">if conf.wordMode </span><span class="cov1" title="1">{
+                        counts["word"] += len(strings.Fields(text))
+                }</span>
+
+                <span class="cov6" title="10">if conf.lineMode </span><span class="cov5" title="5">{
+                        counts["line"]++
+                }</span>
+        }
+
+        <span class="cov5" title="5">return counts</span>
+}
+
+func showCount(counts results, conf config) <span class="cov6" title="9">{
+        first := true
+        fieldSize := "0"
+
+        if conf.verboseMode </span><span class="cov5" title="5">{
+                fieldSize = "8"
+        }</span>
+
+        <span class="cov6" title="9">for _, mode := range printOrder </span><span class="cov10" title="36">{
+                if !conf.modes[mode] </span><span class="cov9" title="25">{
+                        continue</span>
+                }
+
+                <span class="cov7" title="11">if !first </span><span class="cov2" title="2">{
+                        fieldSize = "9"
+                }</span>
+
+                <span class="cov7" title="11">first = false
+
+                var label string
+
+                if conf.verboseMode </span><span class="cov5" title="7">{
+                        label = " (" + mode + ")"
+                }</span>
+
+                <span class="cov7" title="11">fmt.Printf("%"+fieldSize+"d%s", counts[mode], label)</span>
+        }
+
+        <span class="cov6" title="9">fmt.Println()</span>
 }
 </pre>
 		
@@ -282,18 +322,12 @@ type config struct {
         lineMode    bool
         runeMode    bool
         wordMode    bool
+        modes       map[string]bool
         verboseMode bool
         versionMode bool
 }
 
-var defaults = config{
-        byteMode:    false,
-        lineMode:    false,
-        runeMode:    false,
-        wordMode:    true,
-        verboseMode: false,
-        versionMode: false,
-}
+type results map[string]int
 
 const (
         usage = `Usage: %s [OPTION]...
@@ -308,6 +342,14 @@ the following order: newline, word, character, byte.
 Options:
 `
 )
+
+// Printing order: line, word, byte, rune
+var printOrder = []string{
+        "line",
+        "word",
+        "byte",
+        "rune",
+}
 
 // SetVersion is used my the main package to pass version information to the app package.
 func SetVersion(b []byte) <span class="cov10" title="2">{

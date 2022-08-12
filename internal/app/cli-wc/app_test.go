@@ -16,6 +16,42 @@ import (
   https://github.com/joncalhoun/algorithmswithgo.com/blob/master/module01/fizz_buzz_test.go
 */
 
+func TestBadFlag(t *testing.T) {
+	testStderr, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStderr := os.Stderr // keep backup of the real stdout
+	os.Stderr = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stderr = osStderr
+	}()
+
+	// It's a silly test but I need the practice.
+	want := "flag provided but not defined: -x"
+
+	// Run the function who's output we want to capture.
+	os.Args = []string{"cli", "-x"}
+	RunApp()
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStderr)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	got = strings.Split(got, "\n")[0]
+	if got != want {
+		t.Errorf("Usage(); want %q, got %q", want, got)
+	}
+}
+
 func TestShowUsage(t *testing.T) {
 	testStderr, writer, err := os.Pipe()
 	if err != nil {
@@ -35,10 +71,7 @@ func TestShowUsage(t *testing.T) {
 
 	// Run the function who's output we want to capture.
 	os.Args = []string{"cli", "-h"}
-	// We need the flag to keep flag.Parse() from calling os.Exit()
-	fs := flag.NewFlagSet("cli", flag.ContinueOnError)
-	fs.Usage = Usage
-	fs.Parse(os.Args[1:])
+	RunApp()
 
 	// Stop capturing stdout.
 	writer.Close()
@@ -89,12 +122,50 @@ func TestShowBanner(t *testing.T) {
 	}
 }
 
-func TestSetupFlags(t *testing.T) {
+func TestSetupFlagsDefaults(t *testing.T) {
 	want := config{
+		byteMode: true,
+		lineMode: true,
 		wordMode: true,
+		modes: map[string]bool{
+			"byte": true,
+			"line": true,
+			"word": true,
+		},
 	}
 
 	os.Args = []string{"test"}
+
+	got, err := setup()
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if want.byteMode != got.byteMode {
+		t.Errorf("setup() returned the wrong byte mode value. want: %v, got %v", want.byteMode, got.byteMode)
+	}
+
+	if want.lineMode != got.lineMode {
+		t.Errorf("setup() returned the wrong line mode value. want: %v, got %v", want.lineMode, got.lineMode)
+	}
+
+	if want.wordMode != got.wordMode {
+		t.Errorf("setup() returned the wrong word mode value. want: %v, got %v", want.wordMode, got.wordMode)
+	}
+
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
+}
+
+func TestSetupFlagsWordMode(t *testing.T) {
+	want := config{
+		wordMode: true,
+		modes: map[string]bool{
+			"word": true,
+		},
+	}
+
+	os.Args = []string{"test", "-w"}
 
 	got, err := setup()
 
@@ -112,6 +183,9 @@ func TestSetupFlags(t *testing.T) {
 func TestSetupFlagsLineMode(t *testing.T) {
 	want := config{
 		lineMode: true,
+		modes: map[string]bool{
+			"line": true,
+		},
 	}
 
 	// -l
@@ -133,6 +207,9 @@ func TestSetupFlagsLineMode(t *testing.T) {
 func TestSetupFlagsByteMode(t *testing.T) {
 	want := config{
 		byteMode: true,
+		modes: map[string]bool{
+			"byte": true,
+		},
 	}
 
 	// -l
@@ -172,10 +249,13 @@ func TestGetWordCount(t *testing.T) {
 
 	conf := config{
 		wordMode: true,
+		modes: map[string]bool{
+			"word": true,
+		},
 	}
 
 	want := 5
-	got := getCount(b, conf)
+	got := getCounts(b, conf)["word"]
 
 	if want != got {
 		t.Errorf("Expected word count %d, got %d.\n", want, got)
@@ -187,10 +267,13 @@ func TestGetLineCount(t *testing.T) {
 
 	conf := config{
 		lineMode: true,
+		modes: map[string]bool{
+			"line": true,
+		},
 	}
 
 	want := 5
-	got := getCount(b, conf)
+	got := getCounts(b, conf)["line"]
 
 	if want != got {
 		t.Errorf("Expected line count %d, got %d.\n", want, got)
@@ -202,10 +285,13 @@ func TestGetByteCount(t *testing.T) {
 
 	conf := config{
 		byteMode: true,
+		modes: map[string]bool{
+			"byte": true,
+		},
 	}
 
 	want := 22
-	got := getCount(b, conf)
+	got := getCounts(b, conf)["byte"]
 
 	if want != got {
 		t.Errorf("Expected byte count %d, got %d.\n", want, got)
@@ -217,10 +303,13 @@ func TestGetRuneCount(t *testing.T) {
 
 	conf := config{
 		runeMode: true,
+		modes: map[string]bool{
+			"rune": true,
+		},
 	}
 
 	want := 22
-	got := getCount(b, conf)
+	got := getCounts(b, conf)["rune"]
 
 	if want != got {
 		t.Errorf("Expected rune count %d, got %d.\n", want, got)
@@ -241,18 +330,23 @@ func TestShowWordCountVerbose(t *testing.T) {
 		os.Stdout = osStdout
 	}()
 
-	count := 5
+	counts := results{
+		"word": 5,
+	}
 
 	conf := config{
 		wordMode:    true,
 		verboseMode: true,
+		modes: map[string]bool{
+			"word": true,
+		},
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("word count: %d\n", count)
+	want := fmt.Sprintf("%8d (word)\n", counts["word"])
 
 	// Run the function who's output we want to capture.
-	showCount(count, conf)
+	showCount(counts, conf)
 
 	// Stop capturing stdout.
 	writer.Close()
@@ -282,18 +376,23 @@ func TestShowLineCountVerbose(t *testing.T) {
 		os.Stdout = osStdout
 	}()
 
-	count := 5
+	counts := results{
+		"line": 5,
+	}
 
 	conf := config{
 		lineMode:    true,
 		verboseMode: true,
+		modes: map[string]bool{
+			"line": true,
+		},
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("line count: %d\n", count)
+	want := fmt.Sprintf("%8d (line)\n", counts["line"])
 
 	// Run the function who's output we want to capture.
-	showCount(count, conf)
+	showCount(counts, conf)
 
 	// Stop capturing stdout.
 	writer.Close()
@@ -323,18 +422,23 @@ func TestShowByteCountVerbose(t *testing.T) {
 		os.Stdout = osStdout
 	}()
 
-	count := 5
+	counts := results{
+		"byte": 5,
+	}
 
 	conf := config{
 		byteMode:    true,
 		verboseMode: true,
+		modes: map[string]bool{
+			"byte": true,
+		},
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("byte count: %d\n", count)
+	want := fmt.Sprintf("%8d (byte)\n", counts["byte"])
 
 	// Run the function who's output we want to capture.
-	showCount(count, conf)
+	showCount(counts, conf)
 
 	// Stop capturing stdout.
 	writer.Close()
@@ -364,18 +468,23 @@ func TestShowRuneCountVerbose(t *testing.T) {
 		os.Stdout = osStdout
 	}()
 
-	count := 5
+	counts := results{
+		"rune": 5,
+	}
 
 	conf := config{
 		runeMode:    true,
 		verboseMode: true,
+		modes: map[string]bool{
+			"rune": true,
+		},
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("rune count: %d\n", count)
+	want := fmt.Sprintf("%8d (rune)\n", counts["rune"])
 
 	// Run the function who's output we want to capture.
-	showCount(count, conf)
+	showCount(counts, conf)
 
 	// Stop capturing stdout.
 	writer.Close()
@@ -405,18 +514,23 @@ func TestShowWordCount(t *testing.T) {
 		os.Stdout = osStdout
 	}()
 
-	count := 5
+	counts := results{
+		"word": 5,
+	}
 
 	conf := config{
-		lineMode:    false,
+		wordMode:    true,
 		verboseMode: false,
+		modes: map[string]bool{
+			"word": true,
+		},
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("%d\n", count)
+	want := fmt.Sprintf("%d\n", counts["word"])
 
 	// Run the function who's output we want to capture.
-	showCount(count, conf)
+	showCount(counts, conf)
 
 	// Stop capturing stdout.
 	writer.Close()
@@ -446,18 +560,23 @@ func TestShowLineCount(t *testing.T) {
 		os.Stdout = osStdout
 	}()
 
-	count := 5
+	counts := results{
+		"line": 5,
+	}
 
 	conf := config{
 		lineMode:    true,
 		verboseMode: false,
+		modes: map[string]bool{
+			"line": true,
+		},
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("%d\n", count)
+	want := fmt.Sprintf("%d\n", counts["line"])
 
 	// Run the function who's output we want to capture.
-	showCount(count, conf)
+	showCount(counts, conf)
 
 	// Stop capturing stdout.
 	writer.Close()
@@ -487,18 +606,23 @@ func TestShowByteCount(t *testing.T) {
 		os.Stdout = osStdout
 	}()
 
-	count := 5
+	counts := results{
+		"byte": 5,
+	}
 
 	conf := config{
 		byteMode:    true,
 		verboseMode: false,
+		modes: map[string]bool{
+			"byte": true,
+		},
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("%d\n", count)
+	want := fmt.Sprintf("%d\n", counts["byte"])
 
 	// Run the function who's output we want to capture.
-	showCount(count, conf)
+	showCount(counts, conf)
 
 	// Stop capturing stdout.
 	writer.Close()
@@ -528,18 +652,23 @@ func TestShowRuneCount(t *testing.T) {
 		os.Stdout = osStdout
 	}()
 
-	count := 5
+	counts := results{
+		"rune": 5,
+	}
 
 	conf := config{
 		runeMode:    true,
 		verboseMode: false,
+		modes: map[string]bool{
+			"rune": true,
+		},
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("%d\n", count)
+	want := fmt.Sprintf("%d\n", counts["rune"])
 
 	// Run the function who's output we want to capture.
-	showCount(count, conf)
+	showCount(counts, conf)
 
 	// Stop capturing stdout.
 	writer.Close()
@@ -599,35 +728,40 @@ func TestRunAppFlagVersion(t *testing.T) {
 }
 
 func TestRunAppFlagByteAndRune(t *testing.T) {
-	testStdout, writer, err := os.Pipe()
-	if err != nil {
-		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	want := config{
+		byteMode: false,
+		runeMode: true,
 	}
-
-	osStdout := os.Stdout // keep backup of the real stdout
-	os.Stdout = writer
-
-	defer func() {
-		// Undo what we changed when this test is done.
-		os.Stdout = osStdout
-	}()
-
-	want := "Error: -b (byte count mode) and -r (rune count mode) can't be used at the same time\n"
 
 	os.Args = []string{"test", "-b", "-r"}
-	RunApp()
+	got, _ := setup()
 
-	// Stop capturing stdout.
-	writer.Close()
-
-	var buf bytes.Buffer
-	_, err = io.Copy(&buf, testStdout)
-	if err != nil {
-		t.Error(err)
+	if got.byteMode != want.byteMode {
+		t.Errorf("setup flags -r & -b (byteMode): want %v, got %v", want.byteMode, got.byteMode)
 	}
-	got := buf.String()
-	if got != want {
-		t.Errorf("RunApp (Flag !-V): want %q, got %q", want, got)
+
+	if got.runeMode != want.runeMode {
+		t.Errorf("setup flags -r & -b (runeMode): want %v, got %v", want.runeMode, got.runeMode)
+	}
+
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
+}
+
+func TestRunAppFlagWordAndRune(t *testing.T) {
+	want := config{
+		wordMode: true,
+		runeMode: false,
+	}
+
+	os.Args = []string{"test", "-b", "-w"}
+	got, _ := setup()
+
+	if got.wordMode != want.wordMode {
+		t.Errorf("setup flags -r & -b (wordMode): want %v, got %v", want.wordMode, got.wordMode)
+	}
+
+	if got.runeMode != want.runeMode {
+		t.Errorf("setup flags -r & -b (runeMode): want %v, got %v", want.runeMode, got.runeMode)
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
