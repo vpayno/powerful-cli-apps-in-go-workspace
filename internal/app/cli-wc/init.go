@@ -22,7 +22,7 @@ var metadata = appInfo{
 type config struct {
 	byteMode    bool
 	lineMode    bool
-	runeMode    bool
+	charMode    bool
 	wordMode    bool
 	modes       map[string]bool
 	verboseMode bool
@@ -45,12 +45,12 @@ Options:
 `
 )
 
-// Printing order: line, word, byte, rune
+// Printing order: line, word, byte, char
 var printOrder = []string{
 	"line",
 	"word",
 	"byte",
-	"rune",
+	"char",
 }
 
 // SetVersion is used my the main package to pass version information to the app package.

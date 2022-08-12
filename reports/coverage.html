@@ -157,7 +157,7 @@ func setup() (config, error) <span class="cov7" title="11">{
 
         lineMode := fs.Bool("l", false, "count newlines")
         wordMode := fs.Bool("w", false, "count words")
-        runeMode := fs.Bool("r", false, "count runes/characters")
+        charMode := fs.Bool("r", false, "count characters")
         byteMode := fs.Bool("b", false, "count bytes")
         verboseMode := fs.Bool("v", false, "verbose mode")
         versionMode := fs.Bool("V", false, "show the app version")
@@ -183,16 +183,16 @@ func setup() (config, error) <span class="cov7" title="11">{
 
                 conf.byteMode = true
                 conf.lineMode = false
-                conf.runeMode = false
+                conf.charMode = false
                 conf.wordMode = false
         }</span>
 
-        <span class="cov6" title="9">if *runeMode </span><span class="cov1" title="1">{
+        <span class="cov6" title="9">if *charMode </span><span class="cov1" title="1">{
                 usingDefaults = false
 
                 conf.byteMode = false
                 conf.lineMode = false
-                conf.runeMode = true
+                conf.charMode = true
                 conf.wordMode = false
         }</span>
 
@@ -201,7 +201,7 @@ func setup() (config, error) <span class="cov7" title="11">{
 
                 conf.byteMode = false
                 conf.lineMode = false
-                conf.runeMode = false
+                conf.charMode = false
                 conf.wordMode = true
         }</span>
 
@@ -210,21 +210,21 @@ func setup() (config, error) <span class="cov7" title="11">{
 
                 conf.byteMode = false
                 conf.lineMode = true
-                conf.runeMode = false
+                conf.charMode = false
                 conf.wordMode = false
         }</span>
 
         <span class="cov6" title="9">if usingDefaults </span><span class="cov4" title="4">{
                 conf.byteMode = true
                 conf.lineMode = true
-                conf.runeMode = false
+                conf.charMode = false
                 conf.wordMode = true
         }</span>
 
         <span class="cov6" title="9">conf.modes = map[string]bool{
                 "byte": conf.byteMode,
                 "line": conf.lineMode,
-                "rune": conf.runeMode,
+                "char": conf.charMode,
                 "word": conf.wordMode,
         }
 
@@ -234,7 +234,7 @@ func setup() (config, error) <span class="cov7" title="11">{
 func getCounts(r io.Reader, conf config) results <span class="cov5" title="5">{
         counts := results{
                 "byte": 0,
-                "rune": 0,
+                "char": 0,
                 "line": 0,
                 "word": 0,
         }
@@ -248,8 +248,8 @@ func getCounts(r io.Reader, conf config) results <span class="cov5" title="5">{
                         counts["byte"] += len(text)
                 }</span>
 
-                <span class="cov6" title="10">if conf.runeMode </span><span class="cov2" title="2">{
-                        counts["rune"] += utf8.RuneCountInString(text)
+                <span class="cov6" title="10">if conf.charMode </span><span class="cov2" title="2">{
+                        counts["char"] += utf8.RuneCountInString(text)
                 }</span>
 
                 <span class="cov6" title="10">if conf.wordMode </span><span class="cov1" title="1">{
@@ -320,7 +320,7 @@ var metadata = appInfo{
 type config struct {
         byteMode    bool
         lineMode    bool
-        runeMode    bool
+        charMode    bool
         wordMode    bool
         modes       map[string]bool
         verboseMode bool
@@ -343,12 +343,12 @@ Options:
 `
 )
 
-// Printing order: line, word, byte, rune
+// Printing order: line, word, byte, char
 var printOrder = []string{
         "line",
         "word",
         "byte",
-        "rune",
+        "char",
 }
 
 // SetVersion is used my the main package to pass version information to the app package.

@@ -51,7 +51,7 @@ func setup() (config, error) {
 
 	lineMode := fs.Bool("l", false, "count newlines")
 	wordMode := fs.Bool("w", false, "count words")
-	runeMode := fs.Bool("r", false, "count runes/characters")
+	charMode := fs.Bool("r", false, "count characters")
 	byteMode := fs.Bool("b", false, "count bytes")
 	verboseMode := fs.Bool("v", false, "verbose mode")
 	versionMode := fs.Bool("V", false, "show the app version")
@@ -77,16 +77,16 @@ func setup() (config, error) {
 
 		conf.byteMode = true
 		conf.lineMode = false
-		conf.runeMode = false
+		conf.charMode = false
 		conf.wordMode = false
 	}
 
-	if *runeMode {
+	if *charMode {
 		usingDefaults = false
 
 		conf.byteMode = false
 		conf.lineMode = false
-		conf.runeMode = true
+		conf.charMode = true
 		conf.wordMode = false
 	}
 
@@ -95,7 +95,7 @@ func setup() (config, error) {
 
 		conf.byteMode = false
 		conf.lineMode = false
-		conf.runeMode = false
+		conf.charMode = false
 		conf.wordMode = true
 	}
 
@@ -104,21 +104,21 @@ func setup() (config, error) {
 
 		conf.byteMode = false
 		conf.lineMode = true
-		conf.runeMode = false
+		conf.charMode = false
 		conf.wordMode = false
 	}
 
 	if usingDefaults {
 		conf.byteMode = true
 		conf.lineMode = true
-		conf.runeMode = false
+		conf.charMode = false
 		conf.wordMode = true
 	}
 
 	conf.modes = map[string]bool{
 		"byte": conf.byteMode,
 		"line": conf.lineMode,
-		"rune": conf.runeMode,
+		"char": conf.charMode,
 		"word": conf.wordMode,
 	}
 
@@ -128,7 +128,7 @@ func setup() (config, error) {
 func getCounts(r io.Reader, conf config) results {
 	counts := results{
 		"byte": 0,
-		"rune": 0,
+		"char": 0,
 		"line": 0,
 		"word": 0,
 	}
@@ -142,8 +142,8 @@ func getCounts(r io.Reader, conf config) results {
 			counts["byte"] += len(text)
 		}
 
-		if conf.runeMode {
-			counts["rune"] += utf8.RuneCountInString(text)
+		if conf.charMode {
+			counts["char"] += utf8.RuneCountInString(text)
 		}
 
 		if conf.wordMode {

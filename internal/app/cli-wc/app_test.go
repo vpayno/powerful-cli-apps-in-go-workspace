@@ -302,17 +302,17 @@ func TestGetRuneCount(t *testing.T) {
 	b := bytes.NewBufferString("0123456789\n0123456789\n")
 
 	conf := config{
-		runeMode: true,
+		charMode: true,
 		modes: map[string]bool{
-			"rune": true,
+			"char": true,
 		},
 	}
 
 	want := 22
-	got := getCounts(b, conf)["rune"]
+	got := getCounts(b, conf)["char"]
 
 	if want != got {
-		t.Errorf("Expected rune count %d, got %d.\n", want, got)
+		t.Errorf("Expected char count %d, got %d.\n", want, got)
 	}
 }
 
@@ -469,19 +469,19 @@ func TestShowRuneCountVerbose(t *testing.T) {
 	}()
 
 	counts := results{
-		"rune": 5,
+		"char": 5,
 	}
 
 	conf := config{
-		runeMode:    true,
+		charMode:    true,
 		verboseMode: true,
 		modes: map[string]bool{
-			"rune": true,
+			"char": true,
 		},
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("%8d (rune)\n", counts["rune"])
+	want := fmt.Sprintf("%8d (char)\n", counts["char"])
 
 	// Run the function who's output we want to capture.
 	showCount(counts, conf)
@@ -653,19 +653,19 @@ func TestShowRuneCount(t *testing.T) {
 	}()
 
 	counts := results{
-		"rune": 5,
+		"char": 5,
 	}
 
 	conf := config{
-		runeMode:    true,
+		charMode:    true,
 		verboseMode: false,
 		modes: map[string]bool{
-			"rune": true,
+			"char": true,
 		},
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("%d\n", counts["rune"])
+	want := fmt.Sprintf("%d\n", counts["char"])
 
 	// Run the function who's output we want to capture.
 	showCount(counts, conf)
@@ -680,7 +680,7 @@ func TestShowRuneCount(t *testing.T) {
 	}
 	got := buf.String()
 	if got != want {
-		t.Errorf("show rune count: want %q, got %q", want, got)
+		t.Errorf("show char count: want %q, got %q", want, got)
 	}
 }
 
@@ -730,7 +730,7 @@ func TestRunAppFlagVersion(t *testing.T) {
 func TestRunAppFlagByteAndRune(t *testing.T) {
 	want := config{
 		byteMode: false,
-		runeMode: true,
+		charMode: true,
 	}
 
 	os.Args = []string{"test", "-b", "-r"}
@@ -740,8 +740,8 @@ func TestRunAppFlagByteAndRune(t *testing.T) {
 		t.Errorf("setup flags -r & -b (byteMode): want %v, got %v", want.byteMode, got.byteMode)
 	}
 
-	if got.runeMode != want.runeMode {
-		t.Errorf("setup flags -r & -b (runeMode): want %v, got %v", want.runeMode, got.runeMode)
+	if got.charMode != want.charMode {
+		t.Errorf("setup flags -r & -b (charMode): want %v, got %v", want.charMode, got.charMode)
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
@@ -750,7 +750,7 @@ func TestRunAppFlagByteAndRune(t *testing.T) {
 func TestRunAppFlagWordAndRune(t *testing.T) {
 	want := config{
 		wordMode: true,
-		runeMode: false,
+		charMode: false,
 	}
 
 	os.Args = []string{"test", "-b", "-w"}
@@ -760,8 +760,8 @@ func TestRunAppFlagWordAndRune(t *testing.T) {
 		t.Errorf("setup flags -r & -b (wordMode): want %v, got %v", want.wordMode, got.wordMode)
 	}
 
-	if got.runeMode != want.runeMode {
-		t.Errorf("setup flags -r & -b (runeMode): want %v, got %v", want.runeMode, got.runeMode)
+	if got.charMode != want.charMode {
+		t.Errorf("setup flags -r & -b (charMode): want %v, got %v", want.charMode, got.charMode)
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
