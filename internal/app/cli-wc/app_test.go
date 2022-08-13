@@ -18,7 +18,18 @@ import (
   https://github.com/joncalhoun/algorithmswithgo.com/blob/master/module01/fizz_buzz_test.go
 */
 
+// Use this to put modules, functions in testing mode.
+func setupTestEnv() {
+}
+
+// Use this to undo things you did in setupTestEnv()
+func teardownTestEnv() {
+}
+
 func TestBadFlag(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStderr, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -55,6 +66,9 @@ func TestBadFlag(t *testing.T) {
 }
 
 func TestShowUsage(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStderr, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -91,6 +105,9 @@ func TestShowUsage(t *testing.T) {
 }
 
 func TestShowBanner(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -125,6 +142,9 @@ func TestShowBanner(t *testing.T) {
 }
 
 func TestSetupFlagsDefaults(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	want := config{
 		modes: map[string]bool{
 			"byte": true,
@@ -157,6 +177,9 @@ func TestSetupFlagsDefaults(t *testing.T) {
 }
 
 func TestSetupFlagsWordMode(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	want := config{
 		modes: map[string]bool{
 			"word": true,
@@ -179,6 +202,9 @@ func TestSetupFlagsWordMode(t *testing.T) {
 }
 
 func TestSetupFlagsLineMode(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	want := config{
 		modes: map[string]bool{
 			"line": true,
@@ -202,6 +228,9 @@ func TestSetupFlagsLineMode(t *testing.T) {
 }
 
 func TestSetupFlagsByteMode(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	want := config{
 		modes: map[string]bool{
 			"byte": true,
@@ -225,6 +254,9 @@ func TestSetupFlagsByteMode(t *testing.T) {
 }
 
 func TestSetupFlagVersion(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	// -V
 	os.Args = []string{"test", "-V"}
 	conf, err := setup()
@@ -241,6 +273,9 @@ func TestSetupFlagVersion(t *testing.T) {
 }
 
 func TestGetCounts(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	for _, tc := range testData {
 		t.Run(tc.name, func(t *testing.T) {
 			b := bytes.NewBufferString(tc.input)
@@ -264,6 +299,9 @@ func TestGetCounts(t *testing.T) {
 }
 
 func TestGetWordCount(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	b := bytes.NewBufferString("one two three four five\n")
 
 	conf := config{
@@ -281,6 +319,9 @@ func TestGetWordCount(t *testing.T) {
 }
 
 func TestGetLineCount(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	b := bytes.NewBufferString("one\ntwo\nthree\nfour\nfive\n")
 
 	conf := config{
@@ -298,6 +339,9 @@ func TestGetLineCount(t *testing.T) {
 }
 
 func TestGetByteCount(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	b := bytes.NewBufferString("0123456789\n0123456789\n")
 
 	conf := config{
@@ -315,6 +359,9 @@ func TestGetByteCount(t *testing.T) {
 }
 
 func TestGetRuneCount(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	b := bytes.NewBufferString("0123456789\n0123456789\n")
 
 	conf := config{
@@ -332,6 +379,9 @@ func TestGetRuneCount(t *testing.T) {
 }
 
 func TestShowWordCountVerbose(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -377,6 +427,9 @@ func TestShowWordCountVerbose(t *testing.T) {
 }
 
 func TestShowLineCountVerbose(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -467,6 +520,9 @@ func TestShowByteCountVerbose(t *testing.T) {
 }
 
 func TestShowRuneCountVerbose(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -512,6 +568,9 @@ func TestShowRuneCountVerbose(t *testing.T) {
 }
 
 func TestShowWordCount(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -557,6 +616,9 @@ func TestShowWordCount(t *testing.T) {
 }
 
 func TestShowLineCount(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -602,6 +664,9 @@ func TestShowLineCount(t *testing.T) {
 }
 
 func TestShowByteCount(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -647,6 +712,9 @@ func TestShowByteCount(t *testing.T) {
 }
 
 func TestShowRuneCount(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -692,6 +760,9 @@ func TestShowRuneCount(t *testing.T) {
 }
 
 func TestRunApp(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	os.Args = []string{"test", "-v"}
 
 	RunApp()
@@ -700,6 +771,9 @@ func TestRunApp(t *testing.T) {
 }
 
 func TestRunAppFlagVersion(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -735,6 +809,9 @@ func TestRunAppFlagVersion(t *testing.T) {
 }
 
 func TestRunAppFlagByteAndRune(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	want := config{
 		modes: map[string]bool{
 			"char": true,
@@ -757,6 +834,9 @@ func TestRunAppFlagByteAndRune(t *testing.T) {
 }
 
 func TestRunAppFlagWordAndRune(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
 	want := config{
 		modes: map[string]bool{
 			"char": false,
