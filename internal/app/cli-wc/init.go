@@ -9,6 +9,7 @@ import (
 
 // This is used to disable side-effects like flag calling os.Exit() during tests when it encounters an error or the --help flag.
 var flagExitErrorBehavior = flag.ExitOnError
+var flagSet = flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
 
 type appInfo struct {
 	name       string

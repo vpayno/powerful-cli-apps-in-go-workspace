@@ -21,12 +21,13 @@ import (
 // Use this to put modules, functions in testing mode.
 func setupTestEnv() {
 	flagExitErrorBehavior = flag.ContinueOnError
+	flagSet = flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
 }
 
 // Use this to undo things you did in setupTestEnv()
 func teardownTestEnv() {
 	flagExitErrorBehavior = flag.ExitOnError
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flagExitErrorBehavior) // flags are now reset
+	flagSet = flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
 }
 
 func TestBadFlag(t *testing.T) {
@@ -85,8 +86,8 @@ func TestShowUsage(t *testing.T) {
 		os.Stderr = osStderr
 	}()
 
-	// It's a silly test but I need the practice.
-	want := "Usage: cli [OPTION]..."
+	want1 := "Usage: cli [OPTION]..."
+	want2 := "show the app version"
 
 	// Run the function who's output we want to capture.
 	os.Args = []string{"cli", "-h"}
@@ -101,9 +102,14 @@ func TestShowUsage(t *testing.T) {
 		t.Error(err)
 	}
 	got := buf.String()
-	got = strings.Split(got, "\n")[0]
-	if got != want {
-		t.Errorf("Usage(); want %q, got %q", want, got)
+
+	got1 := strings.Split(got, "\n")[0]
+	if got1 != want1 {
+		t.Errorf("Usage(); want %q, got %q", want1, got1)
+	}
+
+	if !strings.Contains(got, want2) {
+		t.Errorf("Usage(); %q doesn't contain %q", got, want2)
 	}
 }
 

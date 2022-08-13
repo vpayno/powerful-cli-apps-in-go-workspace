@@ -43,23 +43,21 @@ func RunApp() {
 // Usage prints the command-line usage help message.
 func Usage() {
 	fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
-	flag.PrintDefaults()
+	flagSet.PrintDefaults()
 }
 
 func setup() (config, error) {
 
-	fs := flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
+	byteFlag := flagSet.Bool("b", false, "count bytes")
+	charFlag := flagSet.Bool("r", false, "count characters")
+	lineFlag := flagSet.Bool("l", false, "count newlines")
+	wordFlag := flagSet.Bool("w", false, "count words")
+	verboseFlag := flagSet.Bool("v", false, "verbose mode")
+	versionFlag := flagSet.Bool("V", false, "show the app version")
 
-	byteFlag := fs.Bool("b", false, "count bytes")
-	charFlag := fs.Bool("r", false, "count characters")
-	lineFlag := fs.Bool("l", false, "count newlines")
-	wordFlag := fs.Bool("w", false, "count words")
-	verboseFlag := fs.Bool("v", false, "verbose mode")
-	versionFlag := fs.Bool("V", false, "show the app version")
+	flagSet.Usage = Usage
 
-	fs.Usage = Usage
-
-	err := fs.Parse(os.Args[1:])
+	err := flagSet.Parse(os.Args[1:])
 
 	if err != nil {
 		return config{}, err

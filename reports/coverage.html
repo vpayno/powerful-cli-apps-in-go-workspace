@@ -149,23 +149,21 @@ func RunApp() <span class="cov4" title="4">{
 // Usage prints the command-line usage help message.
 func Usage() <span class="cov2" title="2">{
         fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
-        flag.PrintDefaults()
+        flagSet.PrintDefaults()
 }</span>
 
 func setup() (config, error) <span class="cov6" title="11">{
 
-        fs := flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
+        byteFlag := flagSet.Bool("b", false, "count bytes")
+        charFlag := flagSet.Bool("r", false, "count characters")
+        lineFlag := flagSet.Bool("l", false, "count newlines")
+        wordFlag := flagSet.Bool("w", false, "count words")
+        verboseFlag := flagSet.Bool("v", false, "verbose mode")
+        versionFlag := flagSet.Bool("V", false, "show the app version")
 
-        byteFlag := fs.Bool("b", false, "count bytes")
-        charFlag := fs.Bool("r", false, "count characters")
-        lineFlag := fs.Bool("l", false, "count newlines")
-        wordFlag := fs.Bool("w", false, "count words")
-        verboseFlag := fs.Bool("v", false, "verbose mode")
-        versionFlag := fs.Bool("V", false, "show the app version")
+        flagSet.Usage = Usage
 
-        fs.Usage = Usage
-
-        err := fs.Parse(os.Args[1:])
+        err := flagSet.Parse(os.Args[1:])
 
         if err != nil </span><span class="cov2" title="2">{
                 return config{}, err
@@ -319,6 +317,7 @@ import (
 
 // This is used to disable side-effects like flag calling os.Exit() during tests when it encounters an error or the --help flag.
 var flagExitErrorBehavior = flag.ExitOnError
+var flagSet = flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
 
 type appInfo struct {
         name       string
