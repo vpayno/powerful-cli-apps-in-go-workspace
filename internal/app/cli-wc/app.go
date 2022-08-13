@@ -49,7 +49,7 @@ func Usage() {
 func setup() (config, error) {
 
 	byteFlag := flagSet.Bool("b", false, "count bytes")
-	charFlag := flagSet.Bool("r", false, "count characters")
+	charFlag := flagSet.Bool("m", false, "print the character counts")
 	lineFlag := flagSet.Bool("l", false, "count newlines")
 	wordFlag := flagSet.Bool("w", false, "count words")
 	verboseFlag := flagSet.Bool("v", false, "verbose mode")
