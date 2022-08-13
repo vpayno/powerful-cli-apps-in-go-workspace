@@ -87,7 +87,7 @@ func TestShowUsage(t *testing.T) {
 	}()
 
 	want1 := "Usage: cli [OPTION]..."
-	want2 := "show the app version"
+	want2 := "output version information and exit"
 
 	// Run the function who's output we want to capture.
 	os.Args = []string{"cli", "-h"}

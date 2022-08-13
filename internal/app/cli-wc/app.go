@@ -53,7 +53,7 @@ func setup() (config, error) {
 	lineFlag := flagSet.Bool("l", false, "print the newline counts")
 	wordFlag := flagSet.Bool("w", false, "print the word counts")
 	verboseFlag := flagSet.Bool("v", false, "verbose mode")
-	versionFlag := flagSet.Bool("V", false, "show the app version")
+	versionFlag := flagSet.Bool("V", false, "output version information and exit")
 
 	flagSet.Usage = Usage
 
