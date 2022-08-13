@@ -154,7 +154,7 @@ func Usage() <span class="cov2" title="2">{
 
 func setup() (config, error) <span class="cov6" title="11">{
 
-        byteFlag := flagSet.Bool("b", false, "count bytes")
+        byteFlag := flagSet.Bool("c", false, "print the byte counts")
         charFlag := flagSet.Bool("m", false, "print the character counts")
         lineFlag := flagSet.Bool("l", false, "count newlines")
         wordFlag := flagSet.Bool("w", false, "count words")

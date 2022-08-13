@@ -241,7 +241,7 @@ func TestSetupFlagsByteMode(t *testing.T) {
 	}
 
 	// -l
-	os.Args = []string{"test", "-b"}
+	os.Args = []string{"test", "-c"}
 
 	got, err := setup()
 
@@ -814,15 +814,15 @@ func TestRunAppFlagByteAndRune(t *testing.T) {
 		},
 	}
 
-	os.Args = []string{"test", "-b", "-m"}
+	os.Args = []string{"test", "-c", "-m"}
 	got, _ := setup()
 
 	if got.modes["byte"] != want.modes["byte"] {
-		t.Errorf("setup flags -m & -b (byteMode): want %v, got %v", want.modes["byte"], got.modes["byte"])
+		t.Errorf("setup flags -m & -c (byteMode): want %v, got %v", want.modes["byte"], got.modes["byte"])
 	}
 
 	if got.modes["char"] != want.modes["char"] {
-		t.Errorf("setup flags -m & -b (charMode): want %v, got %v", want.modes["char"], got.modes["char"])
+		t.Errorf("setup flags -m & -c (charMode): want %v, got %v", want.modes["char"], got.modes["char"])
 	}
 }
 
@@ -837,14 +837,14 @@ func TestRunAppFlagWordAndRune(t *testing.T) {
 		},
 	}
 
-	os.Args = []string{"test", "-b", "-w"}
+	os.Args = []string{"test", "-c", "-w"}
 	got, _ := setup()
 
 	if got.modes["word"] != want.modes["word"] {
-		t.Errorf("setup flags -m & -b (wordMode): want %v, got %v", want.modes["word"], got.modes["word"])
+		t.Errorf("setup flags -m & -c (wordMode): want %v, got %v", want.modes["word"], got.modes["word"])
 	}
 
 	if got.modes["char"] != want.modes["char"] {
-		t.Errorf("setup flags -m & -b (charMode): want %v, got %v", want.modes["char"], got.modes["char"])
+		t.Errorf("setup flags -m & -c (charMode): want %v, got %v", want.modes["char"], got.modes["char"])
 	}
 }
