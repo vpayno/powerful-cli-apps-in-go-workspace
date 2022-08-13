@@ -124,9 +124,6 @@ func TestShowBanner(t *testing.T) {
 
 func TestSetupFlagsDefaults(t *testing.T) {
 	want := config{
-		byteMode: true,
-		lineMode: true,
-		wordMode: true,
 		modes: map[string]bool{
 			"byte": true,
 			"line": true,
@@ -142,16 +139,16 @@ func TestSetupFlagsDefaults(t *testing.T) {
 		t.Error(err)
 	}
 
-	if want.byteMode != got.byteMode {
-		t.Errorf("setup() returned the wrong byte mode value. want: %v, got %v", want.byteMode, got.byteMode)
+	if want.modes["byte"] != got.modes["byte"] {
+		t.Errorf("setup() returned the wrong byte mode value. want: %v, got %v", want.modes["byte"], got.modes["byte"])
 	}
 
-	if want.lineMode != got.lineMode {
-		t.Errorf("setup() returned the wrong line mode value. want: %v, got %v", want.lineMode, got.lineMode)
+	if want.modes["line"] != got.modes["line"] {
+		t.Errorf("setup() returned the wrong line mode value. want: %v, got %v", want.modes["line"], got.modes["line"])
 	}
 
-	if want.wordMode != got.wordMode {
-		t.Errorf("setup() returned the wrong word mode value. want: %v, got %v", want.wordMode, got.wordMode)
+	if want.modes["word"] != got.modes["word"] {
+		t.Errorf("setup() returned the wrong word mode value. want: %v, got %v", want.modes["word"], got.modes["word"])
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
@@ -159,7 +156,6 @@ func TestSetupFlagsDefaults(t *testing.T) {
 
 func TestSetupFlagsWordMode(t *testing.T) {
 	want := config{
-		wordMode: true,
 		modes: map[string]bool{
 			"word": true,
 		},
@@ -173,8 +169,8 @@ func TestSetupFlagsWordMode(t *testing.T) {
 		t.Error(err)
 	}
 
-	if want.wordMode != got.wordMode {
-		t.Errorf("setup() returned the wrong word mode value. want: %v, got %v", want.wordMode, got.wordMode)
+	if want.modes["word"] != got.modes["word"] {
+		t.Errorf("setup() returned the wrong word mode value. want: %v, got %v", want.modes["word"], got.modes["word"])
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
@@ -182,7 +178,6 @@ func TestSetupFlagsWordMode(t *testing.T) {
 
 func TestSetupFlagsLineMode(t *testing.T) {
 	want := config{
-		lineMode: true,
 		modes: map[string]bool{
 			"line": true,
 		},
@@ -197,8 +192,8 @@ func TestSetupFlagsLineMode(t *testing.T) {
 		t.Error(err)
 	}
 
-	if want.lineMode != got.lineMode {
-		t.Errorf("setup() returned the wrong line mode value. want: %v, got %v", want.lineMode, got.lineMode)
+	if want.modes["line"] != got.modes["line"] {
+		t.Errorf("setup() returned the wrong line mode value. want: %v, got %v", want.modes["line"], got.modes["line"])
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
@@ -206,7 +201,6 @@ func TestSetupFlagsLineMode(t *testing.T) {
 
 func TestSetupFlagsByteMode(t *testing.T) {
 	want := config{
-		byteMode: true,
 		modes: map[string]bool{
 			"byte": true,
 		},
@@ -221,8 +215,8 @@ func TestSetupFlagsByteMode(t *testing.T) {
 		t.Error(err)
 	}
 
-	if want.byteMode != got.byteMode {
-		t.Errorf("setup() returned the wrong byte mode value. want: %v, got %v", want.byteMode, got.byteMode)
+	if want.modes["byte"] != got.modes["byte"] {
+		t.Errorf("setup() returned the wrong byte mode value. want: %v, got %v", want.modes["byte"], got.modes["byte"])
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
@@ -248,7 +242,6 @@ func TestGetWordCount(t *testing.T) {
 	b := bytes.NewBufferString("one two three four five\n")
 
 	conf := config{
-		wordMode: true,
 		modes: map[string]bool{
 			"word": true,
 		},
@@ -266,7 +259,6 @@ func TestGetLineCount(t *testing.T) {
 	b := bytes.NewBufferString("one\ntwo\nthree\nfour\nfive\n")
 
 	conf := config{
-		lineMode: true,
 		modes: map[string]bool{
 			"line": true,
 		},
@@ -284,7 +276,6 @@ func TestGetByteCount(t *testing.T) {
 	b := bytes.NewBufferString("0123456789\n0123456789\n")
 
 	conf := config{
-		byteMode: true,
 		modes: map[string]bool{
 			"byte": true,
 		},
@@ -302,7 +293,6 @@ func TestGetRuneCount(t *testing.T) {
 	b := bytes.NewBufferString("0123456789\n0123456789\n")
 
 	conf := config{
-		charMode: true,
 		modes: map[string]bool{
 			"char": true,
 		},
@@ -335,7 +325,6 @@ func TestShowWordCountVerbose(t *testing.T) {
 	}
 
 	conf := config{
-		wordMode:    true,
 		verboseMode: true,
 		modes: map[string]bool{
 			"word": true,
@@ -381,7 +370,6 @@ func TestShowLineCountVerbose(t *testing.T) {
 	}
 
 	conf := config{
-		lineMode:    true,
 		verboseMode: true,
 		modes: map[string]bool{
 			"line": true,
@@ -427,7 +415,6 @@ func TestShowByteCountVerbose(t *testing.T) {
 	}
 
 	conf := config{
-		byteMode:    true,
 		verboseMode: true,
 		modes: map[string]bool{
 			"byte": true,
@@ -473,7 +460,6 @@ func TestShowRuneCountVerbose(t *testing.T) {
 	}
 
 	conf := config{
-		charMode:    true,
 		verboseMode: true,
 		modes: map[string]bool{
 			"char": true,
@@ -519,7 +505,6 @@ func TestShowWordCount(t *testing.T) {
 	}
 
 	conf := config{
-		wordMode:    true,
 		verboseMode: false,
 		modes: map[string]bool{
 			"word": true,
@@ -565,7 +550,6 @@ func TestShowLineCount(t *testing.T) {
 	}
 
 	conf := config{
-		lineMode:    true,
 		verboseMode: false,
 		modes: map[string]bool{
 			"line": true,
@@ -611,7 +595,6 @@ func TestShowByteCount(t *testing.T) {
 	}
 
 	conf := config{
-		byteMode:    true,
 		verboseMode: false,
 		modes: map[string]bool{
 			"byte": true,
@@ -657,7 +640,6 @@ func TestShowRuneCount(t *testing.T) {
 	}
 
 	conf := config{
-		charMode:    true,
 		verboseMode: false,
 		modes: map[string]bool{
 			"char": true,
@@ -729,19 +711,21 @@ func TestRunAppFlagVersion(t *testing.T) {
 
 func TestRunAppFlagByteAndRune(t *testing.T) {
 	want := config{
-		byteMode: false,
-		charMode: true,
+		modes: map[string]bool{
+			"char": true,
+			"byte": false,
+		},
 	}
 
 	os.Args = []string{"test", "-b", "-r"}
 	got, _ := setup()
 
-	if got.byteMode != want.byteMode {
-		t.Errorf("setup flags -r & -b (byteMode): want %v, got %v", want.byteMode, got.byteMode)
+	if got.modes["byte"] != want.modes["byte"] {
+		t.Errorf("setup flags -r & -b (byteMode): want %v, got %v", want.modes["byte"], got.modes["byte"])
 	}
 
-	if got.charMode != want.charMode {
-		t.Errorf("setup flags -r & -b (charMode): want %v, got %v", want.charMode, got.charMode)
+	if got.modes["char"] != want.modes["char"] {
+		t.Errorf("setup flags -r & -b (charMode): want %v, got %v", want.modes["char"], got.modes["char"])
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
@@ -749,19 +733,21 @@ func TestRunAppFlagByteAndRune(t *testing.T) {
 
 func TestRunAppFlagWordAndRune(t *testing.T) {
 	want := config{
-		wordMode: true,
-		charMode: false,
+		modes: map[string]bool{
+			"char": false,
+			"word": true,
+		},
 	}
 
 	os.Args = []string{"test", "-b", "-w"}
 	got, _ := setup()
 
-	if got.wordMode != want.wordMode {
-		t.Errorf("setup flags -r & -b (wordMode): want %v, got %v", want.wordMode, got.wordMode)
+	if got.modes["word"] != want.modes["word"] {
+		t.Errorf("setup flags -r & -b (wordMode): want %v, got %v", want.modes["word"], got.modes["word"])
 	}
 
-	if got.charMode != want.charMode {
-		t.Errorf("setup flags -r & -b (charMode): want %v, got %v", want.charMode, got.charMode)
+	if got.modes["char"] != want.modes["char"] {
+		t.Errorf("setup flags -r & -b (charMode): want %v, got %v", want.modes["char"], got.modes["char"])
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset

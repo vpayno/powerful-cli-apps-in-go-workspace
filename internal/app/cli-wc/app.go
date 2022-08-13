@@ -49,12 +49,12 @@ func Usage() {
 func setup() (config, error) {
 	fs := flag.NewFlagSet("cli", flag.ContinueOnError)
 
-	lineMode := fs.Bool("l", false, "count newlines")
-	wordMode := fs.Bool("w", false, "count words")
-	charMode := fs.Bool("r", false, "count characters")
-	byteMode := fs.Bool("b", false, "count bytes")
-	verboseMode := fs.Bool("v", false, "verbose mode")
-	versionMode := fs.Bool("V", false, "show the app version")
+	byteFlag := fs.Bool("b", false, "count bytes")
+	charFlag := fs.Bool("r", false, "count characters")
+	lineFlag := fs.Bool("l", false, "count newlines")
+	wordFlag := fs.Bool("w", false, "count words")
+	verboseFlag := fs.Bool("v", false, "verbose mode")
+	versionFlag := fs.Bool("V", false, "show the app version")
 
 	fs.Usage = Usage
 
@@ -65,61 +65,64 @@ func setup() (config, error) {
 	}
 
 	conf := config{
-		verboseMode: *verboseMode,
-		versionMode: *versionMode,
+		verboseMode: *verboseFlag,
+		versionMode: *versionFlag,
 	}
 
 	usingDefaults := true
 
+	var byteMode bool
+	var charMode bool
+	var lineMode bool
+	var wordMode bool
+
 	// order for flag overrides: newline, word, character, byte.
-	if *byteMode {
+	switch {
+	case *lineFlag:
 		usingDefaults = false
 
-		conf.byteMode = true
-		conf.lineMode = false
-		conf.charMode = false
-		conf.wordMode = false
-	}
+		byteMode = false
+		charMode = false
+		lineMode = true
+		wordMode = false
 
-	if *charMode {
+	case *wordFlag:
 		usingDefaults = false
 
-		conf.byteMode = false
-		conf.lineMode = false
-		conf.charMode = true
-		conf.wordMode = false
-	}
+		byteMode = false
+		charMode = false
+		lineMode = false
+		wordMode = true
 
-	if *wordMode {
+	case *charFlag:
 		usingDefaults = false
 
-		conf.byteMode = false
-		conf.lineMode = false
-		conf.charMode = false
-		conf.wordMode = true
-	}
+		byteMode = false
+		charMode = true
+		lineMode = false
+		wordMode = false
 
-	if *lineMode {
+	case *byteFlag:
 		usingDefaults = false
 
-		conf.byteMode = false
-		conf.lineMode = true
-		conf.charMode = false
-		conf.wordMode = false
+		byteMode = true
+		charMode = false
+		lineMode = false
+		wordMode = false
 	}
 
 	if usingDefaults {
-		conf.byteMode = true
-		conf.lineMode = true
-		conf.charMode = false
-		conf.wordMode = true
+		byteMode = true
+		lineMode = true
+		charMode = false
+		wordMode = true
 	}
 
 	conf.modes = map[string]bool{
-		"byte": conf.byteMode,
-		"line": conf.lineMode,
-		"char": conf.charMode,
-		"word": conf.wordMode,
+		"byte": byteMode,
+		"char": charMode,
+		"line": lineMode,
+		"word": wordMode,
 	}
 
 	return conf, nil
@@ -138,19 +141,19 @@ func getCounts(r io.Reader, conf config) results {
 	for scanner.Scan() {
 		text := scanner.Text() + "\n"
 
-		if conf.byteMode {
+		if conf.modes["byte"] {
 			counts["byte"] += len(text)
 		}
 
-		if conf.charMode {
+		if conf.modes["char"] {
 			counts["char"] += utf8.RuneCountInString(text)
 		}
 
-		if conf.wordMode {
+		if conf.modes["word"] {
 			counts["word"] += len(strings.Fields(text))
 		}
 
-		if conf.lineMode {
+		if conf.modes["line"] {
 			counts["line"]++
 		}
 	}

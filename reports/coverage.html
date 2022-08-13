@@ -155,12 +155,12 @@ func Usage() <span class="cov2" title="2">{
 func setup() (config, error) <span class="cov7" title="11">{
         fs := flag.NewFlagSet("cli", flag.ContinueOnError)
 
-        lineMode := fs.Bool("l", false, "count newlines")
-        wordMode := fs.Bool("w", false, "count words")
-        charMode := fs.Bool("r", false, "count characters")
-        byteMode := fs.Bool("b", false, "count bytes")
-        verboseMode := fs.Bool("v", false, "verbose mode")
-        versionMode := fs.Bool("V", false, "show the app version")
+        byteFlag := fs.Bool("b", false, "count bytes")
+        charFlag := fs.Bool("r", false, "count characters")
+        lineFlag := fs.Bool("l", false, "count newlines")
+        wordFlag := fs.Bool("w", false, "count words")
+        verboseFlag := fs.Bool("v", false, "verbose mode")
+        versionFlag := fs.Bool("V", false, "show the app version")
 
         fs.Usage = Usage
 
@@ -171,61 +171,64 @@ func setup() (config, error) <span class="cov7" title="11">{
         }</span>
 
         <span class="cov6" title="9">conf := config{
-                verboseMode: *verboseMode,
-                versionMode: *versionMode,
+                verboseMode: *verboseFlag,
+                versionMode: *versionFlag,
         }
 
         usingDefaults := true
 
+        var byteMode bool
+        var charMode bool
+        var lineMode bool
+        var wordMode bool
+
         // order for flag overrides: newline, word, character, byte.
-        if *byteMode </span><span class="cov3" title="3">{
+        switch </span>{
+        case *lineFlag:<span class="cov1" title="1">
                 usingDefaults = false
 
-                conf.byteMode = true
-                conf.lineMode = false
-                conf.charMode = false
-                conf.wordMode = false
-        }</span>
+                byteMode = false
+                charMode = false
+                lineMode = true
+                wordMode = false</span>
 
-        <span class="cov6" title="9">if *charMode </span><span class="cov1" title="1">{
+        case *wordFlag:<span class="cov2" title="2">
                 usingDefaults = false
 
-                conf.byteMode = false
-                conf.lineMode = false
-                conf.charMode = true
-                conf.wordMode = false
-        }</span>
+                byteMode = false
+                charMode = false
+                lineMode = false
+                wordMode = true</span>
 
-        <span class="cov6" title="9">if *wordMode </span><span class="cov2" title="2">{
+        case *charFlag:<span class="cov1" title="1">
                 usingDefaults = false
 
-                conf.byteMode = false
-                conf.lineMode = false
-                conf.charMode = false
-                conf.wordMode = true
-        }</span>
+                byteMode = false
+                charMode = true
+                lineMode = false
+                wordMode = false</span>
 
-        <span class="cov6" title="9">if *lineMode </span><span class="cov1" title="1">{
+        case *byteFlag:<span class="cov1" title="1">
                 usingDefaults = false
 
-                conf.byteMode = false
-                conf.lineMode = true
-                conf.charMode = false
-                conf.wordMode = false
-        }</span>
+                byteMode = true
+                charMode = false
+                lineMode = false
+                wordMode = false</span>
+        }
 
         <span class="cov6" title="9">if usingDefaults </span><span class="cov4" title="4">{
-                conf.byteMode = true
-                conf.lineMode = true
-                conf.charMode = false
-                conf.wordMode = true
+                byteMode = true
+                lineMode = true
+                charMode = false
+                wordMode = true
         }</span>
 
         <span class="cov6" title="9">conf.modes = map[string]bool{
-                "byte": conf.byteMode,
-                "line": conf.lineMode,
-                "char": conf.charMode,
-                "word": conf.wordMode,
+                "byte": byteMode,
+                "char": charMode,
+                "line": lineMode,
+                "word": wordMode,
         }
 
         return conf, nil</span>
@@ -244,19 +247,19 @@ func getCounts(r io.Reader, conf config) results <span class="cov5" title="5">{
         for scanner.Scan() </span><span class="cov6" title="10">{
                 text := scanner.Text() + "\n"
 
-                if conf.byteMode </span><span class="cov2" title="2">{
+                if conf.modes["byte"] </span><span class="cov2" title="2">{
                         counts["byte"] += len(text)
                 }</span>
 
-                <span class="cov6" title="10">if conf.charMode </span><span class="cov2" title="2">{
+                <span class="cov6" title="10">if conf.modes["char"] </span><span class="cov2" title="2">{
                         counts["char"] += utf8.RuneCountInString(text)
                 }</span>
 
-                <span class="cov6" title="10">if conf.wordMode </span><span class="cov1" title="1">{
+                <span class="cov6" title="10">if conf.modes["word"] </span><span class="cov1" title="1">{
                         counts["word"] += len(strings.Fields(text))
                 }</span>
 
-                <span class="cov6" title="10">if conf.lineMode </span><span class="cov5" title="5">{
+                <span class="cov6" title="10">if conf.modes["line"] </span><span class="cov5" title="5">{
                         counts["line"]++
                 }</span>
         }
