@@ -20,10 +20,6 @@ var metadata = appInfo{
 }
 
 type config struct {
-	byteMode    bool
-	lineMode    bool
-	charMode    bool
-	wordMode    bool
 	modes       map[string]bool
 	verboseMode bool
 	versionMode bool
