@@ -1,10 +1,14 @@
 package appwc
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"strings"
 )
+
+// This is used to disable side-effects like flag calling os.Exit() during tests when it encounters an error or the --help flag.
+var flagExitErrorBehavior = flag.ExitOnError
 
 type appInfo struct {
 	name       string

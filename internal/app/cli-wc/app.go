@@ -47,7 +47,8 @@ func Usage() {
 }
 
 func setup() (config, error) {
-	fs := flag.NewFlagSet("cli", flag.ContinueOnError)
+
+	fs := flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
 
 	byteFlag := fs.Bool("b", false, "count bytes")
 	charFlag := fs.Bool("r", false, "count characters")

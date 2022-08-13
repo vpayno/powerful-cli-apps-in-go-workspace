@@ -20,10 +20,13 @@ import (
 
 // Use this to put modules, functions in testing mode.
 func setupTestEnv() {
+	flagExitErrorBehavior = flag.ContinueOnError
 }
 
 // Use this to undo things you did in setupTestEnv()
 func teardownTestEnv() {
+	flagExitErrorBehavior = flag.ExitOnError
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flagExitErrorBehavior) // flags are now reset
 }
 
 func TestBadFlag(t *testing.T) {
@@ -172,8 +175,6 @@ func TestSetupFlagsDefaults(t *testing.T) {
 	if want.modes["word"] != got.modes["word"] {
 		t.Errorf("setup() returned the wrong word mode value. want: %v, got %v", want.modes["word"], got.modes["word"])
 	}
-
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
 
 func TestSetupFlagsWordMode(t *testing.T) {
@@ -197,8 +198,6 @@ func TestSetupFlagsWordMode(t *testing.T) {
 	if want.modes["word"] != got.modes["word"] {
 		t.Errorf("setup() returned the wrong word mode value. want: %v, got %v", want.modes["word"], got.modes["word"])
 	}
-
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
 
 func TestSetupFlagsLineMode(t *testing.T) {
@@ -223,8 +222,6 @@ func TestSetupFlagsLineMode(t *testing.T) {
 	if want.modes["line"] != got.modes["line"] {
 		t.Errorf("setup() returned the wrong line mode value. want: %v, got %v", want.modes["line"], got.modes["line"])
 	}
-
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
 
 func TestSetupFlagsByteMode(t *testing.T) {
@@ -249,8 +246,6 @@ func TestSetupFlagsByteMode(t *testing.T) {
 	if want.modes["byte"] != got.modes["byte"] {
 		t.Errorf("setup() returned the wrong byte mode value. want: %v, got %v", want.modes["byte"], got.modes["byte"])
 	}
-
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
 
 func TestSetupFlagVersion(t *testing.T) {
@@ -268,8 +263,6 @@ func TestSetupFlagVersion(t *testing.T) {
 	if !conf.versionMode {
 		t.Errorf("versionMode: want %v, got %v", true, conf.versionMode)
 	}
-
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
 
 func TestGetCounts(t *testing.T) {
@@ -766,8 +759,6 @@ func TestRunApp(t *testing.T) {
 	os.Args = []string{"test", "-v"}
 
 	RunApp()
-
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
 
 func TestRunAppFlagVersion(t *testing.T) {
@@ -804,8 +795,6 @@ func TestRunAppFlagVersion(t *testing.T) {
 	if got != want {
 		t.Errorf("RunApp (Flag -V): want %q, got %q", want, got)
 	}
-
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
 
 func TestRunAppFlagByteAndRune(t *testing.T) {
@@ -829,8 +818,6 @@ func TestRunAppFlagByteAndRune(t *testing.T) {
 	if got.modes["char"] != want.modes["char"] {
 		t.Errorf("setup flags -r & -b (charMode): want %v, got %v", want.modes["char"], got.modes["char"])
 	}
-
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }
 
 func TestRunAppFlagWordAndRune(t *testing.T) {
@@ -854,6 +841,4 @@ func TestRunAppFlagWordAndRune(t *testing.T) {
 	if got.modes["char"] != want.modes["char"] {
 		t.Errorf("setup flags -r & -b (charMode): want %v, got %v", want.modes["char"], got.modes["char"])
 	}
-
-	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
 }

@@ -153,7 +153,8 @@ func Usage() <span class="cov2" title="2">{
 }</span>
 
 func setup() (config, error) <span class="cov6" title="11">{
-        fs := flag.NewFlagSet("cli", flag.ContinueOnError)
+
+        fs := flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
 
         byteFlag := fs.Bool("b", false, "count bytes")
         charFlag := fs.Bool("r", false, "count characters")
@@ -310,10 +311,14 @@ func showCount(counts results, conf config) <span class="cov6" title="9">{
 		<pre class="file" id="file2" style="display: none">package appwc
 
 import (
+        "flag"
         "fmt"
         "os"
         "strings"
 )
+
+// This is used to disable side-effects like flag calling os.Exit() during tests when it encounters an error or the --help flag.
+var flagExitErrorBehavior = flag.ExitOnError
 
 type appInfo struct {
         name       string
