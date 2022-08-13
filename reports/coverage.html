@@ -56,11 +56,11 @@
 				<select id="files">
 				
 				<option value="file0">github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go (100.0%)</option>
-
+				
 				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (100.0%)</option>
-
+				
 				<option value="file2">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go (100.0%)</option>
-
+				
 				</select>
 			</div>
 			<div id="legend">
@@ -103,7 +103,7 @@ func main() <span class="cov8" title="1">{
         appwc.RunApp()
 }</span>
 </pre>
-
+		
 		<pre class="file" id="file1" style="display: none">// Package appwc is the module with the cli logic for the wc main application.
 package appwc
 
@@ -276,10 +276,17 @@ func getCounts(r io.Reader, conf config) results <span class="cov7" title="20">{
 
 func showCount(counts results, conf config) <span class="cov6" title="9">{
         first := true
-        fieldSize := "0"
+        fieldSize := "7"
 
-        if conf.verboseMode </span><span class="cov4" title="5">{
-                fieldSize = "8"
+        var modeCount int
+        for _, v := range conf.modes </span><span class="cov6" title="12">{
+                if v </span><span class="cov6" title="11">{
+                        modeCount++
+                }</span>
+        }
+
+        <span class="cov6" title="9">if modeCount == 1 </span><span class="cov5" title="8">{
+                fieldSize = "0"
         }</span>
 
         <span class="cov6" title="9">for _, mode := range printOrder </span><span class="cov9" title="36">{
@@ -288,7 +295,7 @@ func showCount(counts results, conf config) <span class="cov6" title="9">{
                 }
 
                 <span class="cov6" title="11">if !first </span><span class="cov2" title="2">{
-                        fieldSize = "9"
+                        fieldSize = "8"
                 }</span>
 
                 <span class="cov6" title="11">first = false
@@ -305,7 +312,7 @@ func showCount(counts results, conf config) <span class="cov6" title="9">{
         <span class="cov6" title="9">fmt.Println()</span>
 }
 </pre>
-
+		
 		<pre class="file" id="file2" style="display: none">package appwc
 
 import (
@@ -412,7 +419,7 @@ func Exit(code int, msg string) <span class="cov1" title="1">{
         OSExit(code)
 }</span>
 </pre>
-
+		
 		</div>
 	</body>
 	<script>

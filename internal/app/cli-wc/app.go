@@ -170,10 +170,17 @@ func getCounts(r io.Reader, conf config) results {
 
 func showCount(counts results, conf config) {
 	first := true
-	fieldSize := "0"
+	fieldSize := "7"
 
-	if conf.verboseMode {
-		fieldSize = "8"
+	var modeCount int
+	for _, v := range conf.modes {
+		if v {
+			modeCount++
+		}
+	}
+
+	if modeCount == 1 {
+		fieldSize = "0"
 	}
 
 	for _, mode := range printOrder {
@@ -182,7 +189,7 @@ func showCount(counts results, conf config) {
 		}
 
 		if !first {
-			fieldSize = "9"
+			fieldSize = "8"
 		}
 
 		first = false

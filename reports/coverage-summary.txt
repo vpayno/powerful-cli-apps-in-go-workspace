@@ -4,14 +4,14 @@ github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go main	 1
 github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc		 ----	 100.00% (2/2)
 
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go	 setup		 100.00% (44/44)
+github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go	 showCount	 100.00% (19/19)
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go	 getCounts	 100.00% (17/17)
-github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go	 showCount	 100.00% (15/15)
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go	 RunApp		 100.00% (12/12)
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go	 SetVersion	 100.00% (11/11)
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go	 showVersion	 100.00% (9/9)
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go	 Usage		 100.00% (2/2)
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go	 showBanner	 100.00% (2/2)
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go	 Exit		 100.00% (2/2)
-github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc		 -----------	 100.00% (114/114)
+github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc		 -----------	 100.00% (118/118)
 
-Total Coverage: 100.00% (116/116)
+Total Coverage: 100.00% (120/120)

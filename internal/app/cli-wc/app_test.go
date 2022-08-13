@@ -406,7 +406,7 @@ func TestShowWordCountVerbose(t *testing.T) {
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("%8d (word)\n", counts["word"])
+	want := fmt.Sprintf("%d (word)\n", counts["word"])
 
 	// Run the function who's output we want to capture.
 	showCount(counts, conf)
@@ -454,7 +454,7 @@ func TestShowLineCountVerbose(t *testing.T) {
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("%8d (line)\n", counts["line"])
+	want := fmt.Sprintf("%d (line)\n", counts["line"])
 
 	// Run the function who's output we want to capture.
 	showCount(counts, conf)
@@ -499,7 +499,7 @@ func TestShowByteCountVerbose(t *testing.T) {
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("%8d (byte)\n", counts["byte"])
+	want := fmt.Sprintf("%d (byte)\n", counts["byte"])
 
 	// Run the function who's output we want to capture.
 	showCount(counts, conf)
@@ -547,7 +547,7 @@ func TestShowRuneCountVerbose(t *testing.T) {
 	}
 
 	// It's a silly test but I need the practice.
-	want := fmt.Sprintf("%8d (char)\n", counts["char"])
+	want := fmt.Sprintf("%d (char)\n", counts["char"])
 
 	// Run the function who's output we want to capture.
 	showCount(counts, conf)
