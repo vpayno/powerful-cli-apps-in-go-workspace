@@ -38,7 +38,9 @@ install: build
 
 clean:
 	go clean
-	rm -fv .coverage.* ./cmd/changeme/.version.txt
+	rm -fv .coverage.*
+	git restore ./cmd/*/.version.txt
+	rm -fv ./cli-*
 	@printf "\n"
 
 vendor:
