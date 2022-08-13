@@ -8,6 +8,8 @@ import (
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 /*
@@ -236,6 +238,29 @@ func TestSetupFlagVersion(t *testing.T) {
 	}
 
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError) // flags are now reset
+}
+
+func TestGetCounts(t *testing.T) {
+	for _, tc := range testData {
+		t.Run(tc.name, func(t *testing.T) {
+			b := bytes.NewBufferString(tc.input)
+			c := config{
+				modes: map[string]bool{
+					"byte": true,
+					"char": true,
+					"word": true,
+					"line": true,
+				},
+			}
+
+			got := getCounts(b, c)
+
+			assert.Equal(t, tc.wantByte, got["byte"], "byte counts aren't equal")
+			assert.Equal(t, tc.wantChar, got["char"], "char counts aren't equal")
+			assert.Equal(t, tc.wantWord, got["word"], "word counts aren't equal")
+			assert.Equal(t, tc.wantLine, got["line"], "line counts aren't equal")
+		})
+	}
 }
 
 func TestGetWordCount(t *testing.T) {

@@ -5,7 +5,7 @@ github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go:2
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go:44:	Usage		100.0%
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go:49:	setup		100.0%
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go:131:	getCounts	100.0%
-github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go:164:	showCount	100.0%
+github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go:172:	showCount	100.0%
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go:53:	SetVersion	100.0%
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go:74:	showVersion	100.0%
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go:97:	Exit		100.0%

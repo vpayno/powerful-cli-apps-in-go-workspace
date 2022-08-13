@@ -136,10 +136,10 @@ func getCounts(r io.Reader, conf config) results {
 		"word": 0,
 	}
 
-	scanner := bufio.NewScanner(r)
+	reader := bufio.NewReader(r)
 
-	for scanner.Scan() {
-		text := scanner.Text() + "\n"
+	for {
+		text, err := reader.ReadString('\n')
 
 		if conf.modes["byte"] {
 			counts["byte"] += len(text)
@@ -155,6 +155,14 @@ func getCounts(r io.Reader, conf config) results {
 
 		if conf.modes["line"] {
 			counts["line"]++
+
+			if err == io.EOF {
+				counts["line"]--
+			}
+		}
+
+		if err != nil {
+			break
 		}
 	}
 

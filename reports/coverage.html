@@ -56,11 +56,11 @@
 				<select id="files">
 				
 				<option value="file0">github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go (100.0%)</option>
-				
+
 				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (100.0%)</option>
-				
+
 				<option value="file2">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go (100.0%)</option>
-				
+
 				</select>
 			</div>
 			<div id="legend">
@@ -103,7 +103,7 @@ func main() <span class="cov8" title="1">{
         appwc.RunApp()
 }</span>
 </pre>
-		
+
 		<pre class="file" id="file1" style="display: none">// Package appwc is the module with the cli logic for the wc main application.
 package appwc
 
@@ -152,7 +152,7 @@ func Usage() <span class="cov2" title="2">{
         flag.PrintDefaults()
 }</span>
 
-func setup() (config, error) <span class="cov7" title="11">{
+func setup() (config, error) <span class="cov6" title="11">{
         fs := flag.NewFlagSet("cli", flag.ContinueOnError)
 
         byteFlag := fs.Bool("b", false, "count bytes")
@@ -234,7 +234,7 @@ func setup() (config, error) <span class="cov7" title="11">{
         return conf, nil</span>
 }
 
-func getCounts(r io.Reader, conf config) results <span class="cov5" title="5">{
+func getCounts(r io.Reader, conf config) results <span class="cov7" title="20">{
         counts := results{
                 "byte": 0,
                 "char": 0,
@@ -242,49 +242,57 @@ func getCounts(r io.Reader, conf config) results <span class="cov5" title="5">{
                 "word": 0,
         }
 
-        scanner := bufio.NewScanner(r)
+        reader := bufio.NewReader(r)
 
-        for scanner.Scan() </span><span class="cov6" title="10">{
-                text := scanner.Text() + "\n"
+        for </span><span class="cov10" title="50">{
+                text, err := reader.ReadString('\n')
 
-                if conf.modes["byte"] </span><span class="cov2" title="2">{
+                if conf.modes["byte"] </span><span class="cov9" title="39">{
                         counts["byte"] += len(text)
                 }</span>
 
-                <span class="cov6" title="10">if conf.modes["char"] </span><span class="cov2" title="2">{
+                <span class="cov10" title="50">if conf.modes["char"] </span><span class="cov9" title="38">{
                         counts["char"] += utf8.RuneCountInString(text)
                 }</span>
 
-                <span class="cov6" title="10">if conf.modes["word"] </span><span class="cov1" title="1">{
+                <span class="cov10" title="50">if conf.modes["word"] </span><span class="cov9" title="38">{
                         counts["word"] += len(strings.Fields(text))
                 }</span>
 
-                <span class="cov6" title="10">if conf.modes["line"] </span><span class="cov5" title="5">{
+                <span class="cov10" title="50">if conf.modes["line"] </span><span class="cov9" title="42">{
                         counts["line"]++
-                }</span>
+
+                        if err == io.EOF </span><span class="cov7" title="17">{
+                                counts["line"]--
+                        }</span>
+                }
+
+                <span class="cov10" title="50">if err != nil </span><span class="cov7" title="20">{
+                        break</span>
+                }
         }
 
-        <span class="cov5" title="5">return counts</span>
+        <span class="cov7" title="20">return counts</span>
 }
 
 func showCount(counts results, conf config) <span class="cov6" title="9">{
         first := true
         fieldSize := "0"
 
-        if conf.verboseMode </span><span class="cov5" title="5">{
+        if conf.verboseMode </span><span class="cov4" title="5">{
                 fieldSize = "8"
         }</span>
 
-        <span class="cov6" title="9">for _, mode := range printOrder </span><span class="cov10" title="36">{
-                if !conf.modes[mode] </span><span class="cov9" title="25">{
+        <span class="cov6" title="9">for _, mode := range printOrder </span><span class="cov9" title="36">{
+                if !conf.modes[mode] </span><span class="cov8" title="25">{
                         continue</span>
                 }
 
-                <span class="cov7" title="11">if !first </span><span class="cov2" title="2">{
+                <span class="cov6" title="11">if !first </span><span class="cov2" title="2">{
                         fieldSize = "9"
                 }</span>
 
-                <span class="cov7" title="11">first = false
+                <span class="cov6" title="11">first = false
 
                 var label string
 
@@ -292,13 +300,13 @@ func showCount(counts results, conf config) <span class="cov6" title="9">{
                         label = " (" + mode + ")"
                 }</span>
 
-                <span class="cov7" title="11">fmt.Printf("%"+fieldSize+"d%s", counts[mode], label)</span>
+                <span class="cov6" title="11">fmt.Printf("%"+fieldSize+"d%s", counts[mode], label)</span>
         }
 
         <span class="cov6" title="9">fmt.Println()</span>
 }
 </pre>
-		
+
 		<pre class="file" id="file2" style="display: none">package appwc
 
 import (
@@ -400,7 +408,7 @@ func Exit(code int, msg string) <span class="cov1" title="1">{
         OSExit(code)
 }</span>
 </pre>
-		
+
 		</div>
 	</body>
 	<script>
