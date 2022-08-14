@@ -151,10 +151,11 @@ func Usage() <span class="cov2" title="2">{
         fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
 }</span>
 
-func setup() (config, error) <span class="cov6" title="12">{
+func setup() (config, error) <span class="cov6" title="13">{
 
         var byteFlag bool
         var charFlag bool
+        var lengthFlag bool
         var lineFlag bool
         var wordFlag bool
 
@@ -162,6 +163,8 @@ func setup() (config, error) <span class="cov6" title="12">{
         flagSet.BoolVar(&amp;byteFlag, "bytes", false, "print the byte counts")
         flagSet.BoolVar(&amp;charFlag, "m", false, "print the character counts")
         flagSet.BoolVar(&amp;charFlag, "chars", false, "print the character counts")
+        flagSet.BoolVar(&amp;lengthFlag, "L", false, "print the maximum display width")
+        flagSet.BoolVar(&amp;lengthFlag, "max-line-length", false, "print the maximum display width")
         flagSet.BoolVar(&amp;lineFlag, "l", false, "print the newline counts")
         flagSet.BoolVar(&amp;lineFlag, "lines", false, "print the newline counts")
         flagSet.BoolVar(&amp;wordFlag, "w", false, "print the word counts")
@@ -183,63 +186,76 @@ func setup() (config, error) <span class="cov6" title="12">{
                 return config{}, err
         }</span>
 
-        <span class="cov6" title="10">conf := config{
+        <span class="cov6" title="11">conf := config{
                 verboseMode: verboseFlag,
                 versionMode: versionFlag,
                 modes:       map[string]bool{},
         }
 
-        if byteFlag || charFlag || lineFlag || wordFlag </span><span class="cov5" title="6">{
+        if byteFlag || charFlag || lengthFlag || lineFlag || wordFlag </span><span class="cov5" title="7">{
                 conf.modes["byte"] = false
                 conf.modes["char"] = false
+                conf.modes["length"] = false
                 conf.modes["line"] = false
                 conf.modes["word"] = false
 
                 if byteFlag </span><span class="cov3" title="3">{
                         conf.modes["byte"] = true
                 }</span>
-                <span class="cov5" title="6">if charFlag </span><span class="cov3" title="3">{
+                <span class="cov5" title="7">if charFlag </span><span class="cov3" title="3">{
                         conf.modes["char"] = true
                 }</span>
-                <span class="cov5" title="6">if lineFlag </span><span class="cov2" title="2">{
+                <span class="cov5" title="7">if lengthFlag </span><span class="cov1" title="1">{
+                        conf.modes["length"] = true
+                }</span>
+                <span class="cov5" title="7">if lineFlag </span><span class="cov2" title="2">{
                         conf.modes["line"] = true
                 }</span>
-                <span class="cov5" title="6">if wordFlag </span><span class="cov3" title="3">{
+                <span class="cov5" title="7">if wordFlag </span><span class="cov3" title="3">{
                         conf.modes["word"] = true
                 }</span>
         } else<span class="cov4" title="4"> {
                 conf.modes = flagDefaults
         }</span>
 
-        <span class="cov6" title="10">return conf, nil</span>
+        <span class="cov6" title="11">return conf, nil</span>
 }
 
-func getCounts(r io.Reader, conf config) results <span class="cov7" title="20">{
+func getCounts(r io.Reader, conf config) results <span class="cov7" title="21">{
         counts := results{
-                "byte": 0,
-                "char": 0,
-                "line": 0,
-                "word": 0,
+                "byte":   0,
+                "char":   0,
+                "length": 0,
+                "line":   0,
+                "word":   0,
         }
 
         reader := bufio.NewReader(r)
 
-        for </span><span class="cov10" title="50">{
+        for </span><span class="cov9" title="54">{
                 text, err := reader.ReadString('\n')
 
                 if conf.modes["byte"] </span><span class="cov9" title="39">{
                         counts["byte"] += len(text)
                 }</span>
 
-                <span class="cov10" title="50">if conf.modes["char"] </span><span class="cov9" title="38">{
+                <span class="cov9" title="54">if conf.modes["char"] </span><span class="cov9" title="38">{
                         counts["char"] += utf8.RuneCountInString(text)
                 }</span>
 
-                <span class="cov10" title="50">if conf.modes["word"] </span><span class="cov9" title="38">{
+                <span class="cov9" title="54">if conf.modes["word"] </span><span class="cov9" title="38">{
                         counts["word"] += len(strings.Fields(text))
                 }</span>
 
-                <span class="cov10" title="50">if conf.modes["line"] </span><span class="cov9" title="42">{
+                <span class="cov9" title="54">if conf.modes["length"] </span><span class="cov4" title="4">{
+                        maxLength := utf8.RuneCountInString(strings.TrimSuffix(text, "\n"))
+
+                        if maxLength &gt; counts["length"] </span><span class="cov2" title="2">{
+                                counts["length"] = maxLength
+                        }</span>
+                }
+
+                <span class="cov9" title="54">if conf.modes["line"] </span><span class="cov9" title="42">{
                         counts["line"]++
 
                         if err == io.EOF </span><span class="cov7" title="17">{
@@ -247,50 +263,50 @@ func getCounts(r io.Reader, conf config) results <span class="cov7" title="20">{
                         }</span>
                 }
 
-                <span class="cov10" title="50">if err != nil </span><span class="cov7" title="20">{
+                <span class="cov9" title="54">if err != nil </span><span class="cov7" title="21">{
                         break</span>
                 }
         }
 
-        <span class="cov7" title="20">return counts</span>
+        <span class="cov7" title="21">return counts</span>
 }
 
-func showCount(counts results, conf config) <span class="cov6" title="10">{
+func showCount(counts results, conf config) <span class="cov6" title="11">{
         first := true
         fieldSize := "7"
 
         var modeCount int
-        for _, v := range conf.modes </span><span class="cov7" title="16">{
-                if v </span><span class="cov7" title="15">{
+        for _, v := range conf.modes </span><span class="cov7" title="19">{
+                if v </span><span class="cov7" title="17">{
                         modeCount++
                 }</span>
         }
 
-        <span class="cov6" title="10">if modeCount == 1 </span><span class="cov5" title="8">{
+        <span class="cov6" title="11">if modeCount == 1 </span><span class="cov5" title="9">{
                 fieldSize = "0"
         }</span>
 
-        <span class="cov6" title="10">for _, mode := range printOrder </span><span class="cov9" title="40">{
-                if !conf.modes[mode] </span><span class="cov8" title="25">{
+        <span class="cov6" title="11">for _, mode := range printOrder </span><span class="cov10" title="55">{
+                if !conf.modes[mode] </span><span class="cov9" title="38">{
                         continue</span>
                 }
 
-                <span class="cov7" title="15">if !first </span><span class="cov4" title="5">{
+                <span class="cov7" title="17">if !first </span><span class="cov5" title="6">{
                         fieldSize = "8"
                 }</span>
 
-                <span class="cov7" title="15">first = false
+                <span class="cov7" title="17">first = false
 
                 var label string
 
-                if conf.verboseMode </span><span class="cov6" title="11">{
+                if conf.verboseMode </span><span class="cov6" title="13">{
                         label = " (" + mode + ")"
                 }</span>
 
-                <span class="cov7" title="15">fmt.Printf("%"+fieldSize+"d%s", counts[mode], label)</span>
+                <span class="cov7" title="17">fmt.Printf("%"+fieldSize+"d%s", counts[mode], label)</span>
         }
 
-        <span class="cov6" title="10">fmt.Println()</span>
+        <span class="cov6" title="11">fmt.Println()</span>
 }
 </pre>
 		
@@ -341,6 +357,7 @@ the following order: newline, word, character, byte.
 Options:
   -c, --bytes            print the byte counts
   -m, --chars            print the character counts
+  -L, --max-line-length  print the maximum display width
   -l, --lines            print the newline counts
   -w, --words            print the word counts
   -h, --help             display this help and exit
@@ -350,18 +367,20 @@ Options:
 )
 
 var flagDefaults = map[string]bool{
-        "byte": true,
-        "char": false,
-        "line": true,
-        "word": true,
+        "byte":   true,
+        "char":   false,
+        "length": false,
+        "line":   true,
+        "word":   true,
 }
 
-// Printing order: newline, word, character, byte.
+// Printing order: newline, word, character, byte, max-line-length.
 var printOrder = []string{
         "line",
         "word",
         "char",
         "byte",
+        "length",
 }
 
 // SetVersion is used my the main package to pass version information to the app package.

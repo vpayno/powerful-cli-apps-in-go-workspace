@@ -147,16 +147,31 @@ Word Count Version v0.2.1
 20 (char)
 ```
 
+- Max Line Length
+
+```
+$ printf "0123456\n0123456789\n😂\n01234\n1234567890123\n\n" | ./cli-wc --bytes --chars --lines --words --max-line-length
+      6       5      42      45      13
+```
+
+```
+$ printf "0123456\n0123456789\n😂\n01234\n1234567890123\n\n" | ./cli-wc --bytes --chars --lines --words --max-line-length --verbose
+Word Count Version v0.2.1
+
+      6 (line)       5 (word)      42 (char)      45 (byte)      13 (length)
+```
+
 - All Counts
 
 ```
-$ printf "%s\n" one two 😂 four five | cli-wc --bytes --chars --lines --words
-      5       5      20      23
+$ printf "\n%s\n" one two 😂 four five | cli-wc --bytes --chars --lines --words --max-line-length
+      2       1      12      12      10
 ```
 
 ```
-$ printf "%s\n" one two 😂 four five | cli-wc --bytes --chars --lines --words --verbose
-Word Count Version v0.2.1
+$ printf "\n%s\n" one two 😂 four five | cli-wc --bytes --chars --lines --words --max-line-length --verbose
+```
+Word Count Version v0.2.0
 
-      5 (line)       5 (word)      20 (char)      23 (byte)
+      2 (line)       1 (word)      12 (char)      12 (byte)      10 (length)
 ```
