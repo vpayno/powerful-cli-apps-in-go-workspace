@@ -151,7 +151,7 @@ func Usage() <span class="cov2" title="2">{
         fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
 }</span>
 
-func setup() (config, error) <span class="cov6" title="11">{
+func setup() (config, error) <span class="cov6" title="12">{
 
         var byteFlag bool
         var charFlag bool
@@ -183,68 +183,35 @@ func setup() (config, error) <span class="cov6" title="11">{
                 return config{}, err
         }</span>
 
-        <span class="cov6" title="9">conf := config{
+        <span class="cov6" title="10">conf := config{
                 verboseMode: verboseFlag,
                 versionMode: versionFlag,
+                modes:       map[string]bool{},
         }
 
-        usingDefaults := true
+        if byteFlag || charFlag || lineFlag || wordFlag </span><span class="cov5" title="6">{
+                conf.modes["byte"] = false
+                conf.modes["char"] = false
+                conf.modes["line"] = false
+                conf.modes["word"] = false
 
-        var byteMode bool
-        var charMode bool
-        var lineMode bool
-        var wordMode bool
-
-        // order for flag overrides: newline, word, character, byte.
-        switch </span>{
-        case lineFlag:<span class="cov1" title="1">
-                usingDefaults = false
-
-                byteMode = false
-                charMode = false
-                lineMode = true
-                wordMode = false</span>
-
-        case wordFlag:<span class="cov2" title="2">
-                usingDefaults = false
-
-                byteMode = false
-                charMode = false
-                lineMode = false
-                wordMode = true</span>
-
-        case charFlag:<span class="cov1" title="1">
-                usingDefaults = false
-
-                byteMode = false
-                charMode = true
-                lineMode = false
-                wordMode = false</span>
-
-        case byteFlag:<span class="cov1" title="1">
-                usingDefaults = false
-
-                byteMode = true
-                charMode = false
-                lineMode = false
-                wordMode = false</span>
-        }
-
-        <span class="cov6" title="9">if usingDefaults </span><span class="cov4" title="4">{
-                byteMode = true
-                lineMode = true
-                charMode = false
-                wordMode = true
+                if byteFlag </span><span class="cov3" title="3">{
+                        conf.modes["byte"] = true
+                }</span>
+                <span class="cov5" title="6">if charFlag </span><span class="cov3" title="3">{
+                        conf.modes["char"] = true
+                }</span>
+                <span class="cov5" title="6">if lineFlag </span><span class="cov2" title="2">{
+                        conf.modes["line"] = true
+                }</span>
+                <span class="cov5" title="6">if wordFlag </span><span class="cov3" title="3">{
+                        conf.modes["word"] = true
+                }</span>
+        } else<span class="cov4" title="4"> {
+                conf.modes = flagDefaults
         }</span>
 
-        <span class="cov6" title="9">conf.modes = map[string]bool{
-                "byte": byteMode,
-                "char": charMode,
-                "line": lineMode,
-                "word": wordMode,
-        }
-
-        return conf, nil</span>
+        <span class="cov6" title="10">return conf, nil</span>
 }
 
 func getCounts(r io.Reader, conf config) results <span class="cov7" title="20">{
@@ -288,6 +255,7 @@ func getCounts(r io.Reader, conf config) results <span class="cov7" title="20">{
         <span class="cov7" title="20">return counts</span>
 }
 
+// order for flag overrides: newline, word, character, byte.
 func showCount(counts results, conf config) <span class="cov6" title="9">{
         first := true
         fieldSize := "7"
@@ -381,6 +349,13 @@ Options:
   -V, --verbose          verbose mode
 `
 )
+
+var flagDefaults = map[string]bool{
+        "byte": true,
+        "char": false,
+        "line": true,
+        "word": true,
+}
 
 // Printing order: line, word, byte, char
 var printOrder = []string{

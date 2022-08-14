@@ -53,6 +53,13 @@ Options:
 `
 )
 
+var flagDefaults = map[string]bool{
+	"byte": true,
+	"char": false,
+	"line": true,
+	"word": true,
+}
+
 // Printing order: line, word, byte, char
 var printOrder = []string{
 	"line",

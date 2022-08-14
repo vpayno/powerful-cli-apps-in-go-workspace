@@ -808,7 +808,7 @@ func TestRunAppFlagByteAndChar(t *testing.T) {
 	want := config{
 		modes: map[string]bool{
 			"char": true,
-			"byte": false,
+			"byte": true,
 		},
 	}
 
@@ -830,7 +830,32 @@ func TestRunAppFlagCharAndWord(t *testing.T) {
 
 	want := config{
 		modes: map[string]bool{
-			"char": false,
+			"char": true,
+			"word": true,
+		},
+	}
+
+	os.Args = []string{"test", "--chars", "--words"}
+	got, _ := setup()
+
+	if got.modes["word"] != want.modes["word"] {
+		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["word"], got.modes["word"])
+	}
+
+	if got.modes["char"] != want.modes["char"] {
+		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["char"], got.modes["char"])
+	}
+}
+
+func TestRunAppFlagByteCharWordAndLine(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
+	want := config{
+		modes: map[string]bool{
+			"byte": true,
+			"char": true,
+			"line": true,
 			"word": true,
 		},
 	}

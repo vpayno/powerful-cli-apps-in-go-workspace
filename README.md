@@ -73,7 +73,7 @@ Options:
 ```
 $ cli-wc --version
 
-Word Count Version: v0.2.0
+Word Count Version: v0.2.1
 ```
 
 - Default Counts
@@ -86,7 +86,7 @@ $ printf "%s\n" one two 😂 four five | cli-wc
 
 ```
 $ printf "%s\n" one two 😂 four five | cli-wc --verbose
-Word Count Version v0.2.0
+Word Count Version v0.2.1
 
       5 (line)       5 (word)      23 (byte)
 ```
@@ -100,7 +100,7 @@ $ printf "%s\n" one two 😂 four five | cli-wc --words
 
 ```
 $ printf "%s\n" one two 😂 four five | cli-wc --words --verbose
-Word Count Version v0.2.0
+Word Count Version v0.2.1
 
 5 (word)
 ```
@@ -114,7 +114,7 @@ $ printf "%s\n" one two 😂 four five | cli-wc --lines
 
 ```
 $ printf "%s\n" one two 😂 four five | cli-wc -lines --verbose
-Word Count Version v0.2.0
+Word Count Version v0.2.1
 
 5 (line)
 ```
@@ -128,7 +128,7 @@ $ printf "%s\n" one two 😂 four five | cli-wc --bytes
 
 ```
 $ printf "%s\n" one two 😂 four five | cli-wc --bytes --verbose
-Word Count Version v0.2.0
+Word Count Version v0.2.1
 
 23 (byte)
 ```
@@ -142,7 +142,21 @@ $ printf "%s\n" one two 😂 four five | cli-wc --chars
 
 ```
 $ printf "%s\n" one two 😂 four five | cli-wc --chars --verbose
-Word Count Version v0.2.0
+Word Count Version v0.2.1
 
 20 (char)
+```
+
+- All Counts
+
+```
+$ sudo dmesg | ./cli-wc --bytes --chars --lines --words
+    542    6364   42743   42743
+```
+
+```
+$ sudo dmesg | ./cli-wc --bytes --chars --lines --words --verbose
+Word Count Version v0.2.1
+
+    542 (line)    6364 (word)   42743 (byte)   42743 (char)
 ```

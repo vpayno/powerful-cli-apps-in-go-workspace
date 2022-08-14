@@ -80,62 +80,29 @@ func setup() (config, error) {
 	conf := config{
 		verboseMode: verboseFlag,
 		versionMode: versionFlag,
+		modes:       map[string]bool{},
 	}
 
-	usingDefaults := true
+	if byteFlag || charFlag || lineFlag || wordFlag {
+		conf.modes["byte"] = false
+		conf.modes["char"] = false
+		conf.modes["line"] = false
+		conf.modes["word"] = false
 
-	var byteMode bool
-	var charMode bool
-	var lineMode bool
-	var wordMode bool
-
-	// order for flag overrides: newline, word, character, byte.
-	switch {
-	case lineFlag:
-		usingDefaults = false
-
-		byteMode = false
-		charMode = false
-		lineMode = true
-		wordMode = false
-
-	case wordFlag:
-		usingDefaults = false
-
-		byteMode = false
-		charMode = false
-		lineMode = false
-		wordMode = true
-
-	case charFlag:
-		usingDefaults = false
-
-		byteMode = false
-		charMode = true
-		lineMode = false
-		wordMode = false
-
-	case byteFlag:
-		usingDefaults = false
-
-		byteMode = true
-		charMode = false
-		lineMode = false
-		wordMode = false
-	}
-
-	if usingDefaults {
-		byteMode = true
-		lineMode = true
-		charMode = false
-		wordMode = true
-	}
-
-	conf.modes = map[string]bool{
-		"byte": byteMode,
-		"char": charMode,
-		"line": lineMode,
-		"word": wordMode,
+		if byteFlag {
+			conf.modes["byte"] = true
+		}
+		if charFlag {
+			conf.modes["char"] = true
+		}
+		if lineFlag {
+			conf.modes["line"] = true
+		}
+		if wordFlag {
+			conf.modes["word"] = true
+		}
+	} else {
+		conf.modes = flagDefaults
 	}
 
 	return conf, nil
@@ -182,6 +149,7 @@ func getCounts(r io.Reader, conf config) results {
 	return counts
 }
 
+// print order: newline, word, character, byte.
 func showCount(counts results, conf config) {
 	first := true
 	fieldSize := "7"
