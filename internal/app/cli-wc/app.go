@@ -53,13 +53,13 @@ func setup() (config, error) {
 	var wordFlag bool
 
 	flagSet.BoolVar(&byteFlag, "c", false, "print the byte counts")
-	flagSet.BoolVar(&byteFlag, "byte", false, "print the byte counts")
+	flagSet.BoolVar(&byteFlag, "bytes", false, "print the byte counts")
 	flagSet.BoolVar(&charFlag, "m", false, "print the character counts")
-	flagSet.BoolVar(&charFlag, "char", false, "print the character counts")
+	flagSet.BoolVar(&charFlag, "chars", false, "print the character counts")
 	flagSet.BoolVar(&lineFlag, "l", false, "print the newline counts")
-	flagSet.BoolVar(&lineFlag, "line", false, "print the newline counts")
+	flagSet.BoolVar(&lineFlag, "lines", false, "print the newline counts")
 	flagSet.BoolVar(&wordFlag, "w", false, "print the word counts")
-	flagSet.BoolVar(&wordFlag, "word", false, "print the word counts")
+	flagSet.BoolVar(&wordFlag, "words", false, "print the word counts")
 
 	var verboseFlag bool
 	var versionFlag bool

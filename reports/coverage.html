@@ -159,13 +159,13 @@ func setup() (config, error) <span class="cov6" title="11">{
         var wordFlag bool
 
         flagSet.BoolVar(&amp;byteFlag, "c", false, "print the byte counts")
-        flagSet.BoolVar(&amp;byteFlag, "byte", false, "print the byte counts")
+        flagSet.BoolVar(&amp;byteFlag, "bytes", false, "print the byte counts")
         flagSet.BoolVar(&amp;charFlag, "m", false, "print the character counts")
-        flagSet.BoolVar(&amp;charFlag, "char", false, "print the character counts")
+        flagSet.BoolVar(&amp;charFlag, "chars", false, "print the character counts")
         flagSet.BoolVar(&amp;lineFlag, "l", false, "print the newline counts")
-        flagSet.BoolVar(&amp;lineFlag, "line", false, "print the newline counts")
+        flagSet.BoolVar(&amp;lineFlag, "lines", false, "print the newline counts")
         flagSet.BoolVar(&amp;wordFlag, "w", false, "print the word counts")
-        flagSet.BoolVar(&amp;wordFlag, "word", false, "print the word counts")
+        flagSet.BoolVar(&amp;wordFlag, "words", false, "print the word counts")
 
         var verboseFlag bool
         var versionFlag bool
