@@ -193,7 +193,7 @@ func TestSetupFlagsWordMode(t *testing.T) {
 		},
 	}
 
-	os.Args = []string{"test", "-w"}
+	os.Args = []string{"test", "--words"}
 
 	got, err := setup()
 
@@ -216,8 +216,7 @@ func TestSetupFlagsLineMode(t *testing.T) {
 		},
 	}
 
-	// -l
-	os.Args = []string{"test", "-l"}
+	os.Args = []string{"test", "--lines"}
 
 	got, err := setup()
 
@@ -240,8 +239,7 @@ func TestSetupFlagsByteMode(t *testing.T) {
 		},
 	}
 
-	// -l
-	os.Args = []string{"test", "-c"}
+	os.Args = []string{"test", "--bytes"}
 
 	got, err := setup()
 
@@ -357,7 +355,7 @@ func TestGetByteCount(t *testing.T) {
 	}
 }
 
-func TestGetRuneCount(t *testing.T) {
+func TestGetCharCount(t *testing.T) {
 	setupTestEnv()
 	defer teardownTestEnv()
 
@@ -518,7 +516,7 @@ func TestShowByteCountVerbose(t *testing.T) {
 	}
 }
 
-func TestShowRuneCountVerbose(t *testing.T) {
+func TestShowCharCountVerbose(t *testing.T) {
 	setupTestEnv()
 	defer teardownTestEnv()
 
@@ -710,7 +708,7 @@ func TestShowByteCount(t *testing.T) {
 	}
 }
 
-func TestShowRuneCount(t *testing.T) {
+func TestShowCharCount(t *testing.T) {
 	setupTestEnv()
 	defer teardownTestEnv()
 
@@ -803,7 +801,7 @@ func TestRunAppFlagVersion(t *testing.T) {
 	}
 }
 
-func TestRunAppFlagByteAndRune(t *testing.T) {
+func TestRunAppFlagByteAndChar(t *testing.T) {
 	setupTestEnv()
 	defer teardownTestEnv()
 
@@ -814,19 +812,19 @@ func TestRunAppFlagByteAndRune(t *testing.T) {
 		},
 	}
 
-	os.Args = []string{"test", "-c", "-m"}
+	os.Args = []string{"test", "--bytes", "--chars"}
 	got, _ := setup()
 
 	if got.modes["byte"] != want.modes["byte"] {
-		t.Errorf("setup flags -m & -c (byteMode): want %v, got %v", want.modes["byte"], got.modes["byte"])
+		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["byte"], got.modes["byte"])
 	}
 
 	if got.modes["char"] != want.modes["char"] {
-		t.Errorf("setup flags -m & -c (charMode): want %v, got %v", want.modes["char"], got.modes["char"])
+		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["char"], got.modes["char"])
 	}
 }
 
-func TestRunAppFlagWordAndRune(t *testing.T) {
+func TestRunAppFlagCharAndWord(t *testing.T) {
 	setupTestEnv()
 	defer teardownTestEnv()
 
@@ -837,14 +835,14 @@ func TestRunAppFlagWordAndRune(t *testing.T) {
 		},
 	}
 
-	os.Args = []string{"test", "-c", "-w"}
+	os.Args = []string{"test", "--bytes", "--chars", "--lines", "--words"}
 	got, _ := setup()
 
 	if got.modes["word"] != want.modes["word"] {
-		t.Errorf("setup flags -m & -c (wordMode): want %v, got %v", want.modes["word"], got.modes["word"])
+		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["word"], got.modes["word"])
 	}
 
 	if got.modes["char"] != want.modes["char"] {
-		t.Errorf("setup flags -m & -c (charMode): want %v, got %v", want.modes["char"], got.modes["char"])
+		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["char"], got.modes["char"])
 	}
 }
