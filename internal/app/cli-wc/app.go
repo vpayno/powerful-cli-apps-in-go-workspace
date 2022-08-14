@@ -49,6 +49,7 @@ func setup() (config, error) {
 
 	var byteFlag bool
 	var charFlag bool
+	var lengthFlag bool
 	var lineFlag bool
 	var wordFlag bool
 
@@ -56,6 +57,8 @@ func setup() (config, error) {
 	flagSet.BoolVar(&byteFlag, "bytes", false, "print the byte counts")
 	flagSet.BoolVar(&charFlag, "m", false, "print the character counts")
 	flagSet.BoolVar(&charFlag, "chars", false, "print the character counts")
+	flagSet.BoolVar(&lengthFlag, "L", false, "print the maximum display width")
+	flagSet.BoolVar(&lengthFlag, "max-line-length", false, "print the maximum display width")
 	flagSet.BoolVar(&lineFlag, "l", false, "print the newline counts")
 	flagSet.BoolVar(&lineFlag, "lines", false, "print the newline counts")
 	flagSet.BoolVar(&wordFlag, "w", false, "print the word counts")
@@ -83,9 +86,10 @@ func setup() (config, error) {
 		modes:       map[string]bool{},
 	}
 
-	if byteFlag || charFlag || lineFlag || wordFlag {
+	if byteFlag || charFlag || lengthFlag || lineFlag || wordFlag {
 		conf.modes["byte"] = false
 		conf.modes["char"] = false
+		conf.modes["length"] = false
 		conf.modes["line"] = false
 		conf.modes["word"] = false
 
@@ -94,6 +98,9 @@ func setup() (config, error) {
 		}
 		if charFlag {
 			conf.modes["char"] = true
+		}
+		if lengthFlag {
+			conf.modes["length"] = true
 		}
 		if lineFlag {
 			conf.modes["line"] = true
@@ -110,10 +117,11 @@ func setup() (config, error) {
 
 func getCounts(r io.Reader, conf config) results {
 	counts := results{
-		"byte": 0,
-		"char": 0,
-		"line": 0,
-		"word": 0,
+		"byte":   0,
+		"char":   0,
+		"length": 0,
+		"line":   0,
+		"word":   0,
 	}
 
 	reader := bufio.NewReader(r)
@@ -131,6 +139,14 @@ func getCounts(r io.Reader, conf config) results {
 
 		if conf.modes["word"] {
 			counts["word"] += len(strings.Fields(text))
+		}
+
+		if conf.modes["length"] {
+			maxLength := utf8.RuneCountInString(strings.TrimSuffix(text, "\n"))
+
+			if maxLength > counts["length"] {
+				counts["length"] = maxLength
+			}
 		}
 
 		if conf.modes["line"] {

@@ -45,6 +45,7 @@ the following order: newline, word, character, byte.
 Options:
   -c, --bytes            print the byte counts
   -m, --chars            print the character counts
+  -L, --max-line-length  print the maximum display width
   -l, --lines            print the newline counts
   -w, --words            print the word counts
   -h, --help             display this help and exit
@@ -54,18 +55,20 @@ Options:
 )
 
 var flagDefaults = map[string]bool{
-	"byte": true,
-	"char": false,
-	"line": true,
-	"word": true,
+	"byte":   true,
+	"char":   false,
+	"length": false,
+	"line":   true,
+	"word":   true,
 }
 
-// Printing order: newline, word, character, byte.
+// Printing order: newline, word, character, byte, max-line-length.
 var printOrder = []string{
 	"line",
 	"word",
 	"char",
 	"byte",
+	"length",
 }
 
 // SetVersion is used my the main package to pass version information to the app package.

@@ -250,6 +250,29 @@ func TestSetupFlagsByteMode(t *testing.T) {
 	}
 }
 
+func TestSetupFlagsMaxLineLengthMode(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
+	want := config{
+		modes: map[string]bool{
+			"length": true,
+		},
+	}
+
+	os.Args = []string{"test", "--max-line-length"}
+
+	got, err := setup()
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if want.modes["length"] != got.modes["length"] {
+		t.Errorf("setup() returned the wrong max-line-length mode value. want: %v, got %v", want.modes["length"], got.modes["length"])
+	}
+}
+
 func TestSetupFlagVersion(t *testing.T) {
 	setupTestEnv()
 	defer teardownTestEnv()
@@ -370,6 +393,26 @@ func TestGetCharCount(t *testing.T) {
 
 	if want != got {
 		t.Errorf("Expected char count %d, got %d.\n", want, got)
+	}
+}
+
+func TestGetMaxLineLengthCount(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
+	b := bytes.NewBufferString("0123456\n0123456789\n01234\n")
+
+	conf := config{
+		modes: map[string]bool{
+			"length": true,
+		},
+	}
+
+	want := 10
+	got := getCounts(b, conf)["length"]
+
+	if want != got {
+		t.Errorf("Expected max-line-length count %d, got %d.\n", want, got)
 	}
 }
 
@@ -555,6 +598,53 @@ func TestShowCharCountVerbose(t *testing.T) {
 	got := buf.String()
 	if got != want {
 		t.Errorf("show byte count: want %q, got %q", want, got)
+	}
+}
+
+func TestShowMaxLengthCountVerbose(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	counts := results{
+		"length": 5,
+	}
+
+	conf := config{
+		verboseMode: true,
+		modes: map[string]bool{
+			"length": true,
+		},
+	}
+
+	want := fmt.Sprintf("%d (length)\n", counts["length"])
+
+	// Run the function who's output we want to capture.
+	showCount(counts, conf)
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("show max-line-length count: want %q, got %q", want, got)
 	}
 }
 
@@ -880,27 +970,30 @@ func TestPrintOrder(t *testing.T) {
 	}()
 
 	counts := results{
-		"byte": 3,
-		"char": 4,
-		"word": 2,
-		"line": 1,
+		"byte":   3,
+		"char":   4,
+		"length": 5,
+		"line":   1,
+		"word":   2,
 	}
 
 	conf := config{
 		verboseMode: true,
 		modes: map[string]bool{
-			"byte": true,
-			"char": true,
-			"word": true,
-			"line": true,
+			"byte":   true,
+			"char":   true,
+			"length": true,
+			"line":   true,
+			"word":   true,
 		},
 	}
 
-	//       1 (line)       2 (word)       4 (char)       3 (byte)\n
+	//       1 (line)       2 (word)       4 (char)       3 (byte)       5 (length)\n
 	want := fmt.Sprintf("%7d (line)", counts["line"])
 	want += fmt.Sprintf("%8d (word)", counts["word"])
 	want += fmt.Sprintf("%8d (char)", counts["char"])
 	want += fmt.Sprintf("%8d (byte)", counts["byte"])
+	want += fmt.Sprintf("%8d (length)", counts["length"])
 	want += "\n"
 
 	// Run the function who's output we want to capture.
