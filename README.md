@@ -46,36 +46,24 @@ $ go generate
 #### Usage
 
 ```
-$ ./scripts/go-cmd run ./... -h
-go generate ./...
-go generate: creating /home/vpayno/git_vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/./.version.txt
+$ cli-wc --help
+Usage: cli-wc [OPTION]...
 
-v0.0.0
-v0.0.0-8-g275e726
-275e72657a4241eaddc5ce90bbb1aaa0c6a0289b
-2022-08-08T07:00:12Z
+Print newline, word, and byte counts for stdin input.
 
+A word is a non-zero-length sequence of characters delimited by white space.
 
-real	0m0.144s
-user	0m0.102s
-sys	0m0.140s
+The options below may be used to select which counts are printed, always in
+the following order: newline, word, character, byte.
 
-Usage of /tmp/go-build1277001378/b001/exe/cli-wc:
-  -V	show the app version
-  -b	count bytes instead of words
-  -l	count lines instead of words
-  -v	verbose mode
-
-real	0m0.314s
-user	0m0.301s
-sys	0m0.290s
-go run ./... -h
-
-git restore ./cmd/cli-wc/.version.txt
-
-real	0m0.004s
-user	0m0.003s
-sys	0m0.003s
+Options:
+  -c, --bytes            print the byte counts
+  -m, --chars            print the character counts
+  -l, --lines            print the newline counts
+  -w, --words            print the word counts
+  -h, --help             display this help and exit
+  -v, --version          output version information and exit
+  -V, --verbose          verbose mode
 ```
 
 #### Examples
@@ -83,63 +71,78 @@ sys	0m0.003s
 - Show Version
 
 ```
-$ go generate ./...
-go generate: creating /home/vpayno/git_vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/./.version.txt
+$ cli-wc --version
 
-v0.0.0
-v0.0.0-8-g275e726
-275e72657a4241eaddc5ce90bbb1aaa0c6a0289b
-2022-08-08T07:25:49Z
+Word Count Version: v0.2.0
+```
 
-$ go build ./cmd/cli-wc/cli-wc.go
+- Default Counts
 
-$ printf "%s\n" one two three four five | ./cli-wc -V
+```
+$ printf "%s\n" one two 😂 four five | cli-wc
+      5       5      23
 
-Word Count Version: v0.0.0
+```
 
-git version: v0.0.0-8-g275e726
-   git hash: 275e72657a4241eaddc5ce90bbb1aaa0c6a0289b
- build time: 2022-08-08T07:25:49Z
+```
+$ printf "%s\n" one two 😂 four five | cli-wc --verbose
+Word Count Version v0.2.0
+
+      5 (line)       5 (word)      23 (byte)
 ```
 
 - Count Words
 
 ```
-$ printf "%s\n" one two three four five | ./cli-wc
+$ printf "%s\n" one two 😂 four five | cli-wc --words
 5
 ```
 
 ```
-$ printf "%s\n" one two three four five | ./cli-wc -v
-Word Count Version v0.0.0
+$ printf "%s\n" one two 😂 four five | cli-wc --words --verbose
+Word Count Version v0.2.0
 
-word count: 5
+5 (word)
 ```
 
 - Count Lines
 
 ```
-$ printf "%s\n" one two three four five | ./cli-wc -l
+$ printf "%s\n" one two 😂 four five | cli-wc --lines
 5
 ```
 
 ```
-$ printf "%s\n" one two three four five | ./cli-wc -l -v
-Word Count Version v0.0.0
+$ printf "%s\n" one two 😂 four five | cli-wc -lines --verbose
+Word Count Version v0.2.0
 
-line count: 5
+5 (line)
 ```
 
 - Count Bytes
 
 ```
-$ printf "%s\n" one two three four five | ./cli-wc -b
-19
+$ printf "%s\n" one two 😂 four five | cli-wc --bytes
+23
 ```
 
 ```
-$ printf "%s\n" one two three four five | ./cli-wc -b -v
-Word Count Version v0.0.0
+$ printf "%s\n" one two 😂 four five | cli-wc --bytes --verbose
+Word Count Version v0.2.0
 
-byte count: 24
+23 (byte)
+```
+
+- Count Chars
+
+```
+$ printf "%s\n" one two 😂 four five | cli-wc --chars
+20
+```
+
+```
+$ printf "%s\n" one two 😂 four five | cli-wc --chars --verbose
+Word Count Version v0.2.0
+
+20 (char)
 ```
