@@ -149,7 +149,6 @@ func getCounts(r io.Reader, conf config) results {
 	return counts
 }
 
-// print order: newline, word, character, byte.
 func showCount(counts results, conf config) {
 	first := true
 	fieldSize := "7"

@@ -47,7 +47,6 @@ func TestBadFlag(t *testing.T) {
 		os.Stderr = osStderr
 	}()
 
-	// It's a silly test but I need the practice.
 	want := "flag provided but not defined: -x"
 
 	// Run the function who's output we want to capture.
@@ -130,7 +129,6 @@ func TestShowBanner(t *testing.T) {
 		os.Stdout = osStdout
 	}()
 
-	// It's a silly test but I need the practice.
 	want := metadata.name + " Version " + metadata.version + "\n\n"
 
 	// Run the function who's output we want to capture.
@@ -403,7 +401,6 @@ func TestShowWordCountVerbose(t *testing.T) {
 		},
 	}
 
-	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d (word)\n", counts["word"])
 
 	// Run the function who's output we want to capture.
@@ -451,7 +448,6 @@ func TestShowLineCountVerbose(t *testing.T) {
 		},
 	}
 
-	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d (line)\n", counts["line"])
 
 	// Run the function who's output we want to capture.
@@ -496,7 +492,6 @@ func TestShowByteCountVerbose(t *testing.T) {
 		},
 	}
 
-	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d (byte)\n", counts["byte"])
 
 	// Run the function who's output we want to capture.
@@ -544,7 +539,6 @@ func TestShowCharCountVerbose(t *testing.T) {
 		},
 	}
 
-	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d (char)\n", counts["char"])
 
 	// Run the function who's output we want to capture.
@@ -592,7 +586,6 @@ func TestShowWordCount(t *testing.T) {
 		},
 	}
 
-	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d\n", counts["word"])
 
 	// Run the function who's output we want to capture.
@@ -640,7 +633,6 @@ func TestShowLineCount(t *testing.T) {
 		},
 	}
 
-	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d\n", counts["line"])
 
 	// Run the function who's output we want to capture.
@@ -688,7 +680,6 @@ func TestShowByteCount(t *testing.T) {
 		},
 	}
 
-	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d\n", counts["byte"])
 
 	// Run the function who's output we want to capture.
@@ -736,7 +727,6 @@ func TestShowCharCount(t *testing.T) {
 		},
 	}
 
-	// It's a silly test but I need the practice.
 	want := fmt.Sprintf("%d\n", counts["char"])
 
 	// Run the function who's output we want to capture.
