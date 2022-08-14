@@ -150,13 +150,13 @@ Word Count Version v0.2.1
 - All Counts
 
 ```
-$ sudo dmesg | ./cli-wc --bytes --chars --lines --words
-    542    6364   42743   42743
+$ printf "%s\n" one two 😂 four five | cli-wc --bytes --chars --lines --words
+      5       5      20      23
 ```
 
 ```
-$ sudo dmesg | ./cli-wc --bytes --chars --lines --words --verbose
+$ printf "%s\n" one two 😂 four five | cli-wc --bytes --chars --lines --words --verbose
 Word Count Version v0.2.1
 
-    542 (line)    6364 (word)   42743 (byte)   42743 (char)
+      5 (line)       5 (word)      20 (char)      23 (byte)
 ```

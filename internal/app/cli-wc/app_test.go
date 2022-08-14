@@ -861,3 +861,61 @@ func TestRunAppFlagByteCharWordAndLine(t *testing.T) {
 		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["char"], got.modes["char"])
 	}
 }
+
+func TestPrintOrder(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	counts := results{
+		"byte": 3,
+		"char": 4,
+		"word": 2,
+		"line": 1,
+	}
+
+	conf := config{
+		verboseMode: true,
+		modes: map[string]bool{
+			"byte": true,
+			"char": true,
+			"word": true,
+			"line": true,
+		},
+	}
+
+	//       1 (line)       2 (word)       4 (char)       3 (byte)\n
+	want := fmt.Sprintf("%7d (line)", counts["line"])
+	want += fmt.Sprintf("%8d (word)", counts["word"])
+	want += fmt.Sprintf("%8d (char)", counts["char"])
+	want += fmt.Sprintf("%8d (byte)", counts["byte"])
+	want += "\n"
+
+	// Run the function who's output we want to capture.
+	showCount(counts, conf)
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("show line count:\n\twant %q\n\t got %q", want, got)
+	}
+}

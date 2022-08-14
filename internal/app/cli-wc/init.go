@@ -60,12 +60,12 @@ var flagDefaults = map[string]bool{
 	"word": true,
 }
 
-// Printing order: line, word, byte, char
+// Printing order: newline, word, character, byte.
 var printOrder = []string{
 	"line",
 	"word",
-	"byte",
 	"char",
+	"byte",
 }
 
 // SetVersion is used my the main package to pass version information to the app package.

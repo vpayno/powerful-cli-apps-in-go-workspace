@@ -255,43 +255,42 @@ func getCounts(r io.Reader, conf config) results <span class="cov7" title="20">{
         <span class="cov7" title="20">return counts</span>
 }
 
-// order for flag overrides: newline, word, character, byte.
-func showCount(counts results, conf config) <span class="cov6" title="9">{
+func showCount(counts results, conf config) <span class="cov6" title="10">{
         first := true
         fieldSize := "7"
 
         var modeCount int
-        for _, v := range conf.modes </span><span class="cov6" title="12">{
-                if v </span><span class="cov6" title="11">{
+        for _, v := range conf.modes </span><span class="cov7" title="16">{
+                if v </span><span class="cov7" title="15">{
                         modeCount++
                 }</span>
         }
 
-        <span class="cov6" title="9">if modeCount == 1 </span><span class="cov5" title="8">{
+        <span class="cov6" title="10">if modeCount == 1 </span><span class="cov5" title="8">{
                 fieldSize = "0"
         }</span>
 
-        <span class="cov6" title="9">for _, mode := range printOrder </span><span class="cov9" title="36">{
+        <span class="cov6" title="10">for _, mode := range printOrder </span><span class="cov9" title="40">{
                 if !conf.modes[mode] </span><span class="cov8" title="25">{
                         continue</span>
                 }
 
-                <span class="cov6" title="11">if !first </span><span class="cov2" title="2">{
+                <span class="cov7" title="15">if !first </span><span class="cov4" title="5">{
                         fieldSize = "8"
                 }</span>
 
-                <span class="cov6" title="11">first = false
+                <span class="cov7" title="15">first = false
 
                 var label string
 
-                if conf.verboseMode </span><span class="cov5" title="7">{
+                if conf.verboseMode </span><span class="cov6" title="11">{
                         label = " (" + mode + ")"
                 }</span>
 
-                <span class="cov6" title="11">fmt.Printf("%"+fieldSize+"d%s", counts[mode], label)</span>
+                <span class="cov7" title="15">fmt.Printf("%"+fieldSize+"d%s", counts[mode], label)</span>
         }
 
-        <span class="cov6" title="9">fmt.Println()</span>
+        <span class="cov6" title="10">fmt.Println()</span>
 }
 </pre>
 		
@@ -357,12 +356,12 @@ var flagDefaults = map[string]bool{
         "word": true,
 }
 
-// Printing order: line, word, byte, char
+// Printing order: newline, word, character, byte.
 var printOrder = []string{
         "line",
         "word",
-        "byte",
         "char",
+        "byte",
 }
 
 // SetVersion is used my the main package to pass version information to the app package.
