@@ -149,17 +149,31 @@ func RunApp() <span class="cov4" title="4">{
 // Usage prints the command-line usage help message.
 func Usage() <span class="cov2" title="2">{
         fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
-        flagSet.PrintDefaults()
 }</span>
 
 func setup() (config, error) <span class="cov6" title="11">{
 
-        byteFlag := flagSet.Bool("c", false, "print the byte counts")
-        charFlag := flagSet.Bool("m", false, "print the character counts")
-        lineFlag := flagSet.Bool("l", false, "print the newline counts")
-        wordFlag := flagSet.Bool("w", false, "print the word counts")
-        verboseFlag := flagSet.Bool("v", false, "verbose mode")
-        versionFlag := flagSet.Bool("V", false, "output version information and exit")
+        var byteFlag bool
+        var charFlag bool
+        var lineFlag bool
+        var wordFlag bool
+
+        flagSet.BoolVar(&amp;byteFlag, "c", false, "print the byte counts")
+        flagSet.BoolVar(&amp;byteFlag, "byte", false, "print the byte counts")
+        flagSet.BoolVar(&amp;charFlag, "m", false, "print the character counts")
+        flagSet.BoolVar(&amp;charFlag, "char", false, "print the character counts")
+        flagSet.BoolVar(&amp;lineFlag, "l", false, "print the newline counts")
+        flagSet.BoolVar(&amp;lineFlag, "line", false, "print the newline counts")
+        flagSet.BoolVar(&amp;wordFlag, "w", false, "print the word counts")
+        flagSet.BoolVar(&amp;wordFlag, "word", false, "print the word counts")
+
+        var verboseFlag bool
+        var versionFlag bool
+
+        flagSet.BoolVar(&amp;verboseFlag, "v", false, "verbose mode")
+        flagSet.BoolVar(&amp;verboseFlag, "verbose", false, "verbose mode")
+        flagSet.BoolVar(&amp;versionFlag, "V", false, "output version information and exit")
+        flagSet.BoolVar(&amp;versionFlag, "version", false, "output version information and exit")
 
         flagSet.Usage = Usage
 
@@ -170,8 +184,8 @@ func setup() (config, error) <span class="cov6" title="11">{
         }</span>
 
         <span class="cov6" title="9">conf := config{
-                verboseMode: *verboseFlag,
-                versionMode: *versionFlag,
+                verboseMode: verboseFlag,
+                versionMode: versionFlag,
         }
 
         usingDefaults := true
@@ -183,7 +197,7 @@ func setup() (config, error) <span class="cov6" title="11">{
 
         // order for flag overrides: newline, word, character, byte.
         switch </span>{
-        case *lineFlag:<span class="cov1" title="1">
+        case lineFlag:<span class="cov1" title="1">
                 usingDefaults = false
 
                 byteMode = false
@@ -191,7 +205,7 @@ func setup() (config, error) <span class="cov6" title="11">{
                 lineMode = true
                 wordMode = false</span>
 
-        case *wordFlag:<span class="cov2" title="2">
+        case wordFlag:<span class="cov2" title="2">
                 usingDefaults = false
 
                 byteMode = false
@@ -199,7 +213,7 @@ func setup() (config, error) <span class="cov6" title="11">{
                 lineMode = false
                 wordMode = true</span>
 
-        case *charFlag:<span class="cov1" title="1">
+        case charFlag:<span class="cov1" title="1">
                 usingDefaults = false
 
                 byteMode = false
@@ -207,7 +221,7 @@ func setup() (config, error) <span class="cov6" title="11">{
                 lineMode = false
                 wordMode = false</span>
 
-        case *byteFlag:<span class="cov1" title="1">
+        case byteFlag:<span class="cov1" title="1">
                 usingDefaults = false
 
                 byteMode = true
@@ -358,6 +372,13 @@ The options below may be used to select which counts are printed, always in
 the following order: newline, word, character, byte.
 
 Options:
+  -c, --bytes            print the byte counts
+  -m, --chars            print the character counts
+  -l, --lines            print the newline counts
+  -w, --words            print the word counts
+  -h, --help             display this help and exit
+  -v, --version          output version information and exit
+  -V, --verbose          verbose mode
 `
 )
 

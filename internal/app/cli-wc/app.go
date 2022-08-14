@@ -43,17 +43,31 @@ func RunApp() {
 // Usage prints the command-line usage help message.
 func Usage() {
 	fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
-	flagSet.PrintDefaults()
 }
 
 func setup() (config, error) {
 
-	byteFlag := flagSet.Bool("c", false, "print the byte counts")
-	charFlag := flagSet.Bool("m", false, "print the character counts")
-	lineFlag := flagSet.Bool("l", false, "print the newline counts")
-	wordFlag := flagSet.Bool("w", false, "print the word counts")
-	verboseFlag := flagSet.Bool("v", false, "verbose mode")
-	versionFlag := flagSet.Bool("V", false, "output version information and exit")
+	var byteFlag bool
+	var charFlag bool
+	var lineFlag bool
+	var wordFlag bool
+
+	flagSet.BoolVar(&byteFlag, "c", false, "print the byte counts")
+	flagSet.BoolVar(&byteFlag, "byte", false, "print the byte counts")
+	flagSet.BoolVar(&charFlag, "m", false, "print the character counts")
+	flagSet.BoolVar(&charFlag, "char", false, "print the character counts")
+	flagSet.BoolVar(&lineFlag, "l", false, "print the newline counts")
+	flagSet.BoolVar(&lineFlag, "line", false, "print the newline counts")
+	flagSet.BoolVar(&wordFlag, "w", false, "print the word counts")
+	flagSet.BoolVar(&wordFlag, "word", false, "print the word counts")
+
+	var verboseFlag bool
+	var versionFlag bool
+
+	flagSet.BoolVar(&verboseFlag, "v", false, "verbose mode")
+	flagSet.BoolVar(&verboseFlag, "verbose", false, "verbose mode")
+	flagSet.BoolVar(&versionFlag, "V", false, "output version information and exit")
+	flagSet.BoolVar(&versionFlag, "version", false, "output version information and exit")
 
 	flagSet.Usage = Usage
 
@@ -64,8 +78,8 @@ func setup() (config, error) {
 	}
 
 	conf := config{
-		verboseMode: *verboseFlag,
-		versionMode: *versionFlag,
+		verboseMode: verboseFlag,
+		versionMode: versionFlag,
 	}
 
 	usingDefaults := true
@@ -77,7 +91,7 @@ func setup() (config, error) {
 
 	// order for flag overrides: newline, word, character, byte.
 	switch {
-	case *lineFlag:
+	case lineFlag:
 		usingDefaults = false
 
 		byteMode = false
@@ -85,7 +99,7 @@ func setup() (config, error) {
 		lineMode = true
 		wordMode = false
 
-	case *wordFlag:
+	case wordFlag:
 		usingDefaults = false
 
 		byteMode = false
@@ -93,7 +107,7 @@ func setup() (config, error) {
 		lineMode = false
 		wordMode = true
 
-	case *charFlag:
+	case charFlag:
 		usingDefaults = false
 
 		byteMode = false
@@ -101,7 +115,7 @@ func setup() (config, error) {
 		lineMode = false
 		wordMode = false
 
-	case *byteFlag:
+	case byteFlag:
 		usingDefaults = false
 
 		byteMode = true

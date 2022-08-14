@@ -43,6 +43,13 @@ The options below may be used to select which counts are printed, always in
 the following order: newline, word, character, byte.
 
 Options:
+  -c, --bytes            print the byte counts
+  -m, --chars            print the character counts
+  -l, --lines            print the newline counts
+  -w, --words            print the word counts
+  -h, --help             display this help and exit
+  -v, --version          output version information and exit
+  -V, --verbose          verbose mode
 `
 )
 
