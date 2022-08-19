@@ -20,3 +20,4 @@
 - feat: add rest api
 - feat: add wasm interface
 - feat: add ncurses interface - file browser
+- feat: use cobra&viper cli modules?
