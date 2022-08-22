@@ -324,11 +324,10 @@ var flagExitErrorBehavior = flag.ExitOnError
 var flagSet = flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
 
 type appInfo struct {
-        name       string
-        version    string
-        gitVersion string
-        gitHash    string
-        buildTime  string
+        name      string
+        version   string
+        gitHash   string
+        buildTime string
 }
 
 var metadata = appInfo{
@@ -394,13 +393,10 @@ func SetVersion(b []byte) <span class="cov10" title="2">{
 
         <span class="cov10" title="2">if len(slice) &gt; 1 </span><span class="cov10" title="2">{
                 if slice[1] != "" </span><span class="cov10" title="2">{
-                        metadata.gitVersion = slice[1]
+                        metadata.gitHash = slice[1]
                 }</span>
                 <span class="cov10" title="2">if slice[2] != "" </span><span class="cov10" title="2">{
-                        metadata.gitHash = slice[2]
-                }</span>
-                <span class="cov10" title="2">if slice[3] != "" </span><span class="cov10" title="2">{
-                        metadata.buildTime = slice[3]
+                        metadata.buildTime = slice[2]
                 }</span>
         }
 }
@@ -409,11 +405,7 @@ func showVersion() <span class="cov10" title="2">{
         fmt.Println()
         fmt.Printf("%s Version: %s\n\n", metadata.name, metadata.version)
 
-        if metadata.gitVersion != "" </span><span class="cov1" title="1">{
-                fmt.Printf("git version: %s\n", metadata.gitVersion)
-        }</span>
-
-        <span class="cov10" title="2">if metadata.gitHash != "" </span><span class="cov1" title="1">{
+        if metadata.gitHash != "" </span><span class="cov1" title="1">{
                 fmt.Printf("   git hash: %s\n", metadata.gitHash)
         }</span>
 

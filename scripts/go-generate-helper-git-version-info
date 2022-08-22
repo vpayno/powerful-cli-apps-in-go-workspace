@@ -35,12 +35,10 @@ for target in "${targets[@]}"; do
 		if ${is_release}; then
 			printf "%s\n" "${version[0]}"
 		else
-			git describe --tags --abbrev=0 || (( retval++ ))
+			git describe --tags || (( retval++ ))
 
 			# checking if the commit count (middle number) isn't 0
 			if [[ ${version[1]} -ne 0 ]]; then
-				git describe --tags --long || (( retval++ ))
-
 				git rev-parse HEAD || (( retval++ ))
 
 				date -u '+%Y-%m-%dT%H:%M:%SZ' || (( retval++ ))

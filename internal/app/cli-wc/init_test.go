@@ -68,21 +68,19 @@ func TestShowVersion(t *testing.T) {
 	}()
 
 	wantMetadata := appInfo{
-		name:       metadata.name,
-		version:    "version",
-		gitVersion: "gitVersion",
-		gitHash:    "gitHash",
-		buildTime:  "buildTime",
+		name:      metadata.name,
+		version:   "version",
+		gitHash:   "gitHash",
+		buildTime: "buildTime",
 	}
 
-	strSlice := []string{wantMetadata.version, wantMetadata.gitVersion, wantMetadata.gitHash, wantMetadata.buildTime}
+	strSlice := []string{wantMetadata.version, wantMetadata.gitHash, wantMetadata.buildTime}
 	b := []byte(strings.Join(strSlice, "\n") + "\n")
 	SetVersion(b)
 
 	// It's a silly test but I need the practice.
 	want := "\n"
 	want += fmt.Sprintf("%s Version: %s\n\n", wantMetadata.name, wantMetadata.version)
-	want += fmt.Sprintf("git version: %s\n", wantMetadata.gitVersion)
 	want += fmt.Sprintf("   git hash: %s\n", wantMetadata.gitHash)
 	want += fmt.Sprintf(" build time: %s\n", wantMetadata.buildTime)
 	want += "\n"
@@ -106,14 +104,13 @@ func TestShowVersion(t *testing.T) {
 
 func TestSetVersion(t *testing.T) {
 	want := appInfo{
-		name:       "name",
-		version:    "version",
-		gitVersion: "gitVersion",
-		gitHash:    "gitHash",
-		buildTime:  "buildTime",
+		name:      "name",
+		version:   "version",
+		gitHash:   "gitHash",
+		buildTime: "buildTime",
 	}
 
-	strSlice := []string{want.version, want.gitVersion, want.gitHash, want.buildTime}
+	strSlice := []string{want.version, want.gitHash, want.buildTime}
 	b := []byte(strings.Join(strSlice, "\n") + "\n")
 	SetVersion(b)
 
@@ -121,10 +118,6 @@ func TestSetVersion(t *testing.T) {
 
 	if want.version != got.version {
 		t.Errorf("expected version to be set to %q, got %q", want.version, got.version)
-	}
-
-	if want.gitVersion != got.gitVersion {
-		t.Errorf("expected gitVersion to be set to %q, got %q", want.gitVersion, got.gitVersion)
 	}
 
 	if want.gitHash != got.gitHash {

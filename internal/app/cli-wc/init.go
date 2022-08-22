@@ -12,11 +12,10 @@ var flagExitErrorBehavior = flag.ExitOnError
 var flagSet = flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
 
 type appInfo struct {
-	name       string
-	version    string
-	gitVersion string
-	gitHash    string
-	buildTime  string
+	name      string
+	version   string
+	gitHash   string
+	buildTime string
 }
 
 var metadata = appInfo{
@@ -82,13 +81,10 @@ func SetVersion(b []byte) {
 
 	if len(slice) > 1 {
 		if slice[1] != "" {
-			metadata.gitVersion = slice[1]
+			metadata.gitHash = slice[1]
 		}
 		if slice[2] != "" {
-			metadata.gitHash = slice[2]
-		}
-		if slice[3] != "" {
-			metadata.buildTime = slice[3]
+			metadata.buildTime = slice[2]
 		}
 	}
 }
@@ -96,10 +92,6 @@ func SetVersion(b []byte) {
 func showVersion() {
 	fmt.Println()
 	fmt.Printf("%s Version: %s\n\n", metadata.name, metadata.version)
-
-	if metadata.gitVersion != "" {
-		fmt.Printf("git version: %s\n", metadata.gitVersion)
-	}
 
 	if metadata.gitHash != "" {
 		fmt.Printf("   git hash: %s\n", metadata.gitHash)
