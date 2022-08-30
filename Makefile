@@ -17,11 +17,9 @@ build: clean prepare
 	@printf "\n"
 
 build-all:
-	mkdir -pv build/
+	rm -rf dist
 	@printf "Building for every OS and Platform\n\n"
-	GOOS=freebsd GOARCH=386 go build -o "${BIN_FILE}"-freebsd-386 ./cmd/changeme/changeme.go
-	GOOS=linux   GOARCH=386 go build -o "${BIN_FILE}"-linux-386 ./cmd/changeme/changeme.go
-	GOOS=windows GOARCH=386 go build -o "${BIN_FILE}"-windows-386 ./cmd/changeme/changeme.go
+	time goreleaser build
 	@printf "\n"
 
 run: build prepare
