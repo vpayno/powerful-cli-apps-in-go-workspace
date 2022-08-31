@@ -20,6 +20,22 @@ This is also my "notebook" on how to do things in Go or how to manage a Go proje
 
 - [Website](https://pragprog.com/titles/rggo/powerful-command-line-applications-in-go/)
 
+## Et Cetera
+
+### Build Releases
+
+[Install GoReleaser](https://goreleaser.com/install/):
+
+```
+$ go install github.com/goreleaser/goreleaser@latest
+```
+
+Build Linux, OSX and Windows binaries:
+
+```
+$ make build-all
+```
+
 ## Chapters|Apps
 
 ### Chapter 01 - Your First Command-Line Program in Go - wordcount/wc
