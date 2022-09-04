@@ -1,0 +1,29 @@
+engines:
+  editorconfig:
+    enabled: false
+  gofmt:
+    enabled: true
+  golint:
+    enabled: true
+  govet:
+    enabled: true
+  markdownlint:
+    enabled: false
+
+exclude_patterns:
+  - "**/*.json"
+  - "**/*.yaml"
+  - "**/*.yml"
+  - "**/*_test.go"
+  - ".github/"
+  - ".gitignore"
+  - "LICENSE"
+  - "codegen/"
+  - "config/"
+  - "db/"
+  - "dist/"
+  - "doc.go"
+  - "features/"
+  - "reports/"
+  - "script/"
+  - "vendor/"
