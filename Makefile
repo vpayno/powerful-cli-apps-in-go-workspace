@@ -13,21 +13,16 @@ all: clean annotate check
 check: vet ineffassign lint gocyclo gocritic golangci-lint misspell
 
 build: clean prepare
-	go build ./...
+	goreleaser build --rm-dist --single-target || goreleaser build --rm-dist --single-target --snapshot
 	@printf "\n"
 
 build-all:
-	rm -rf dist
 	@printf "Building for every OS and Platform\n\n"
-	time goreleaser build
+	time goreleaser build --rm-dist || time goreleaser build --rm-dist --snapshot
 	@printf "\n"
 
 run: build prepare
 	go run ./...
-	@printf "\n"
-
-version: build
-	go version
 	@printf "\n"
 
 install: build
