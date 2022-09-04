@@ -225,6 +225,7 @@ jobs:
     - name: Code Climate Code Coverage Report
       id: go-code-climate-code-coverage-report
       run: |
+        cp -v ./reports/.coverage.out ./c.out
         ./cc-test-reporter after-build format-coverage -t gocov --prefix "${GH_REPO_URL}" ./reports/.coverage.out
 
     - name: Install octocov
