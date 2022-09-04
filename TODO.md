@@ -1,6 +1,5 @@
 # powerful-cli-apps-in-go-workspace TODO List
 
-- fix: sort usage options with uppercase letters before lowercase letters
 - fix: remove version string from verbose mode
 - test: validate all mode map bool values per test
 - change: use bitflag instead of modes map
