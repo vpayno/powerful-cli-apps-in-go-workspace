@@ -927,7 +927,40 @@ func TestRunAppFlagCharAndWord(t *testing.T) {
 	}
 }
 
-func TestRunAppFlagByteCharWordAndLine(t *testing.T) {
+func TestRunAppFlagByteCharWordAndLineShortOpts(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
+	want := config{
+		modes: map[string]bool{
+			"byte": true,
+			"char": true,
+			"line": true,
+			"word": true,
+		},
+	}
+
+	os.Args = []string{"test", "-c", "-m", "-l", "-w"}
+	got, _ := setup()
+
+	if got.modes["byte"] != want.modes["byte"] {
+		t.Errorf("setup flags -m -c -l -w: want %v, got %v", want.modes["byte"], got.modes["byte"])
+	}
+
+	if got.modes["char"] != want.modes["char"] {
+		t.Errorf("setup flags -m -c -l -w: want %v, got %v", want.modes["char"], got.modes["char"])
+	}
+
+	if got.modes["line"] != want.modes["line"] {
+		t.Errorf("setup flags -m -c -l -w: want %v, got %v", want.modes["line"], got.modes["line"])
+	}
+
+	if got.modes["word"] != want.modes["word"] {
+		t.Errorf("setup flags -m -c -l -w: want %v, got %v", want.modes["word"], got.modes["word"])
+	}
+}
+
+func TestRunAppFlagByteCharWordAndLineLongOpts(t *testing.T) {
 	setupTestEnv()
 	defer teardownTestEnv()
 
@@ -943,12 +976,20 @@ func TestRunAppFlagByteCharWordAndLine(t *testing.T) {
 	os.Args = []string{"test", "--bytes", "--chars", "--lines", "--words"}
 	got, _ := setup()
 
-	if got.modes["word"] != want.modes["word"] {
-		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["word"], got.modes["word"])
+	if got.modes["byte"] != want.modes["byte"] {
+		t.Errorf("setup flags --chars --bytes --lines --words: want %v, got %v", want.modes["byte"], got.modes["byte"])
 	}
 
 	if got.modes["char"] != want.modes["char"] {
-		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["char"], got.modes["char"])
+		t.Errorf("setup flags --chars --bytes --lines --words: want %v, got %v", want.modes["char"], got.modes["char"])
+	}
+
+	if got.modes["line"] != want.modes["line"] {
+		t.Errorf("setup flags --chars --bytes --lines --words: want %v, got %v", want.modes["line"], got.modes["line"])
+	}
+
+	if got.modes["word"] != want.modes["word"] {
+		t.Errorf("setup flags --chars --bytes --lines --words: want %v, got %v", want.modes["word"], got.modes["word"])
 	}
 }
 

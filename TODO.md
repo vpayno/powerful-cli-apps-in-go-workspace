@@ -2,10 +2,8 @@
 
 - fix: sort usage options with uppercase letters before lowercase letters
 - fix: remove version string from verbose mode
-- test: add unicode tests to test cases
 - test: validate all mode map bool values per test
 - change: use bitflag instead of modes map
-- test: use both short and long options
 - change: reduce complexity of setup()
 - feat: add file support
 - test: add integration tests

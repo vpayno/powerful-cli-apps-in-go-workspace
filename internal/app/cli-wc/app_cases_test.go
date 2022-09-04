@@ -14,6 +14,42 @@ type testCases []testCase
 
 var testData = testCases{
 	{
+		name:       "1 unicode char",
+		input:      "😂",
+		wantByte:   4,
+		wantChar:   1,
+		wantLength: 1,
+		wantLine:   0,
+		wantWord:   1,
+	},
+	{
+		name:       "7 unicode chars",
+		input:      "😂😂😂😂😂😂😂",
+		wantByte:   28,
+		wantChar:   7,
+		wantLength: 7,
+		wantLine:   0,
+		wantWord:   1,
+	},
+	{
+		name:       "7 unicode chars with 3 newlines",
+		input:      "😂😂\n😂\n😂😂😂\n😂",
+		wantByte:   31,
+		wantChar:   10,
+		wantLength: 7,
+		wantLine:   3,
+		wantWord:   4,
+	},
+	{
+		name:       "7 unicode chars with 5 newlines",
+		input:      "\n😂😂\n😂\n😂😂😂\n😂\n",
+		wantByte:   33,
+		wantChar:   12,
+		wantLength: 7,
+		wantLine:   5,
+		wantWord:   4,
+	},
+	{
 		name:       "7 spaces",
 		input:      "       ",
 		wantByte:   7,
