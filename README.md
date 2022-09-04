@@ -4,6 +4,7 @@
 ![Code2Test Ratio](./reports/.octocov-ratio.svg)
 
 [![made-with-Go](https://img.shields.io/badge/Made%20with-Go-1f425f.svg)](https://go.dev/)
+[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/vpayno/powerful-cli-apps-in-go-workspace.svg)](https://github.com/gomods/athens)
 [![Version](https://badge.fury.io/gh/vpayno%2Fpowerful-cli-apps-in-go-workspace.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/tags)
 
 [![Go Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/go.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/go.yml)
