@@ -1,8 +1,8 @@
 #
-#  .github/workflows/hugo.yml
+#  .github/workflows/github-pages-hugo.yml
 #
 
-name: Deploy Hugo site to Pages
+name: Deploy Hugo site to GitHub Pages
 
 on:
   push:
