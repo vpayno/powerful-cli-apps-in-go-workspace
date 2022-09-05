@@ -25,3 +25,5 @@ octocov
 
 # Hugo/GitHub Pages
 *.lock
+site/
+public/
