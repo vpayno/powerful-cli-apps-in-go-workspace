@@ -49,6 +49,17 @@ jobs:
         id: setup_pages
         uses: actions/configure-pages@v2
 
+      - name: Setup NodeJS
+        id: setup-nodejs
+        uses: actions/setup-node@v3
+        with:
+          # https://nodejs.org/en/about/releases/
+          node-version: lts/*
+      - run: |
+          npm install --save-dev autoprefixer
+          npm install --save-dev postcss-cli
+          npm install -D postcss
+
       - name: Build with Hugo
         env:
           # For maximum backward compatibility with Hugo modules

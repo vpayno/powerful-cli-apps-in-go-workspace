@@ -1,3 +1,4 @@
 baseURL = 'https://vpayno.github.io/powerful-cli-apps-in-go-workspace/'
 languageCode = 'en-us'
 title = 'Powerful Cli Application In Go Workspace'
+theme = "docsy"

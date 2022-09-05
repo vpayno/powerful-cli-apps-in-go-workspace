@@ -1,3 +1,6 @@
 [submodule "wiki"]
 	path = wiki
 	url = https://github.com/vpayno/powerful-cli-apps-in-go-workspace.wiki.git
+[submodule "pages-gh/themes/docsy"]
+	path = pages-gh/themes/docsy
+	url = https://github.com/google/docsy
