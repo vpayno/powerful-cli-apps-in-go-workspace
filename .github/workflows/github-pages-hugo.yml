@@ -55,6 +55,7 @@ jobs:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
         run: |
+          cd pages-gh/
           hugo \
             --minify \
             --baseURL "${{ steps.setup_pages.outputs.base_url }}/"
