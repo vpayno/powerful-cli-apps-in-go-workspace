@@ -56,9 +56,11 @@ jobs:
           # https://nodejs.org/en/about/releases/
           node-version: lts/*
       - run: |
+          node -v
           npm install --save-dev autoprefixer
           npm install --save-dev postcss-cli
           npm install -D postcss
+          (cd pages-gh/themes/docsy && npm install)
 
       - name: Build with Hugo
         env:
