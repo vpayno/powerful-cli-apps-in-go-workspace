@@ -5,9 +5,6 @@
 name: Deploy Hugo site to GitHub Pages
 
 on:
-  push:
-    branches: ["pages-pr"]
-
   pull_request:
     branches: ["pages-pr"]
 
