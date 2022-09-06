@@ -22,8 +22,3 @@ dist/
 
 # Ignore random things (usually things generaged in CI that we don't want to track).
 octocov
-
-# Hugo/GitHub Pages
-*.lock
-site/
-public/
