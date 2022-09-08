@@ -18,6 +18,12 @@ import (
   https://github.com/joncalhoun/algorithmswithgo.com/blob/master/module01/fizz_buzz_test.go
 */
 
+// This is the main test function. This is the gatekeeper of all the tests in the appwc package.
+func TestMain(m *testing.M) {
+	exitCode := m.Run()
+	os.Exit(exitCode)
+}
+
 // Use this to put modules, functions in testing mode.
 func setupTestEnv() {
 	flagExitErrorBehavior = flag.ContinueOnError
