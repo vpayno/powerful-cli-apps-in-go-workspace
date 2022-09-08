@@ -22,3 +22,8 @@ dist/
 
 # Ignore random things (usually things generaged in CI that we don't want to track).
 octocov
+
+# GitHub Pages
+*.lock
+site/
+public/
