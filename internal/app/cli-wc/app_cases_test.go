@@ -1,6 +1,6 @@
 package appwc
 
-type testCase struct {
+type dataTestCase struct {
 	name       string
 	input      string
 	wantLength int
@@ -10,9 +10,9 @@ type testCase struct {
 	wantWord   int
 }
 
-type testCases []testCase
+type dataTestCases []dataTestCase
 
-var testData = testCases{
+var testData = dataTestCases{
 	{
 		name:       "1 unicode char",
 		input:      "😂",
