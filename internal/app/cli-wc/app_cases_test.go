@@ -185,3 +185,24 @@ var testData = dataTestCases{
 		wantWord:   3,
 	},
 }
+
+type flagTestCase struct {
+	name  string
+	flags []string
+	want  string
+}
+
+type flagTestCases []flagTestCase
+
+var testFlags = flagTestCases{
+	{
+		name:  "invalid flag",
+		flags: []string{"-x"},
+		want:  "flag provided but not defined: -x",
+	},
+	{
+		name:  "show usage",
+		flags: []string{"-h"},
+		want:  "Usage: cli [OPTION]...",
+	},
+}

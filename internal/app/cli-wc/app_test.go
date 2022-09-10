@@ -36,6 +36,48 @@ func teardownTestEnv() {
 	flagSet = flag.NewFlagSet(os.Args[0], flagExitErrorBehavior)
 }
 
+func TestFlags(t *testing.T) {
+	osStderr := os.Stderr // keep backup of the real stdout
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stderr = osStderr
+	}()
+
+	for _, tc := range testFlags {
+		setupTestEnv()
+
+		testStderr, writer, err := os.Pipe()
+		if err != nil {
+			t.Errorf("os.Pipe() err %v; want %v", err, nil)
+		}
+
+		os.Stderr = writer
+
+		want := tc.want
+
+		// Run the function who's output we want to capture.
+		os.Args = append([]string{"cli"}, tc.flags...)
+		RunApp()
+
+		// Stop capturing stdout.
+		writer.Close()
+
+		var buf bytes.Buffer
+		_, err = io.Copy(&buf, testStderr)
+		if err != nil {
+			t.Error(err)
+		}
+		got := buf.String()
+		got = strings.Split(got, "\n")[0]
+		if got != want {
+			t.Errorf("Usage(); want %q, got %q", want, got)
+		}
+
+		teardownTestEnv()
+	}
+}
+
 func TestBadFlag(t *testing.T) {
 	setupTestEnv()
 	defer teardownTestEnv()
