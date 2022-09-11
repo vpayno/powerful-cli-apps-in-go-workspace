@@ -42,7 +42,7 @@ jobs:
         echo "=== Which files changed? ===" | Out-String -Stream
         ([string[]] $diff = git diff --name-only HEAD^ HEAD)
 
-        # Check if a file under docs/ or with the .md extension has changed (added, modified, deleted) then output to stdout.
+        # Check if the files are present in the changed file list (added, modified, deleted) then output to stdout.
         echo "=== Which Golang files changed? ===" | Out-String -Stream
         ([string[]] $SourceDiff = $diff | Where-Object { $_ -match '^.*[.]go$' -or $_ -match '^go[.]sum$' -or $_ -match '^go[.]mod$' })
 
