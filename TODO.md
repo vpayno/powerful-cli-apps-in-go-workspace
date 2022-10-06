@@ -18,3 +18,4 @@
 - feat: add ncurses interface - file browser
 - feat: use cobra&viper cli modules?
 - debug: play with debuggers
+- build: add tag-release script
