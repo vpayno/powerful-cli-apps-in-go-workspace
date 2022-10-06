@@ -101,8 +101,13 @@ Options:
 
 ```
 $ cli-wc --version
+v0.3.4
+```
 
-Word Count Version: v0.2.1
+```
+$ cli-wc --version --verbose
+
+Word Count Version: v0.3.4
 ```
 
 - Default Counts
