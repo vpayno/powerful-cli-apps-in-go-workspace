@@ -89,7 +89,12 @@ func SetVersion(b []byte) {
 	}
 }
 
-func showVersion() {
+func showVersion(conf config) {
+	if !conf.verboseMode {
+		fmt.Printf("%s\n", metadata.version)
+		return
+	}
+
 	fmt.Println()
 	fmt.Printf("%s Version: %s\n\n", metadata.name, metadata.version)
 

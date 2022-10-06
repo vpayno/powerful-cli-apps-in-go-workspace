@@ -123,17 +123,17 @@ func showBanner() <span class="cov2" title="2">{
 }</span>
 
 // RunApp is called my the main function. It's basically the main function of the app.
-func RunApp() <span class="cov3" title="4">{
+func RunApp() <span class="cov4" title="6">{
         conf, err := setup()
 
-        if err != nil </span><span class="cov2" title="2">{
+        if err != nil </span><span class="cov3" title="4">{
                 fmt.Print("Error: ")
                 fmt.Println(err)
                 return
         }</span>
 
         <span class="cov2" title="2">if conf.versionMode </span><span class="cov1" title="1">{
-                showVersion()
+                showVersion(conf)
                 return
         }</span>
 
@@ -147,11 +147,11 @@ func RunApp() <span class="cov3" title="4">{
 }
 
 // Usage prints the command-line usage help message.
-func Usage() <span class="cov2" title="2">{
+func Usage() <span class="cov3" title="4">{
         fmt.Fprintf(flag.CommandLine.Output(), usage, os.Args[0])
 }</span>
 
-func setup() (config, error) <span class="cov6" title="14">{
+func setup() (config, error) <span class="cov7" title="18">{
 
         var byteFlag bool
         var charFlag bool
@@ -182,11 +182,11 @@ func setup() (config, error) <span class="cov6" title="14">{
 
         err := flagSet.Parse(os.Args[1:])
 
-        if err != nil </span><span class="cov2" title="2">{
+        if err != nil </span><span class="cov3" title="4">{
                 return config{}, err
         }</span>
 
-        <span class="cov6" title="12">conf := config{
+        <span class="cov6" title="14">conf := config{
                 verboseMode: verboseFlag,
                 versionMode: versionFlag,
                 modes:       map[string]bool{},
@@ -214,11 +214,11 @@ func setup() (config, error) <span class="cov6" title="14">{
                 <span class="cov5" title="8">if wordFlag </span><span class="cov3" title="4">{
                         conf.modes["word"] = true
                 }</span>
-        } else<span class="cov3" title="4"> {
+        } else<span class="cov4" title="6"> {
                 conf.modes = flagDefaults
         }</span>
 
-        <span class="cov6" title="12">return conf, nil</span>
+        <span class="cov6" title="14">return conf, nil</span>
 }
 
 func getCounts(r io.Reader, conf config) results <span class="cov7" title="25">{
@@ -383,37 +383,42 @@ var printOrder = []string{
 }
 
 // SetVersion is used my the main package to pass version information to the app package.
-func SetVersion(b []byte) <span class="cov10" title="2">{
+func SetVersion(b []byte) <span class="cov10" title="3">{
         slice := strings.Split(string(b), "\n")
         slice = slice[:len(slice)-1]
 
-        if slice[0] != "" </span><span class="cov10" title="2">{
+        if slice[0] != "" </span><span class="cov10" title="3">{
                 metadata.version = slice[0]
         }</span>
 
-        <span class="cov10" title="2">if len(slice) &gt; 1 </span><span class="cov10" title="2">{
-                if slice[1] != "" </span><span class="cov10" title="2">{
+        <span class="cov10" title="3">if len(slice) &gt; 1 </span><span class="cov10" title="3">{
+                if slice[1] != "" </span><span class="cov10" title="3">{
                         metadata.gitHash = slice[1]
                 }</span>
-                <span class="cov10" title="2">if slice[2] != "" </span><span class="cov10" title="2">{
+                <span class="cov10" title="3">if slice[2] != "" </span><span class="cov10" title="3">{
                         metadata.buildTime = slice[2]
                 }</span>
         }
 }
 
-func showVersion() <span class="cov10" title="2">{
-        fmt.Println()
+func showVersion(conf config) <span class="cov10" title="3">{
+        if !conf.verboseMode </span><span class="cov1" title="1">{
+                fmt.Printf("%s\n", metadata.version)
+                return
+        }</span>
+
+        <span class="cov6" title="2">fmt.Println()
         fmt.Printf("%s Version: %s\n\n", metadata.name, metadata.version)
 
         if metadata.gitHash != "" </span><span class="cov1" title="1">{
                 fmt.Printf("   git hash: %s\n", metadata.gitHash)
         }</span>
 
-        <span class="cov10" title="2">if metadata.buildTime != "" </span><span class="cov1" title="1">{
+        <span class="cov6" title="2">if metadata.buildTime != "" </span><span class="cov1" title="1">{
                 fmt.Printf(" build time: %s\n", metadata.buildTime)
         }</span>
 
-        <span class="cov10" title="2">fmt.Println()</span>
+        <span class="cov6" title="2">fmt.Println()</span>
 }
 
 // OSExit is used to Money Patch the Exit function during testing.

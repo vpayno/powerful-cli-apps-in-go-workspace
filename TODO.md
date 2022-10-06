@@ -1,6 +1,5 @@
 # powerful-cli-apps-in-go-workspace TODO List
 
-- fix: remove version string from verbose mode
 - test: validate all mode map bool values per test
 - change: use bitflag instead of modes map
 - change: reduce complexity of setup()

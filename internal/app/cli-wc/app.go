@@ -27,7 +27,7 @@ func RunApp() {
 	}
 
 	if conf.versionMode {
-		showVersion()
+		showVersion(conf)
 		return
 	}
 
