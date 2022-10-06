@@ -326,7 +326,7 @@ func TestSetupFlagVersion(t *testing.T) {
 	defer teardownTestEnv()
 
 	// -V
-	os.Args = []string{"test", "-V"}
+	os.Args = []string{"test", "--version", "--verbose"}
 	conf, err := setup()
 
 	if err != nil {
@@ -912,7 +912,7 @@ func TestRunAppFlagVersion(t *testing.T) {
 
 	want := "\nWord Count Version: " + metadata.version + "\n\n\n"
 
-	os.Args = []string{"test", "-V"}
+	os.Args = []string{"test", "--version", "--verbose"}
 	RunApp()
 
 	// Stop capturing stdout.

@@ -54,6 +54,71 @@ func TestExitVerbose(t *testing.T) {
 }
 
 func TestShowVersion(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
+	os.Args = []string{"test", "--version"}
+	conf, err := setup()
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	testStdout, writer, err := os.Pipe()
+	if err != nil {
+		t.Errorf("os.Pipe() err %v; want %v", err, nil)
+	}
+
+	osStdout := os.Stdout // keep backup of the real stdout
+	os.Stdout = writer
+
+	defer func() {
+		// Undo what we changed when this test is done.
+		os.Stdout = osStdout
+	}()
+
+	wantMetadata := appInfo{
+		name:      metadata.name,
+		version:   "version",
+		gitHash:   "gitHash",
+		buildTime: "buildTime",
+	}
+
+	strSlice := []string{wantMetadata.version, wantMetadata.gitHash, wantMetadata.buildTime}
+	b := []byte(strings.Join(strSlice, "\n") + "\n")
+	SetVersion(b)
+
+	// It's a silly test but I need the practice.
+	want := fmt.Sprintf("%s\n", wantMetadata.version)
+
+	// Run the function who's output we want to capture.
+	showVersion(conf)
+
+	// Stop capturing stdout.
+	writer.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, testStdout)
+	if err != nil {
+		t.Error(err)
+	}
+	got := buf.String()
+	if got != want {
+		t.Errorf("showVersion(); want %q, got %q", want, got)
+	}
+}
+
+func TestShowVersionVerbose(t *testing.T) {
+	setupTestEnv()
+	defer teardownTestEnv()
+
+	os.Args = []string{"test", "--version", "--verbose"}
+	conf, err := setup()
+
+	if err != nil {
+		t.Error(err)
+	}
+
 	testStdout, writer, err := os.Pipe()
 	if err != nil {
 		t.Errorf("os.Pipe() err %v; want %v", err, nil)
@@ -86,7 +151,7 @@ func TestShowVersion(t *testing.T) {
 	want += "\n"
 
 	// Run the function who's output we want to capture.
-	showVersion()
+	showVersion(conf)
 
 	// Stop capturing stdout.
 	writer.Close()
