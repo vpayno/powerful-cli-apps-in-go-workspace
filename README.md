@@ -54,7 +54,7 @@ $ make build-all
 <details id=1>
     <summary><h3>Chapter 01: Your First Command-Line Program in Go - wordcount/wc</h3></summary>
 
-#### How to Install
+#### How to Install *cli-wc*
 
 I'm adding `cli-` prefix to the binaries so I don't replace the system version of `wc` with this one in my `PATH`.
 
@@ -73,7 +73,7 @@ $ go generate
 # go install ./cmd/cli-wc/cli-wc.go
 ```
 
-#### Usage
+#### *cli-wc* Usage
 
 ```
 $ cli-wc --help
@@ -96,7 +96,7 @@ Options:
   -V, --verbose          verbose mode
 ```
 
-#### Examples
+  <details><summary><h4><em>cli-wc</em> Examples</h4></summary>
 
 - Show Version
 
@@ -209,5 +209,7 @@ Word Count Version v0.3.0
 
       2 (line)       1 (word)      12 (char)      12 (byte)      10 (length)
 ```
+
+  </details>
 
 </details>
