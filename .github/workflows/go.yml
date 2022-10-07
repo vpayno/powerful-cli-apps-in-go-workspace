@@ -4,6 +4,9 @@ on:
   pull_request:
 
 env:
+  GH_REF: ${{ github.ref }}
+  GH_BASE_REF: ${{ github.base_ref }}
+  GH_HEAD_REF: ${{ github.head_ref }}
   CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
   GH_REPO_URL: github.com/vpayno/powerful-cli-apps-in-go-workspace
   GOCYCLO_OVER_THRESHOLD: 15
@@ -90,8 +93,8 @@ jobs:
       id: checkout-branch
       run: |
         git status
-        git fetch origin ${{ github.head_ref }}
-        git switch ${{ github.head_ref }}
+        git fetch origin "${GH_HEAD_REF}"
+        git switch "${GH_HEAD_REF}"
         git status
 
     - name: Run go generate
@@ -104,18 +107,24 @@ jobs:
       if: false && matrix.os == 'ubuntu-latest'
       run: |
         # TODO: add signed commit support
-        git diff --quiet . && exit || true # stop if there's nothing to commit
+        if git diff --quiet .; then
+          true
+        else
+          # stop if there's nothing to commit
+          exit
+        fi
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
         git remote -v
         git add -u .
         git status
+        # shellcheck disable=SC2016
         git commit -m 'ci(go): commit CI `go generated` output files'
         git show
-        #git push origin ${{ github.ref }} # refs/pull/[0-9]+/merge
-        git push origin ${{ github.head_ref }} # branch_name
-        #git push origin ${{ github.base_ref }} # main
+        #git push origin "${GH_REF}" # refs/pull/[0-9]+/merge
+        git push origin "${GH_HEAD_REF}" # branch_name
+        #git push origin "${GH_BASE_REF}" # main
 
     - name: Install Go Tools
       id: install-go-tools
@@ -232,7 +241,7 @@ jobs:
       id: octocov-install
       if: false && matrix.os == 'ubuntu-latest'
       run: |
-        curl -sSL https://github.com/k1LoW/octocov/releases/download/v${OCTOCOV_VERSION}/octocov_v${OCTOCOV_VERSION}_linux_amd64.tar.gz | tar xvzf - octocov
+        curl -sSL "https://github.com/k1LoW/octocov/releases/download/v${OCTOCOV_VERSION}/octocov_v${OCTOCOV_VERSION}_linux_amd64.tar.gz" | tar xvzf - octocov
         ls -lh octocov
         printf "\n"
         ./octocov --help
@@ -252,12 +261,12 @@ jobs:
         git diff --quiet ./report && exit # stop if there's nothing to commit
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
         git remote -v
         git add ./report
         git status
         git commit -m 'ci(reports): commit CI generated files'
         git show
         #git push origin ${{ github.ref }} # refs/pull/[0-9]+/merge
-        git push origin ${{ github.head_ref }} # branch_name
+        git push origin "${GH_HEAD_REF}" # branch_name
         #git push origin ${{ github.base_ref }} # main
