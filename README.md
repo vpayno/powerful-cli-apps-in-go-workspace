@@ -51,7 +51,8 @@ $ make build-all
 
 ## Chapters|Apps
 
-### Chapter 01 - Your First Command-Line Program in Go - wordcount/wc
+<details id=1>
+    <summary><h3>Chapter 01: Your First Command-Line Program in Go - wordcount/wc</h3></summary>
 
 #### How to Install
 
@@ -208,3 +209,5 @@ Word Count Version v0.3.0
 
       2 (line)       1 (word)      12 (char)      12 (byte)      10 (length)
 ```
+
+</details>
