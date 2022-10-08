@@ -17,8 +17,10 @@ jobs:
         uses: reviewdog/action-shellcheck@v1
         with:
           github_token: ${{ github.token }}
-          reporter: github-pr-review
+          # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
+          reporter: github-pr-check
           path: "."
           exclude: "./.git/*"
           check_all_files_with_shebangs: "true"
+          # Change reporter level if you need. GitHub Status Check won't become failure with warning.
           level: error
