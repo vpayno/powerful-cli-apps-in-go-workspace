@@ -12,7 +12,7 @@ declare is_release=false
 if [[ ${release_ver} == not_set ]]; then
 	read -r -a version < <(git describe --tags --long | tr '-' ' ')
 else
-	version=( "${release_ver}" )
+	version=("${release_ver}")
 	is_release=true
 
 	if ! git diff --quiet; then
@@ -35,17 +35,17 @@ for target in "${targets[@]}"; do
 		if ${is_release}; then
 			printf "%s\n" "${version[0]}"
 		else
-			git describe --tags || (( retval++ ))
+			git describe --tags || ((retval++))
 
 			# checking if the commit count (middle number) isn't 0
 			if [[ ${version[1]} -ne 0 ]]; then
-				git rev-parse HEAD || (( retval++ ))
+				git rev-parse HEAD || ((retval++))
 
-				date -u '+%Y-%m-%dT%H:%M:%SZ' || (( retval++ ))
+				date -u '+%Y-%m-%dT%H:%M:%SZ' || ((retval++))
 			fi
 		fi
 
-	} > "./${target}/.version.txt"
+	} >"./${target}/.version.txt"
 
 	cat "./${target}/.version.txt"
 
