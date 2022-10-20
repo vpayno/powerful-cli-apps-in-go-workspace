@@ -220,16 +220,37 @@ jobs:
       run: |
         go tool cover -html=./reports/.coverage.out -o=reports/coverage.html
 
+    - name: Upload coverage.html
+      id: upload-coverage-html
+      uses: actions/upload-artifact@v3
+      with:
+        name: go-coverage-html
+        path: reports/coverage.html
+
     - name: Show Missing Coverage
       id: go-test-coverage-annotate
       run: |
         go install github.com/axw/gocov/gocov@latest
         gocov convert ./reports/.coverage.out | gocov annotate -ceiling=100 -color - | tee reports/coverage-annotations.txt
 
+    - name: Upload coverage-annotations.txt
+      id: upload-coverage-annotations-txt
+      uses: actions/upload-artifact@v3
+      with:
+        name: go-coverage-annotations-txt
+        path: reports/coverage-annotations.txt
+
     - name: gocov Coverage Report
       id: go-test-coverage-report
       run: |
         gocov convert ./reports/.coverage.out | gocov report | tee reports/coverage-summary.txt
+
+    - name: Upload coverage-summary.txt
+      id: upload-coverage-summary-txt
+      uses: actions/upload-artifact@v3
+      with:
+        name: go-coverage-summary-txt
+        path: reports/coverage-summary.txt
 
     - name: Code Climate Code Coverage Report
       id: go-code-climate-code-coverage-report
