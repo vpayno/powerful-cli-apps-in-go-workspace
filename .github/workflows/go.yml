@@ -33,24 +33,29 @@ jobs:
 
     - name: Get Change List
       id: check_file_changed
-      shell: pwsh
+      shell: bash
       run: |
-        # https://www.meziantou.net/executing-github-actions-jobs-or-steps-only-when-specific-files-change.htm#conditional-jobs
-
         # Diff HEAD with the previous commit then output to stdout.
-        echo "=== Which files changed? ===" | Out-String -Stream
-        ([string[]] $diff = git diff --name-only HEAD^ HEAD)
+        printf "=== Which files changed? ===\n"
+        GIT_DIFF="$(git diff --name-only HEAD^ HEAD)"
+        printf "%s\n" "${GIT_DIFF}"
+        printf "\n"
 
         # Check if the files are present in the changed file list (added, modified, deleted) then output to stdout.
-        echo "=== Which Golang files changed? ===" | Out-String -Stream
-        ([string[]] $SourceDiff = $diff | Where-Object { $_ -match '^.*[.]go$' -or $_ -match '^go[.](mod|sum)$' -or $_ -match '^.github/workflows/go.yml$' })
+        HAS_DIFF=false
+        printf "=== Which Golang files changed? ===\n"
+        if printf "%s\n" "${GIT_DIFF}" | grep -E '^(.*[.]go|go[.](mod|sum)|.github/workflows/go.yml)$'; then
+          HAS_DIFF=true
+        fi
+        printf "\n"
 
         # Did Golang files change?
-        echo "=== Did Golang files change? ===" | Out-String -Stream
-        ([string[]] $HasDiff = $SourceDiff.Length -gt 0)
+        printf "=== Did Golang files change? ===\n"
+        printf "%s\n" "${HAS_DIFF}"
+        printf "\n"
 
         # Set the output named "docs_changed"
-        Write-Host "::set-output name=docs_changed::$HasDiff"
+        printf "%s=%s\n" "docs_changed" "${HAS_DIFF}" >> "${GITHUB_OUTPUT}"
 
   stage2:
     name: Go Checks
