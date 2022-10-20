@@ -43,7 +43,7 @@ jobs:
 
         # Check if the files are present in the changed file list (added, modified, deleted) then output to stdout.
         echo "=== Which Golang files changed? ===" | Out-String -Stream
-        ([string[]] $SourceDiff = $diff | Where-Object { $_ -match '^.*[.]go$' -or $_ -match '^go[.]sum$' -or $_ -match '^go[.]mod$' })
+        ([string[]] $SourceDiff = $diff | Where-Object { $_ -match '^.*[.]go$' -or $_ -match '^go[.](mod|sum)$' -or $_ -match '^.github/workflows/go.yml$' })
 
         # Did Golang files change?
         echo "=== Did Golang files change? ===" | Out-String -Stream
@@ -278,20 +278,18 @@ jobs:
     - name: Action Summary
       id: gh-action-summary
       run: |
-        tail -v -n 1000 "${GITHUB_STEP_SUMMARY}"
-        printf "\n"
         {
           printf "### Code Coverage Summary\n\n"
-          printf "```\n"
+          printf '```\n'
           cat reports/coverage-summary.txt
-          printf "```\n"
+          printf '```\n'
           printf "\n"
         } >> "${GITHUB_STEP_SUMMARY}"
         {
           printf "### Code Coverage Annotations\n\n"
-          printf "```\n"
+          printf '```\n'
           cat reports/coverage-annotations.txt
-          printf "```\n"
+          printf '```\n'
           printf "\n"
         } >> "${GITHUB_STEP_SUMMARY}"
 
