@@ -7,6 +7,10 @@ name: Woke Workflow
 on:
   - pull_request
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   woke:
     name: woke
