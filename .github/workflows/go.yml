@@ -66,11 +66,6 @@ jobs:
       matrix:
         go-version: ["1.19"]
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
-        exclude:
-          - os: "macos-latest"
-            go-version: "1.19"
-          - os: "windows-latest"
-            go-version: "1.19"
 
     runs-on: "${{ matrix.os }}"
 
@@ -136,76 +131,89 @@ jobs:
 
     - name: Install Go Tools
       id: install-go-tools
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/reviewdog/reviewdog/cmd/reviewdog@latest
 
     - name: Analysing the code with golint
       id: golint
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install golang.org/x/lint/golint@latest
         golint -set_exit_status ./... | reviewdog -efm="%f:%l:%c: %m" -name="golint" -reporter=github-pr-check
 
     - name: Testing with revive
       id: go-test-revive
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/mgechev/revive@latest
         revive ./... | reviewdog -efm="%f:%l:%c: %m" -name="revive" -reporter=github-pr-check
 
     - name: Analysing the code with go vet
       id: go-vet
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go vet ./... | reviewdog -efm="%f:%l:%c: %m" -name="go vet" -reporter=github-pr-check
 
     - name: Testing with misspell
       id: go-test-misspell
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/client9/misspell/cmd/misspell@latest
         misspell -error . | reviewdog -efm="%f:%l:%c: %m" -name="misspell" -reporter=github-pr-check
 
     - name: Testing with ineffassign
       id: go-test-ineffassign
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/gordonklaus/ineffassign@latest
         ineffassign ./... | reviewdog -efm="%f:%l:%c: %m" -name="ineffassign" -reporter=github-pr-check
 
     - name: Testing with gocyclo
       id: go-test-gocyclo
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
         gocyclo -over "${GOCYCLO_OVER_THRESHOLD}" .
 
     - name: Testing with go-consistent
       id: go-test-go-consistent
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/quasilyte/go-consistent@latest
         go-consistent -v ./... | reviewdog -efm="%f:%l:%c: %m" -name="go-consistent" -reporter=github-pr-check
 
     - name: Testing with gocritic
       id: go-test-gocritic
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/go-critic/go-critic/cmd/gocritic@latest
         gocritic check -enableAll ./... |& reviewdog -efm="%f:%l:%c: %m" -name="gocritic" -reporter=github-pr-check
 
     - name: Testing with staticcheck
       id: go-test-staticcheck
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install honnef.co/go/tools/cmd/staticcheck@latest
         staticcheck ./... | reviewdog -efm="%f:%l:%c: %m" -name="staticcheck" -reporter=github-pr-check
 
     - name: Testing with golangci-lint
       id: go-test-golangci-lint
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
         golangci-lint run --out-format=line-number ./... | reviewdog -f=golangci-lint -name="golangci-lint" -filter-mode=added -reporter=github-pr-check
 
     - name: Testing with gosec
       id: go-test-security
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/securego/gosec/v2/cmd/gosec@latest
         gosec ./... | reviewdog -efm="%f:%l:%c: %m" -name="gosec" -reporter=github-pr-check
 
     - name: Code Climate Code Coverage Setup
       id: go-code-climate-code-coverage-setup
+      if: matrix.os == 'ubuntu-latest'
       run: |
         curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         chmod -v a+x ./cc-test-reporter
@@ -220,6 +228,7 @@ jobs:
 
     - name: Test Coverage Report (txt)
       id: go-test-coverage-txt
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go tool cover -func=./reports/.coverage.out | tee reports/coverage.txt
 
@@ -230,6 +239,7 @@ jobs:
 
     - name: Upload coverage.html
       id: upload-coverage-html
+      if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v3
       with:
         name: go-coverage-html
@@ -243,6 +253,7 @@ jobs:
 
     - name: Upload coverage-annotations.txt
       id: upload-coverage-annotations-txt
+      if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v3
       with:
         name: go-coverage-annotations-txt
@@ -255,6 +266,7 @@ jobs:
 
     - name: Upload coverage-summary.txt
       id: upload-coverage-summary-txt
+      if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v3
       with:
         name: go-coverage-summary-txt
@@ -262,6 +274,7 @@ jobs:
 
     - name: Code Climate Code Coverage Report
       id: go-code-climate-code-coverage-report
+      if: matrix.os == 'ubuntu-latest'
       run: |
         cp -v ./reports/.coverage.out ./c.out
         ./cc-test-reporter after-build format-coverage -t gocov --prefix "${GH_REPO_URL}" ./reports/.coverage.out
@@ -285,6 +298,7 @@ jobs:
 
     - name: Action Summary
       id: gh-action-summary
+      if: matrix.os == 'ubuntu-latest'
       run: |
         {
           printf "### Code Coverage Summary\n\n"
