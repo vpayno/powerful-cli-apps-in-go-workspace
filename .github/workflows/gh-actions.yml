@@ -101,7 +101,7 @@ jobs:
       run: |
         actionlint --version
 
-    - name: Analysing the code with golint
+    - name: Analysing the code with actionlint
       id: actionlint
       run: |
         echo "::add-matcher::.github/actionlint-matcher.json"
