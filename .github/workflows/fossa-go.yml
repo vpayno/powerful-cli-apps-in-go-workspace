@@ -4,7 +4,7 @@
 name: "FOSSA Check"
 
 env:
-  FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
+  FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY_FULL }}
 
 on:
   pull_request:
@@ -89,6 +89,10 @@ jobs:
       run: |
         fossa list-targets
 
-    - name: Run FOSSA Check
+    - name: Run FOSSA Analyze
       run: |
         fossa analyze
+
+    - name: Run FOSSA Test
+      run: |
+        fossa test
