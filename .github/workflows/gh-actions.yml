@@ -6,6 +6,10 @@ on:
 env:
   REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   stage1:
     name: Change Check
@@ -26,7 +30,6 @@ jobs:
 
     - name: Get Change List
       id: check_file_changed
-      shell: bash
       run: |
         # Diff HEAD with the previous commit then output to stdout.
         printf "=== Which files changed? ===\n"
@@ -78,13 +81,11 @@ jobs:
 
     - name: Show Go version
       id: go-version-check
-      shell: bash
       run: |
         go version
 
     - name: Install Tools
       id: install-tools
-      shell: bash
       run: |
         go install github.com/reviewdog/reviewdog/cmd/reviewdog@latest
         go install github.com/rhysd/actionlint/cmd/actionlint@latest
@@ -92,19 +93,16 @@ jobs:
 
     - name: Reviewdog Version Checks
       id: version-check-reviewdog
-      shell: bash
       run: |
         reviewdog --version
 
     - name: Actionlint Version Checks
       id: version-check-actionlint
-      shell: bash
       run: |
         actionlint --version
 
     - name: Analysing the code with golint
       id: actionlint
-      shell: bash
       run: |
         echo "::add-matcher::.github/actionlint-matcher.json"
         for f in ./.github/workflows/*yml; do
