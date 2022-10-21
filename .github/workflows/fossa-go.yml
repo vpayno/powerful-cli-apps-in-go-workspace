@@ -9,6 +9,10 @@ env:
 on:
   pull_request:
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   stage1-setup:
     name: Change Check
@@ -29,7 +33,6 @@ jobs:
 
     - name: Get Change List
       id: check_file_changed
-      shell: bash
       run: |
         # Diff HEAD with the previous commit then output to stdout.
         printf "=== Which files changed? ===\n"
