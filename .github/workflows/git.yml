@@ -2,6 +2,10 @@ name: Git Workflow
 
 on: [pull_request]
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   block-fixup:
     runs-on: ubuntu-latest
