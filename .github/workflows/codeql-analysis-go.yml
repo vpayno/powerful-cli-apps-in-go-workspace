@@ -105,7 +105,7 @@ jobs:
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
 
-    # Adding this because the image as a dead version of Go.
+    # Adding this because the image has a dead version of Go.
     - name: Set up Go ${{ matrix.go-version }}
       id: setup-go
       uses: actions/setup-go@v3
