@@ -23,7 +23,20 @@ var metadata = appInfo{
 	version: "0.0.0",
 }
 
+// Using uint64 because uint switches between 32-bit and 64-bit depending on the architecture instead of being consistent.
+const (
+	byteFlag uint64 = 1
+	charFlag uint64 = 1 << iota
+	wordFlag
+	lineFlag
+	lengthFlag
+)
+
+// default modes: byte, word, line
+var defaultFlags = byteFlag | wordFlag | lineFlag
+
 type config struct {
+	flags       uint64
 	modes       map[string]bool
 	verboseMode bool
 	versionMode bool
@@ -53,12 +66,12 @@ Options:
 `
 )
 
-var flagDefaults = map[string]bool{
-	"byte":   true,
-	"char":   false,
-	"length": false,
-	"line":   true,
-	"word":   true,
+var defaultModes = map[string]bool{
+	"byte":   defaultFlags&byteFlag != 0,
+	"char":   defaultFlags&charFlag != 0,
+	"length": defaultFlags&lengthFlag != 0,
+	"line":   defaultFlags&lineFlag != 0,
+	"word":   defaultFlags&wordFlag != 0,
 }
 
 // Printing order: newline, word, character, byte, max-line-length.

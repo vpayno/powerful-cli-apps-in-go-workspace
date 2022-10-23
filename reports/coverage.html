@@ -153,30 +153,30 @@ func Usage() <span class="cov3" title="4">{
 
 func setup() (config, error) <span class="cov7" title="18">{
 
-        var byteFlag bool
-        var charFlag bool
-        var lengthFlag bool
-        var lineFlag bool
-        var wordFlag bool
+        var byteFlagPtr bool
+        var charFlagPtr bool
+        var lengthFlagPtr bool
+        var lineFlagPtr bool
+        var wordFlagPtr bool
 
-        flagSet.BoolVar(&amp;byteFlag, "c", false, "print the byte counts")
-        flagSet.BoolVar(&amp;byteFlag, "bytes", false, "print the byte counts")
-        flagSet.BoolVar(&amp;charFlag, "m", false, "print the character counts")
-        flagSet.BoolVar(&amp;charFlag, "chars", false, "print the character counts")
-        flagSet.BoolVar(&amp;lengthFlag, "L", false, "print the maximum display width")
-        flagSet.BoolVar(&amp;lengthFlag, "max-line-length", false, "print the maximum display width")
-        flagSet.BoolVar(&amp;lineFlag, "l", false, "print the newline counts")
-        flagSet.BoolVar(&amp;lineFlag, "lines", false, "print the newline counts")
-        flagSet.BoolVar(&amp;wordFlag, "w", false, "print the word counts")
-        flagSet.BoolVar(&amp;wordFlag, "words", false, "print the word counts")
+        flagSet.BoolVar(&amp;byteFlagPtr, "c", false, "print the byte counts")
+        flagSet.BoolVar(&amp;byteFlagPtr, "bytes", false, "print the byte counts")
+        flagSet.BoolVar(&amp;charFlagPtr, "m", false, "print the character counts")
+        flagSet.BoolVar(&amp;charFlagPtr, "chars", false, "print the character counts")
+        flagSet.BoolVar(&amp;lengthFlagPtr, "L", false, "print the maximum display width")
+        flagSet.BoolVar(&amp;lengthFlagPtr, "max-line-length", false, "print the maximum display width")
+        flagSet.BoolVar(&amp;lineFlagPtr, "l", false, "print the newline counts")
+        flagSet.BoolVar(&amp;lineFlagPtr, "lines", false, "print the newline counts")
+        flagSet.BoolVar(&amp;wordFlagPtr, "w", false, "print the word counts")
+        flagSet.BoolVar(&amp;wordFlagPtr, "words", false, "print the word counts")
 
-        var verboseFlag bool
-        var versionFlag bool
+        var verboseFlagPtr bool
+        var versionFlagPtr bool
 
-        flagSet.BoolVar(&amp;verboseFlag, "v", false, "verbose mode")
-        flagSet.BoolVar(&amp;verboseFlag, "verbose", false, "verbose mode")
-        flagSet.BoolVar(&amp;versionFlag, "V", false, "output version information and exit")
-        flagSet.BoolVar(&amp;versionFlag, "version", false, "output version information and exit")
+        flagSet.BoolVar(&amp;verboseFlagPtr, "v", false, "verbose mode")
+        flagSet.BoolVar(&amp;verboseFlagPtr, "verbose", false, "verbose mode")
+        flagSet.BoolVar(&amp;versionFlagPtr, "V", false, "output version information and exit")
+        flagSet.BoolVar(&amp;versionFlagPtr, "version", false, "output version information and exit")
 
         flagSet.Usage = Usage
 
@@ -187,38 +187,25 @@ func setup() (config, error) <span class="cov7" title="18">{
         }</span>
 
         <span class="cov6" title="14">conf := config{
-                verboseMode: verboseFlag,
-                versionMode: versionFlag,
-                modes:       map[string]bool{},
+                flags:       defaultFlags,
+                verboseMode: verboseFlagPtr,
+                versionMode: versionFlagPtr,
+                modes:       defaultModes,
         }
 
-        if byteFlag || charFlag || lengthFlag || lineFlag || wordFlag </span><span class="cov5" title="8">{
-                conf.modes["byte"] = false
-                conf.modes["char"] = false
-                conf.modes["length"] = false
-                conf.modes["line"] = false
-                conf.modes["word"] = false
-
-                if byteFlag </span><span class="cov3" title="4">{
-                        conf.modes["byte"] = true
-                }</span>
-                <span class="cov5" title="8">if charFlag </span><span class="cov3" title="4">{
-                        conf.modes["char"] = true
-                }</span>
-                <span class="cov5" title="8">if lengthFlag </span><span class="cov1" title="1">{
-                        conf.modes["length"] = true
-                }</span>
-                <span class="cov5" title="8">if lineFlag </span><span class="cov3" title="3">{
-                        conf.modes["line"] = true
-                }</span>
-                <span class="cov5" title="8">if wordFlag </span><span class="cov3" title="4">{
-                        conf.modes["word"] = true
-                }</span>
-        } else<span class="cov4" title="6"> {
-                conf.modes = flagDefaults
+        if byteFlagPtr || charFlagPtr || lengthFlagPtr || lineFlagPtr || wordFlagPtr </span><span class="cov5" title="8">{
+                conf.flags = byteFlag | charFlag | wordFlag | lineFlag | lengthFlag
         }</span>
 
-        <span class="cov6" title="14">return conf, nil</span>
+        <span class="cov6" title="14">conf.modes = map[string]bool{
+                "byte":   conf.flags&amp;byteFlag != 0,
+                "char":   conf.flags&amp;charFlag != 0,
+                "length": conf.flags&amp;lengthFlag != 0,
+                "line":   conf.flags&amp;lineFlag != 0,
+                "word":   conf.flags&amp;wordFlag != 0,
+        }
+
+        return conf, nil</span>
 }
 
 func getCounts(r io.Reader, conf config) results <span class="cov7" title="25">{
@@ -335,7 +322,20 @@ var metadata = appInfo{
         version: "0.0.0",
 }
 
+// Using uint64 because uint switches between 32-bit and 64-bit depending on the architecture instead of being consistent.
+const (
+        byteFlag uint64 = 1
+        charFlag uint64 = 1 &lt;&lt; iota
+        wordFlag
+        lineFlag
+        lengthFlag
+)
+
+// default modes: byte, word, line
+var defaultFlags = byteFlag | wordFlag | lineFlag
+
 type config struct {
+        flags       uint64
         modes       map[string]bool
         verboseMode bool
         versionMode bool
@@ -365,12 +365,12 @@ Options:
 `
 )
 
-var flagDefaults = map[string]bool{
-        "byte":   true,
-        "char":   false,
-        "length": false,
-        "line":   true,
-        "word":   true,
+var defaultModes = map[string]bool{
+        "byte":   defaultFlags&amp;byteFlag != 0,
+        "char":   defaultFlags&amp;charFlag != 0,
+        "length": defaultFlags&amp;lengthFlag != 0,
+        "line":   defaultFlags&amp;lineFlag != 0,
+        "word":   defaultFlags&amp;wordFlag != 0,
 }
 
 // Printing order: newline, word, character, byte, max-line-length.

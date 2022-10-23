@@ -47,30 +47,30 @@ func Usage() {
 
 func setup() (config, error) {
 
-	var byteFlag bool
-	var charFlag bool
-	var lengthFlag bool
-	var lineFlag bool
-	var wordFlag bool
+	var byteFlagPtr bool
+	var charFlagPtr bool
+	var lengthFlagPtr bool
+	var lineFlagPtr bool
+	var wordFlagPtr bool
 
-	flagSet.BoolVar(&byteFlag, "c", false, "print the byte counts")
-	flagSet.BoolVar(&byteFlag, "bytes", false, "print the byte counts")
-	flagSet.BoolVar(&charFlag, "m", false, "print the character counts")
-	flagSet.BoolVar(&charFlag, "chars", false, "print the character counts")
-	flagSet.BoolVar(&lengthFlag, "L", false, "print the maximum display width")
-	flagSet.BoolVar(&lengthFlag, "max-line-length", false, "print the maximum display width")
-	flagSet.BoolVar(&lineFlag, "l", false, "print the newline counts")
-	flagSet.BoolVar(&lineFlag, "lines", false, "print the newline counts")
-	flagSet.BoolVar(&wordFlag, "w", false, "print the word counts")
-	flagSet.BoolVar(&wordFlag, "words", false, "print the word counts")
+	flagSet.BoolVar(&byteFlagPtr, "c", false, "print the byte counts")
+	flagSet.BoolVar(&byteFlagPtr, "bytes", false, "print the byte counts")
+	flagSet.BoolVar(&charFlagPtr, "m", false, "print the character counts")
+	flagSet.BoolVar(&charFlagPtr, "chars", false, "print the character counts")
+	flagSet.BoolVar(&lengthFlagPtr, "L", false, "print the maximum display width")
+	flagSet.BoolVar(&lengthFlagPtr, "max-line-length", false, "print the maximum display width")
+	flagSet.BoolVar(&lineFlagPtr, "l", false, "print the newline counts")
+	flagSet.BoolVar(&lineFlagPtr, "lines", false, "print the newline counts")
+	flagSet.BoolVar(&wordFlagPtr, "w", false, "print the word counts")
+	flagSet.BoolVar(&wordFlagPtr, "words", false, "print the word counts")
 
-	var verboseFlag bool
-	var versionFlag bool
+	var verboseFlagPtr bool
+	var versionFlagPtr bool
 
-	flagSet.BoolVar(&verboseFlag, "v", false, "verbose mode")
-	flagSet.BoolVar(&verboseFlag, "verbose", false, "verbose mode")
-	flagSet.BoolVar(&versionFlag, "V", false, "output version information and exit")
-	flagSet.BoolVar(&versionFlag, "version", false, "output version information and exit")
+	flagSet.BoolVar(&verboseFlagPtr, "v", false, "verbose mode")
+	flagSet.BoolVar(&verboseFlagPtr, "verbose", false, "verbose mode")
+	flagSet.BoolVar(&versionFlagPtr, "V", false, "output version information and exit")
+	flagSet.BoolVar(&versionFlagPtr, "version", false, "output version information and exit")
 
 	flagSet.Usage = Usage
 
@@ -81,35 +81,22 @@ func setup() (config, error) {
 	}
 
 	conf := config{
-		verboseMode: verboseFlag,
-		versionMode: versionFlag,
-		modes:       map[string]bool{},
+		flags:       defaultFlags,
+		verboseMode: verboseFlagPtr,
+		versionMode: versionFlagPtr,
+		modes:       defaultModes,
 	}
 
-	if byteFlag || charFlag || lengthFlag || lineFlag || wordFlag {
-		conf.modes["byte"] = false
-		conf.modes["char"] = false
-		conf.modes["length"] = false
-		conf.modes["line"] = false
-		conf.modes["word"] = false
+	if byteFlagPtr || charFlagPtr || lengthFlagPtr || lineFlagPtr || wordFlagPtr {
+		conf.flags = byteFlag | charFlag | wordFlag | lineFlag | lengthFlag
+	}
 
-		if byteFlag {
-			conf.modes["byte"] = true
-		}
-		if charFlag {
-			conf.modes["char"] = true
-		}
-		if lengthFlag {
-			conf.modes["length"] = true
-		}
-		if lineFlag {
-			conf.modes["line"] = true
-		}
-		if wordFlag {
-			conf.modes["word"] = true
-		}
-	} else {
-		conf.modes = flagDefaults
+	conf.modes = map[string]bool{
+		"byte":   conf.flags&byteFlag != 0,
+		"char":   conf.flags&charFlag != 0,
+		"length": conf.flags&lengthFlag != 0,
+		"line":   conf.flags&lineFlag != 0,
+		"word":   conf.flags&wordFlag != 0,
 	}
 
 	return conf, nil
