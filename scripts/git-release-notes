@@ -1,0 +1,47 @@
+#!/bin/bash
+
+git_get_tags() {
+	git tag | sort -Vr | grep -E '^v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+$'
+} # git_get_tags()
+
+git_get_tag_previous() {
+	git_get_tags | head -n 2 | tail -n 1
+} # git_get_tag_previous()
+
+git_get_tag_latest() {
+	git_get_tags | head -n 1
+} # git_get_tag_latest()
+
+git_cl() {
+	local tag_previous
+	local tag_latest
+
+	tag_previous="$(git_get_tag_previous)"
+	tag_latest="$(git_get_tag_latest)"
+
+	git log --pretty=format:'- %s' --abbrev-commit --decorate "${tag_previous}..${tag_latest}"
+} # git_cl()
+
+get_release_title() {
+	git_cl | head -n 1 | sed -r -e 's/^- release: (v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+) - /# Release \1: /g'
+}
+
+get_release_body() {
+	local -a sections
+
+	mapfile -t sections < <(git_cl | grep -v -E "^- release: " | awk '{ print $2 }' | tr -d ":" | sort -Vu)
+
+	for section in "${sections[@]}"; do
+		printf "\n"
+		printf -- "## %s\n" "${section,,}"
+		printf "\n"
+		git_cl | grep -v -E "^- release: " | sort -k 2,2 -V | grep -- "- ${section}: " | sed -r -e 's/^- [[:alpha:]].*: /- /g'
+	done
+}
+
+create_release_notes() {
+	get_release_title
+	get_release_body
+} # create_release_notes()
+
+create_release_notes
