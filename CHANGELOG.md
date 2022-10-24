@@ -1,5 +1,86 @@
 # Release Notes
 
+## [2022-10-23] Release v0.3.5: ci and doc updates, code clean up
+
+### build(tools)
+
+- format bash scripts with shfmt
+
+### ci(bash)
+
+- change reviewdog reporter to github-pr-check
+- set the default run shell to bash
+
+### ci(codeql)
+
+- fix comment
+- fix set-output deprecation notice and convert from pwsh to bash
+- fix typo in comment
+- set the default run shell to bash
+
+### ci(fossa)
+
+- add fossa test step
+- add --help and list-targets output
+- rename action yaml file, fix set-output deprecation notice and convert from pwsh to bash
+- set the default run shell to bash
+
+### ci(gha)
+
+- add git hub workflow linter action
+- fix set-output deprecation notice and convert from pwsh to bash
+- fix typo in comment
+- set the default run shell to bash
+
+### ci(git)
+
+- set the default run shell to bash
+
+### ci(go)
+
+- add coverage info to job summary
+- also run all the checks when the action changes
+- enable tests on windows and macos
+- fix comment
+- fix set-output deprecation notice and convert from pwsh to bash
+- resolve issues found by actionlint
+- set the default run shell to bash
+- temporary fix for misspell
+- upload coverage reports
+
+### ci(hugo)
+
+- comment clean up
+
+### ci(links)
+
+- change version from v1.5.0 to v1
+- set the default run shell to bash
+
+### ci(tools)
+
+- add current release notes script
+- add github action check script
+- add tag-release script for automating releases
+- update git-release-notes to generate a full change log
+- update git-release-notes to generate a release commit message
+
+### ci(woke)
+
+- change reviewdog reporter to github-pr-check
+- set the default run shell to bash
+
+### doc
+
+- add change log for existing releases
+- add collapsable section in ch01 for the examples
+- add collapsable sections for each chapter
+- update readme to show v0.3.4 version usage
+
+### fix
+
+- simplify setup() with bit flags
+
 ## [2022-10-05] Release v0.3.4: fix --version and --version + --verbose usage
 
 ### build(tools)
