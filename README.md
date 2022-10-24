@@ -33,6 +33,10 @@ This is also my "notebook" on how to do things in Go or how to manage a Go proje
 
 - [Website](https://pragprog.com/titles/rggo/powerful-command-line-applications-in-go/)
 
+## Change Log
+
+[Change Log](./CHANGELOG.md)
+
 ## Et Cetera
 
 ### Build Releases
