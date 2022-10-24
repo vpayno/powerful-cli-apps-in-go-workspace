@@ -25,7 +25,7 @@ message_rel="$(echo "${message_tag}" | sed -r -e 's/^release: v[[:digit:]]+[.][[
 
 if ./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"; then
 
-	if git log --pretty=format:'- %s' --abbrev-commit --decorate -n 1 | grep -q "[-] release:"; then
+	if ! git log --pretty=format:'- %s' --abbrev-commit --decorate -n 1 | grep -q "[-] release:"; then
 		printf "ERROR: Failed to create release commit\n"
 		exit 1
 	fi
