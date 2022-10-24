@@ -23,7 +23,25 @@ message_tag="$(./scripts/git-release-notes "release" "${tag} - ${title}")"
 
 message_rel="$(echo "${message_tag}" | sed -r -e 's/^release: v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+ - //g')"
 
-./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"
+if ./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"; then
 
-# For some weird reason, the tag commit message ommits lines starting with '#'.
-git tag -s -a -m "${message_tag//### /}" "${tag}"
+	if git log --pretty=format:'- %s' --abbrev-commit --decorate -n 1 | grep -q "[-] release:"; then
+		printf "ERROR: Failed to create release commit\n"
+		exit 1
+	fi
+
+	# We can update the release notes after the release commit is created.
+	./scripts/git-release-notes all > CHANGELOG.md
+	git add CHANGELOG.md || exit 1
+
+	if git commit -v --ammend; then
+		# For some weird reason, the tag commit message ommits lines starting with '#'.
+		git tag -s -a -m "${message_tag//### /}" "${tag}"
+	fi
+
+else
+
+	printf "ERROR: error encounterd in go-generate-helper-git-version-info script\n"
+	exit 1
+
+fi
