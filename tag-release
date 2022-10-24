@@ -34,7 +34,7 @@ if ./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"; then
 	./scripts/git-release-notes all > CHANGELOG.md
 	git add CHANGELOG.md || exit 1
 
-	if git commit -v --ammend; then
+	if git commit -v --amend; then
 		# For some weird reason, the tag commit message ommits lines starting with '#'.
 		git tag -s -a -m "${message_tag//### /}" "${tag}"
 	fi
