@@ -1,8 +1,8 @@
 # powerful-cli-apps-in-go-workspace TODO List
 
+## Ch01: cli-wc
+
 - test: validate all mode map bool values per test
-- change: use bitflag instead of modes map
-- change: reduce complexity of setup()
 - feat: add file support
 - test: add integration tests
 - test: add tests that compare wc to cli-wc
@@ -19,3 +19,6 @@
 - feat: use cobra&viper cli modules?
 - debug: play with debuggers
 - build: add tag-release script
+- fossa: badge for other steps?
+- dependabot: badge?
+- fossa: remove bootstrap and other dep it complains about
