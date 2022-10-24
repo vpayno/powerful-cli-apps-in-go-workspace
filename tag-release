@@ -1,0 +1,29 @@
+#!/bin/bash
+
+declare tag="${1:-not_set}"
+declare title="${2:-not_set}"
+
+if [[ ! ${tag} =~ ^v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+$ ]]; then
+	printf "ERROR: tag [%s] doesn't match the format \"%s\"\n" "${tag}" "^v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+$"
+	exit 1
+fi
+
+if [[ ${title} == not_set ]]; then
+	printf "ERROR: message is missing\n"
+	printf "\n"
+	printf "Usage: %s tag title\n" "$0"
+	printf "\n"
+	exit 1
+fi
+
+declare message_rel
+declare message_tag
+
+message_tag="$(./scripts/git-release-notes "release" "${tag} - ${title}")"
+
+message_rel="$(echo "${message_tag}" | sed -r -e 's/^release: v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+ - //g')"
+
+./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"
+
+# For some weird reason, the tag commit message ommits lines starting with '#'.
+git tag -s -a -m "${message_tag//### /}" "${tag}"
