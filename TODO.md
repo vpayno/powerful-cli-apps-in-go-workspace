@@ -6,6 +6,8 @@
 - dependabot: badge?
 - doc: add auto-generated man/info pages
 - doc: add version number guide
+- doc: add change log info to readme
+- doc: add tag-release info to readme
 - feat: add coroutines to speed up large file reads
 - feat: add file support
 - feat: add monad patterns - collect file stats while reading and writing files
