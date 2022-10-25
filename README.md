@@ -37,9 +37,7 @@ This is also my "notebook" on how to do things in Go or how to manage a Go proje
 
 [Change Log](./CHANGELOG.md)
 
-## Et Cetera
-
-### Dependabot
+## Dependabot
 
 Dependabot configuration: [.github/dependabot.yml](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/blob/main/.github/dependabot.yml)
 
@@ -82,7 +80,7 @@ You can trigger Dependabot actions by commenting on the PR:
 
 </details>
 
-### Build Releases
+## Build Releases
 
 [Install GoReleaser](https://goreleaser.com/install/):
 
