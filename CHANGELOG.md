@@ -1,4 +1,4 @@
-# Release Notes
+# "Powerful Cli Applications in Go" Workspace Release Notes
 
 <details>
 	<summary>

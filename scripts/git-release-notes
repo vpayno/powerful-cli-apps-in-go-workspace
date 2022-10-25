@@ -108,7 +108,7 @@ create_release_notes() {
 	elif [[ ${mode} == release-short ]]; then
 		mapfile -t tags < <(printf "%s\n" "${mode}")
 	elif [[ ${mode} == release-full ]]; then
-		printf "# Release Notes\n"
+		printf "# %s Release Notes\n" '"Powerful Cli Applications in Go" Workspace'
 		printf "\n"
 
 		mapfile -t tags < <(printf "%s\n" "${mode}"; git_get_tags | sort -Vr)
@@ -120,7 +120,7 @@ create_release_notes() {
 
 		mapfile -t tags < <(printf "%s\n" "${mode}")
 	else
-		printf "# Release Notes\n"
+		printf "# %s Release Notes\n" '"Powerful Cli Applications in Go" Workspace'
 		printf "\n"
 
 		mapfile -t tags < <(git_get_tags | sort -Vr)
