@@ -48,23 +48,34 @@ git_cl() {
 
 get_release_heading() {
 	local tag="${1:-}"
+	local mode="${2:-}"
+
+	local heading_start="##"
+	local heading_end=""
+
+	if [[ ${mode} =~ ^all|release-full$ ]]; then
+		heading_start="<h2>"
+		heading_end="</h2>"
+	fi
 
 	if [[ ${tag} =~ ^release-short$ ]]; then
 		printf "release: %s\n" "${release_message}"
 		return
 	elif [[ ${tag} =~ ^release-full$ ]]; then
-		git log --pretty=format:'## [%as] ' --abbrev-commit --decorate -n 1 "${tag//release-*/HEAD}"
-		printf "Release %s: %s\n" "${tag}" "${release_message}"
+		git log --pretty=format:"${heading_start} [%as] " --abbrev-commit --decorate -n 1 "${tag//release-*/HEAD}"
+		printf "Release %s: %s %s\n" "${tag}" "${release_message}" "${heading_end}"
 		return
 	fi
 
-	git log --pretty=format:'## [%as] ' --abbrev-commit --decorate -n 1 "${tag//release-*/HEAD}"
+	git log --pretty=format:"${heading_start} [%as] " --abbrev-commit --decorate -n 1 "${tag//release-*/HEAD}"
 
 	if [[ ${tag} == v0.0.0^ ]]; then
 		printf "Release v0.0.0: initial release\n"
 	else
 		git_cl "${tag}" | head -n 1 | sed -r -e 's/^- release: (v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+) (- )?/Release \1: /g'
 	fi
+
+	printf "%s\n" "${heading_end}"
 }
 
 filter_commits() {
@@ -126,8 +137,11 @@ create_release_notes() {
 			printf "\n"
 		fi
 
-		get_release_heading "${tag}"
-		get_release_body "${tag}"
+		[[ ${mode} =~ ^all|release-full$ ]] && printf "<details>\n\t<summary>\n"
+		get_release_heading "${tag}" "${mode}"
+		[[ ${mode} =~ ^all|release-full$ ]] &&	printf "\t</summary>\n"
+		get_release_body "${tag}" "${mode}"
+		[[ ${mode} =~ ^all|release-full$ ]] && printf "</details>\n"
 	done
 } # create_release_notes()
 

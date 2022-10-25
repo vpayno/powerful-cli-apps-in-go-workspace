@@ -1,6 +1,10 @@
 # Release Notes
 
-## [2022-10-24] Release release-full: release fixes and update change log when releasing
+<details>
+	<summary>
+<h2> [2022-10-24] Release v0.3.6: release fixes and update change log when releasing
+</h2>
+	</summary>
 
 ### build(deps)
 
@@ -20,8 +24,13 @@
 ### doc
 
 - manually add v0.3.5 change log
+</details>
 
-## [2022-10-23] Release v0.3.5: ci and doc updates, code clean up
+<details>
+	<summary>
+<h2> [2022-10-23] Release v0.3.5: ci and doc updates, code clean up
+</h2>
+	</summary>
 
 ### build(tools)
 
@@ -101,8 +110,13 @@
 ### fix
 
 - simplify setup() with bit flags
+</details>
 
-## [2022-10-05] Release v0.3.4: fix --version and --version + --verbose usage
+<details>
+	<summary>
+<h2> [2022-10-05] Release v0.3.4: fix --version and --version + --verbose usage
+</h2>
+	</summary>
 
 ### build(tools)
 
@@ -165,8 +179,13 @@
 - add basic TestMain(m) functions to test dirs
 - add test cases for cli arg flags
 - rename testCase to dataTestCase
+</details>
 
-## [2022-09-03] Release v0.3.3: ci, doc and chore updates
+<details>
+	<summary>
+<h2> [2022-09-03] Release v0.3.3: ci, doc and chore updates
+</h2>
+	</summary>
 
 ### chore
 
@@ -206,14 +225,24 @@
 ### test
 
 - add unicode tests, test both short and long arg tests
+</details>
 
-## [2022-08-30] Release v0.3.2: testing goreleaser
+<details>
+	<summary>
+<h2> [2022-08-30] Release v0.3.2: testing goreleaser
+</h2>
+	</summary>
 
 ### ci(goreleaser)
 
 - add initial config file
+</details>
 
-## [2022-08-22] Release v0.3.1: simplify version data
+<details>
+	<summary>
+<h2> [2022-08-22] Release v0.3.1: simplify version data
+</h2>
+	</summary>
 
 ### chore
 
@@ -225,14 +254,24 @@
 ### fix
 
 - remove gitVersion and use version instead
+</details>
 
-## [2022-08-14] Release v0.3.0: add --max-line-length option
+<details>
+	<summary>
+<h2> [2022-08-14] Release v0.3.0: add --max-line-length option
+</h2>
+	</summary>
 
 ### feat
 
 - add option to show the maximum line length
+</details>
 
-## [2022-08-14] Release v0.2.1: fix count print order
+<details>
+	<summary>
+<h2> [2022-08-14] Release v0.2.1: fix count print order
+</h2>
+	</summary>
 
 ### chore
 
@@ -251,8 +290,13 @@
 ### test
 
 - make tests easier to ready by using long cli options
+</details>
 
-## [2022-08-13] Release v0.2.0: newline, word, byte and char fixes
+<details>
+	<summary>
+<h2> [2022-08-13] Release v0.2.0: newline, word, byte and char fixes
+</h2>
+	</summary>
 
 ### build(tools)
 
@@ -300,16 +344,26 @@
 ### test
 
 - make it easier to share common test setup and teardown code in test files
+</details>
 
-## [2022-08-08] Release v0.1.1: fix bugs
+<details>
+	<summary>
+<h2> [2022-08-08] Release v0.1.1: fix bugs
+</h2>
+	</summary>
 
 ### fix
 
 - add a wordMode config variable to simplify things
 - get rid of the side-effect friendly global logVerbose var
 - include new line characters in byte count
+</details>
 
-## [2022-08-08] Release v0.1.0: version bump
+<details>
+	<summary>
+<h2> [2022-08-08] Release v0.1.0: version bump
+</h2>
+	</summary>
 
 ### feat
 
@@ -327,8 +381,13 @@
 ### test
 
 - fix missing test coverage - at 100%
+</details>
 
-## [2022-08-07] Release v0.0.0: initial release
+<details>
+	<summary>
+<h2> [2022-08-07] Release v0.0.0: initial release
+</h2>
+	</summary>
 
 ### build(go)
 
@@ -372,3 +431,4 @@
 ### doc
 
 - update readme with project intro
+</details>
