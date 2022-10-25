@@ -39,6 +39,49 @@ This is also my "notebook" on how to do things in Go or how to manage a Go proje
 
 ## Et Cetera
 
+### Dependabot
+
+Dependabot configuration: [.github/dependabot.yml](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/blob/main/.github/dependabot.yml)
+
+[Dependabot Status](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/network/updates)
+
+Dependabot runs once a week, early Monday mornings, and updates dependencies as needed.
+When dependencies are updated, Dependabot will open a new PR with the updates.
+GitHub actions/workflows that run in PRs when Go files change will test the new dependencies automatically.
+
+For this to work with a high degree of confidence, we need
+- 100% [test coverage](https://codeclimate.com/github/vpayno/powerful-cli-apps-in-go-workspace) and
+- dependencies need to be tested without mocking them out of existence.
+
+Note: When CI secrets are added, they also need to be added as [Dependabot secrets](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/settings/secrets/dependabot) for any workflow that will run for a Dependabot PR.
+
+After a Dependabot PR is opened, two human actions are required:
+- Start a review and approve the PR.
+- In the review comment add the string `@dependabot merge` to automatically merge the PR after the CI checks have passed.
+
+Only use `@dependabot merge`, in a comment in the PR, to automatically merge the PR after the CI checks have passed.
+Don't merge Dependabot PRs manually using the `Merge Pull Request` button on the PR.
+Only GitHub can sign Dependabot commits and if you merge the PR, the commits will be unsigned and unverified.
+Commits can be signed and merged by hand on the CLI; However, it's easier to just ask Dependabot to merge the PR.
+
+<details>
+	<summary><hr4>Dependabot commands and options</hr4></summary>
+
+You can trigger Dependabot actions by commenting on the PR:
+
+- `@dependabot rebase` will rebase this PR
+- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it
+- `@dependabot merge` will merge this PR after your CI passes on it
+- `@dependabot squash and merge` will squash and merge this PR after your CI passes on it
+- `@dependabot cancel merge` will cancel a previously requested merge and block automerging
+- `@dependabot reopen` will reopen this PR if it is closed
+- `@dependabot close` will close this PR and stop Dependabot recreating it. You can achieve the same result by closing it manually
+- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)
+
+</details>
+
 ### Build Releases
 
 [Install GoReleaser](https://goreleaser.com/install/):
