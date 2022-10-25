@@ -1,5 +1,26 @@
 # Release Notes
 
+## [2022-10-24] Release release-full: release fixes and update change log when releasing
+
+### build(deps)
+
+- bump github.com/stretchr/testify from 1.8.0 to 1.8.1
+
+### chore
+
+- update todo list completed items and add new ones
+
+### ci(tools)
+
+- add change log update to tag-release
+- add rename release mode to release-short and add mode release-full to generate a complete change log at relase time
+- fix logic error in tag-release
+- fix typo in tag-release
+
+### doc
+
+- manually add v0.3.5 change log
+
 ## [2022-10-23] Release v0.3.5: ci and doc updates, code clean up
 
 ### build(tools)
