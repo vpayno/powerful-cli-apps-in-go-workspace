@@ -2,6 +2,22 @@
 
 <details open>
 	<summary>
+<h2> [2022-10-24] Release release-full: add repo name and section folds to change log </h2>
+	</summary>
+
+### chore
+
+- update todo list completed items and add new ones
+
+### ci(tools)
+
+- add repo name to change log
+- add section folds to the change log
+- the latest fold in the change log defaults to open
+</details>
+
+<details>
+	<summary>
 <h2> [2022-10-24] Release v0.3.6: release fixes and update change log when releasing
 </h2>
 	</summary>
