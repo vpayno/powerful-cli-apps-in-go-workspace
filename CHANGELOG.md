@@ -1,6 +1,6 @@
 # "Powerful Cli Applications in Go" Workspace Release Notes
 
-<details>
+<details open>
 	<summary>
 <h2> [2022-10-24] Release v0.3.6: release fixes and update change log when releasing
 </h2>

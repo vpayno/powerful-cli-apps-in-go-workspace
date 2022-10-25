@@ -102,6 +102,7 @@ create_release_notes() {
 
 	local first="true"
 	local -a tags
+	local open_fold_flag=" open"
 
 	if [[ ${mode} == latest ]]; then
 		mapfile -t tags < <(git_get_tag_latest)
@@ -137,11 +138,13 @@ create_release_notes() {
 			printf "\n"
 		fi
 
-		[[ ${mode} =~ ^all|release-full$ ]] && printf "<details>\n\t<summary>\n"
+		[[ ${mode} =~ ^all|release-full$ ]] && printf "<details%s>\n\t<summary>\n" "${open_fold_flag}"
 		get_release_heading "${tag}" "${mode}"
 		[[ ${mode} =~ ^all|release-full$ ]] &&	printf "\t</summary>\n"
 		get_release_body "${tag}" "${mode}"
 		[[ ${mode} =~ ^all|release-full$ ]] && printf "</details>\n"
+
+		open_fold_flag=""
 	done
 } # create_release_notes()
 
