@@ -107,6 +107,6 @@ jobs:
         echo "::add-matcher::.github/actionlint-matcher.json"
         for f in ./.github/workflows/*yml; do
           printf "Running: actionlint %s\n" "${f}"
-          tee /tmp/actionlint.out < <(actionlint "${f}")
+          tee /tmp/actionlint.out < <(actionlint -oneline "${f}")
           reviewdog -efm="%f:%l:%c: %m" -name="actionlint" -reporter=github-pr-check < /tmp/actionlint.out
         done
