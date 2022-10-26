@@ -175,6 +175,41 @@ The script `././scripts/git-release-notes` can be used to create change logs for
 
 [Change Log](./CHANGELOG.md)
 
+
+## Creating a Release
+
+The script `./tag-release` can be used to create a release commit which contains
+
+- updates to CHANGELOG.md
+- version bump to ./cmd/*/.version.txt
+
+The commit message and the annotated tag also contain the change log for the new release tag.
+
+To create a new release, from the *main* branch or from a hot-fix branch, run:
+
+```
+./tag-release v1.2.3 "added feature x"
+```
+
+These changes get a patch version bump:
+
+- When a feature fix is merged into main.
+
+These changes get a minor version bump:
+
+- When a new feature is merged into main.
+
+- When build system updates are added.
+
+- When dependency or Go version bumps are made.
+
+These changes get a major version bump:
+
+- When a new chapter starts (n-1).
+
+Artifact releases, to save space, will only be created at the end of a chapter.
+
+
 ## Dependabot
 
 Dependabot configuration: [.github/dependabot.yml](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/blob/main/.github/dependabot.yml)
