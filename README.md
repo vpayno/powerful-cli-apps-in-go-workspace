@@ -153,6 +153,26 @@ Categories that can be further subdivided, like build and ci, can have many subc
 
 ## Change Log
 
+The script `./scripts/git-release-notes` can be used to extract the change log from the commit message summaries/titles.
+
+Right now only one type of change log is supported, the developer version. It's composed of all the commit messages in the repo.
+
+The user change log, will only include `doc`, `feat`, `fix` and `release` commits.
+
+The script `././scripts/git-release-notes` can be used to create change logs for the whole repo or for just a single tag.
+
+- Single tag:
+
+```
+./scripts/git-release-notes v1.2.3
+```
+
+- All tags:
+
+```
+./scripts/git-release-notes all
+```
+
 [Change Log](./CHANGELOG.md)
 
 ## Dependabot
