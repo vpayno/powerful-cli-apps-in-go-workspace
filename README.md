@@ -55,7 +55,101 @@ If it's a new feature or fix of the chapter's application, it should be tagged i
 It may seem like unnecessary work but it's good practice for real applications that have to be maintained over long periods of time.
 The hot-fix can be skipped if it's using processes learned in the current chapter since the changes are related to only that chapter.
 
-unecessary
+
+## Commit Messages
+
+Commit messages are used to create change logs.
+
+For this and many other reasons, commit messages:
+- must only contain a single type of change.
+- must never be squashed together.
+- must have properly formatted commit messages.
+- should be in the present tense.
+
+As for the single type of change, it can include a lot of related changes to the same form:
+- formatting changes
+- linter recommended fixes
+- documentation (docs, comments, examples, etc.)
+- adding/removing a feature
+- fixing a feature
+
+That way when a PR is reviewed, one can click on each commit to see what changed.
+If you mix code formatting changes with a fix to an existing feature, it makes it a lot harder to see what changed.
+
+Including multiple changes into a commit or squashing them also makes it more difficult to bisect the code at a later date.
+What do you do when you find that the bug was introduced in a commit that includes hundreds or thousands of formatting changes and a bug fix?
+If they were two separate commits, it would be easy to tell if it was the formatting changes or the bug fix that broke the code.
+
+If you find a bug that tests missed while updating documentation, make that bug fix and doc/test update a separate commit instead of hiding it in another commit.
+
+If in doubt about what categories may apply to an existing file or what commit messages look like, you can use
+
+```
+git log ./path/to/file
+```
+
+or
+
+```
+tig ./path/to/file
+```
+
+to browse all the commit messages associated with that file.
+
+It's always best to check instead of just guessing.
+
+Commit messages can also include more information in their bodies help others understand the changes.
+- What error was prompted the fix?
+- How to test for the error.
+
+<details>
+	<summary><h3>Commit message formats:</h3></summary>
+
+```
+category: short message stating what changed
+```
+
+```
+category(subcategory): short message stating what changed
+```
+
+#### Categories:
+
+- build: things related to the build system
+- chore: catch all for project chores that don't fit in the other categories
+- ci: things related to the ci system
+- doc: things related to project documentation
+- feat: new features
+- fix: fixes to features
+- release: release related changes
+- site: GitHub pages related changes
+- test: things related to project testing
+
+#### Subcategories:
+
+Categories that can be further subdivided, like build and ci, can have many subcategories.
+
+- build(deps): dependency changes (usually version bumps)
+- build(go): build system updates (native to the language)
+- build(make): make related changes
+- build(tools): build system tooling updates
+
+- ci(bash): CI workflow for BASH checks
+- ci(codeclimate): CI workflow for CodeClimate checks
+- ci(codeql): CI workflow for GitHub CodeQL checks
+- ci(fossa): CI workflow for FOSSA (license) checks
+- ci(gha): CI workflow for GitHub Actions checks
+- ci(git): CI workflow for Git related checking
+- ci(goreleaser): CI workflow for Go release bulding and publishing
+- ci(go): CI workflow for Golang checking, testing
+- ci(hugo): CI workflow for GitHub Pages with Hugo build and deploy
+- ci(links): CI workflow for the link checker
+- ci(security): CI workflow for security checking
+- ci(tools): CI workflow for generic CI tooling
+- ci(woke): CI workflow for running the Woke checking
+
+</details>
+
 
 ## Change Log
 
