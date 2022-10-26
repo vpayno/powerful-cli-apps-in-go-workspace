@@ -33,6 +33,30 @@ This is also my "notebook" on how to do things in Go or how to manage a Go proje
 
 - [Website](https://pragprog.com/titles/rggo/powerful-command-line-applications-in-go/)
 
+
+## Versions
+
+Versions tags have two formats:
+
+- `v[0-9]+`
+- `v[0-9]+.[0-9]+.[0-9]+`
+
+The short version is used by some tools to mean any X version.
+The short tag is applied at the same time when the major number is incremented.
+
+The long version has three parts:
+
+- major: it's the chapter number minus 1
+- minor: bumped when a new feature of the chapter's application is added, sometimes bumped when significant changes are made during a chapter.
+- patch: application fixes and other changes
+
+Once a new chapter is started, changes to a previous chapter need to be hot-fixed to the last tag of that chapter and to the HEAD of the repo.
+If it's a new feature or fix of the chapter's application, it should be tagged in both locations.
+It may seem like unnecessary work but it's good practice for real applications that have to be maintained over long periods of time.
+The hot-fix can be skipped if it's using processes learned in the current chapter since the changes are related to only that chapter.
+
+unecessary
+
 ## Change Log
 
 [Change Log](./CHANGELOG.md)
