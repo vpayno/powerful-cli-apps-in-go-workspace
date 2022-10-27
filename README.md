@@ -29,6 +29,7 @@ This is my workspace for learing concepts from the book.
 
 This is also my "notebook" on how to do things in Go or how to manage a Go project.
 
+
 ## Book Info
 
 - [Website](https://pragprog.com/titles/rggo/powerful-command-line-applications-in-go/)
@@ -276,6 +277,7 @@ For instructions on how to install individual applications, check the applicatio
 <details id=1>
     <summary><h3>Chapter 01: Your First Command-Line Program in Go - wordcount/wc</h3></summary>
 
+
 #### How to Install *cli-wc*
 
 I'm adding `cli-` prefix to the binaries so I don't replace the system version of `wc` with this one in my `PATH`.
@@ -294,6 +296,7 @@ $ cd powerful-cli-apps-in-go-workspace
 $ go generate
 # go install ./cmd/cli-wc/cli-wc.go
 ```
+
 
 #### *cli-wc* Usage
 
