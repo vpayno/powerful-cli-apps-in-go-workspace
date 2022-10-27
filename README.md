@@ -253,6 +253,7 @@ You can trigger Dependabot actions by commenting on the PR:
 
 </details>
 
+
 ## Build Releases
 
 [Install GoReleaser](https://goreleaser.com/install/):
@@ -266,6 +267,9 @@ Build Linux, OSX and Windows binaries:
 ```
 $ make build-all
 ```
+
+For instructions on how to install individual applications, check the applications section for `go install url@tag` command you need.
+
 
 ## Chapters|Apps
 
