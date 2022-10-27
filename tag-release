@@ -41,7 +41,7 @@ if ./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"; then
 
 else
 
-	printf "ERROR: error encounterd in go-generate-helper-git-version-info script\n"
+	printf "ERROR: error encountered in go-generate-helper-git-version-info script\n"
 	exit 1
 
 fi
