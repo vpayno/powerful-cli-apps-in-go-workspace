@@ -2,7 +2,8 @@
 
 <details open>
 	<summary>
-<h2> [2022-10-24] Release release-full: add repo name and section folds to change log </h2>
+<h2> [2022-10-24] Release v0.3.7: add repo name and section folds to change log
+</h2>
 	</summary>
 
 ### chore

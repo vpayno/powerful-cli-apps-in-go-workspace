@@ -31,7 +31,7 @@ if ./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"; then
 	fi
 
 	# We can update the release notes after the release commit is created.
-	./scripts/git-release-notes "release-full" "${title}" > CHANGELOG.md
+	./scripts/git-release-notes "release-full:${tag}" "${title}" > CHANGELOG.md
 	git add CHANGELOG.md || exit 1
 
 	if git commit -v --amend; then

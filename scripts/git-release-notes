@@ -34,7 +34,7 @@ git_cl() {
 
 	if [[ ${tag} =~ ^v0.0.0\^$ ]]; then
 		git_ref="${tag}"
-	elif [[ ${tag} =~ ^release-(short|full)$ ]]; then
+	elif [[ ${tag} =~ ^release-(short|full:.*)$ ]]; then
 		git_ref="$(git_get_tags | head -n 1)..HEAD"
 	else
 		tag_previous="$(git_get_tag_previous "${tag}")"
@@ -53,17 +53,17 @@ get_release_heading() {
 	local heading_start="##"
 	local heading_end=""
 
-	if [[ ${mode} =~ ^all|release-full$ ]]; then
+	if [[ ${mode%%:*} =~ ^all|release-full$ ]]; then
 		heading_start="<h2>"
 		heading_end="</h2>"
 	fi
 
-	if [[ ${tag} =~ ^release-short$ ]]; then
+	if [[ ${tag%%:*} =~ ^release-short$ ]]; then
 		printf "release: %s\n" "${release_message}"
 		return
-	elif [[ ${tag} =~ ^release-full$ ]]; then
+	elif [[ ${tag%%:*} =~ ^release-full$ ]]; then
 		git log --pretty=format:"${heading_start} [%as] " --abbrev-commit --decorate -n 1 "${tag//release-*/HEAD}"
-		printf "Release %s: %s %s\n" "${tag}" "${release_message}" "${heading_end}"
+		printf "Release %s: %s\n%s\n" "${tag##*:}" "${release_message}" "${heading_end}"
 		return
 	fi
 
@@ -72,7 +72,7 @@ get_release_heading() {
 	if [[ ${tag} == v0.0.0^ ]]; then
 		printf "Release v0.0.0: initial release\n"
 	else
-		git_cl "${tag}" | head -n 1 | sed -r -e 's/^- release: (v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+) (- )?/Release \1: /g'
+		git_cl "${tag%%:*}" | head -n 1 | sed -r -e 's/^- release: (v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+) (- )?/Release \1: /g'
 	fi
 
 	printf "%s\n" "${heading_end}"
@@ -108,13 +108,13 @@ create_release_notes() {
 		mapfile -t tags < <(git_get_tag_latest)
 	elif [[ ${mode} == release-short ]]; then
 		mapfile -t tags < <(printf "%s\n" "${mode}")
-	elif [[ ${mode} == release-full ]]; then
+	elif [[ ${mode%%:*} == release-full ]]; then
 		printf "# %s Release Notes\n" '"Powerful Cli Applications in Go" Workspace'
 		printf "\n"
 
 		mapfile -t tags < <(printf "%s\n" "${mode}"; git_get_tags | sort -Vr)
 	elif [[ ${mode} =~ ^v[0-9]+[.][0-9]+[.][0-9]+$ ]]; then
-		if ! git tag | grep -q -E "^${mode}$"; then
+		if ! git tag | grep -q -E "^${mode##*:}$"; then
 			printf "ERROR: tag [%s] doesn't exist!\n" "${mode}"
 			exit 1
 		fi
@@ -138,19 +138,19 @@ create_release_notes() {
 			printf "\n"
 		fi
 
-		[[ ${mode} =~ ^all|release-full$ ]] && printf "<details%s>\n\t<summary>\n" "${open_fold_flag}"
+		[[ ${mode} =~ ^all|release-full:v.*$ ]] && printf "<details%s>\n\t<summary>\n" "${open_fold_flag}"
 		get_release_heading "${tag}" "${mode}"
-		[[ ${mode} =~ ^all|release-full$ ]] &&	printf "\t</summary>\n"
+		[[ ${mode} =~ ^all|release-full:v.*$ ]] &&	printf "\t</summary>\n"
 		get_release_body "${tag}" "${mode}"
-		[[ ${mode} =~ ^all|release-full$ ]] && printf "</details>\n"
+		[[ ${mode} =~ ^all|release-full:v.*$ ]] && printf "</details>\n"
 
 		open_fold_flag=""
 	done
 } # create_release_notes()
 
-if [[ ${mode} =~ ^(|latest|release-(short|full)|all|v[0-9]+[.][0-9]+[.][0-9]+)$ ]]; then
+if [[ ${mode} =~ ^(|latest|release-(short|full:v[0-9]+[.][0-9]+[.][0-9]+)|all|v[0-9]+[.][0-9]+[.][0-9]+)$ ]]; then
 	create_release_notes "${mode}"
 else
-	printf "Usage: %s ^(|latest|release-(short|full)|all|v[0-9]+[.][0-9]+[.][0-9]+)$\n" "$0"
+	printf "Usage: %s ^(|latest|release-(short|full:[0-9]+[.][0-9]+[.][0-9]+)|all|v[0-9]+[.][0-9]+[.][0-9]+)$\n" "$0"
 	exit 1
 fi
