@@ -140,27 +140,27 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         go install golang.org/x/lint/golint@latest
-        golint -set_exit_status ./... | reviewdog -tee -f golint -reporter=github-pr-check
+        golint -set_exit_status ./... | reviewdog -tee -f golint -reporter=github-check
 
     - name: Testing with revive
       id: go-test-revive
       if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/mgechev/revive@latest
-        revive ./... | reviewdog -tee -efm="%f:%l:%c: %m" -name="revive" -reporter=github-pr-check
+        revive ./... | reviewdog -tee -efm="%f:%l:%c: %m" -name="revive" -reporter=github-check
 
     - name: Analysing the code with go vet
       id: go-vet
       if: matrix.os == 'ubuntu-latest'
       run: |
-        go vet ./... | reviewdog -tee -f govet -reporter=github-pr-check
+        go vet ./... | reviewdog -tee -f govet -reporter=github-check
 
     - name: Testing with ineffassign
       id: go-test-ineffassign
       if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/gordonklaus/ineffassign@latest
-        ineffassign ./... | reviewdog -tee -efm="%f:%l:%c: %m" -name="ineffassign" -reporter=github-pr-check
+        ineffassign ./... | reviewdog -tee -efm="%f:%l:%c: %m" -name="ineffassign" -reporter=github-check
 
     - name: Testing with gocyclo
       id: go-test-gocyclo
@@ -168,42 +168,42 @@ jobs:
       run: |
         go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
         # 10 appwc getCounts internal/app/cli-wc/app.go:105:1
-        gocyclo -over "${GOCYCLO_OVER_THRESHOLD}" . | reviewdog -tee -efm="%m %f:%l:%c" -name="gocyclo" -reporter=github-pr-check
+        gocyclo -over "${GOCYCLO_OVER_THRESHOLD}" . | reviewdog -tee -efm="%m %f:%l:%c" -name="gocyclo" -reporter=github-check
 
     - name: Testing with go-consistent
       id: go-test-go-consistent
       if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/quasilyte/go-consistent@latest
-        go-consistent -v ./... | reviewdog -tee -f go-consistent -reporter=github-pr-check
+        go-consistent -v ./... | reviewdog -tee -f go-consistent -reporter=github-check
 
     - name: Testing with gocritic
       id: go-test-gocritic
       if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/go-critic/go-critic/cmd/gocritic@latest
-        gocritic check -enableAll ./... | reviewdog -tee -efm="%f:%l:%c: %m" -name="gocritic" -reporter=github-pr-check
+        gocritic check -enableAll ./... | reviewdog -tee -efm="%f:%l:%c: %m" -name="gocritic" -reporter=github-check
 
     - name: Testing with staticcheck
       id: go-test-staticcheck
       if: matrix.os == 'ubuntu-latest'
       run: |
         go install honnef.co/go/tools/cmd/staticcheck@latest
-        staticcheck ./... | reviewdog -tee -f staticcheck -reporter=github-pr-check
+        staticcheck ./... | reviewdog -tee -f staticcheck -reporter=github-check
 
     - name: Testing with golangci-lint
       id: go-test-golangci-lint
       if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-        golangci-lint run --out-format=line-number ./... | reviewdog -tee -f=golangci-lint -reporter=github-pr-check
+        golangci-lint run --out-format=line-number ./... | reviewdog -tee -f=golangci-lint -reporter=github-check
 
     - name: Testing with gosec
       id: go-test-security
       if: matrix.os == 'ubuntu-latest'
       run: |
         go install github.com/securego/gosec/v2/cmd/gosec@latest
-        gosec ./... | reviewdog -tee -f gosec -reporter=github-pr-check
+        gosec ./... | reviewdog -tee -f gosec -reporter=github-check
 
     - name: Code Climate Code Coverage Setup
       id: go-code-climate-code-coverage-setup
