@@ -6,7 +6,12 @@
 
 name: Bash Workflow
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
 
 defaults:
   run:

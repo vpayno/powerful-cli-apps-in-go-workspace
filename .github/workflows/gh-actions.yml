@@ -7,6 +7,11 @@
 name: GitHub Action Workflow
 
 on:
+  push:
+    branches:
+      - main
+      - develop
+
   pull_request:
 
 env:

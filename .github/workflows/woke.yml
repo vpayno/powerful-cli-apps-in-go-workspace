@@ -8,7 +8,12 @@
 name: Woke Workflow
 
 on:
-  - pull_request
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
 
 defaults:
   run:

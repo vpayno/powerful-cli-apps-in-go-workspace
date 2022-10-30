@@ -7,6 +7,11 @@
 name: FOSSA Check
 
 on:
+  push:
+    branches:
+      - main
+      - develop
+
   pull_request:
 
 env:

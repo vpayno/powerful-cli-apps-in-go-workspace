@@ -6,7 +6,13 @@
 
 name: Git Workflow
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
 
 defaults:
   run:

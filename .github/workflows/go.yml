@@ -5,6 +5,11 @@
 name: Go Workflow
 
 on:
+  push:
+    branches:
+      - main
+      - develop
+
   pull_request:
 
 env:
