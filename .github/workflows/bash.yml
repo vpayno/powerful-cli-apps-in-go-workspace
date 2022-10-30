@@ -1,6 +1,8 @@
 #
-# https://github.com/reviewdog/action-shellcheck
+# .github/workflows/bash.yml
 #
+
+# https://github.com/reviewdog/action-shellcheck
 
 name: Bash Workflow
 

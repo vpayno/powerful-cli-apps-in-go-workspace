@@ -1,13 +1,16 @@
 #
-# .github/workflows/fossa.yml
+# .github/workflows/fossa-go.yml
 #
-name: "FOSSA Check"
 
-env:
-  FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY_FULL }}
+# https://github.com/fossas/fossa-action
+
+name: FOSSA Check
 
 on:
   pull_request:
+
+env:
+  FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY_FULL }}
 
 defaults:
   run:

@@ -1,6 +1,9 @@
 #
 # .github/workflows/codeql-analysis.yml
 #
+
+# https://github.com/github/codeql
+
 name: "CodeQL Workflow"
 
 on:

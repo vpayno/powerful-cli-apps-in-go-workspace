@@ -1,9 +1,12 @@
 #
-# https://github.com/get-woke/woke-action-reviewdog
-# https://github.com/get-woke/woke-action
+# .github/workflows/woke.yml
 #
 
+# https://github.com/get-woke/woke-action-reviewdog
+# https://github.com/get-woke/woke-action
+
 name: Woke Workflow
+
 on:
   - pull_request
 

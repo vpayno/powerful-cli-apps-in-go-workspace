@@ -1,3 +1,9 @@
+#
+# .github/workflows/misspell.yml
+#
+
+# https://github.com/reviewdog/action-misspell
+
 name: Spelling Workflow
 
 on:
