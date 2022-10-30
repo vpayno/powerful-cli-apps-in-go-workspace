@@ -2,22 +2,22 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/vpayno/powerful-cli-apps-in-go-workspace/badge)](https://www.codefactor.io/repository/github/vpayno/powerful-cli-apps-in-go-workspace)
 [![Maintainability](https://api.codeclimate.com/v1/badges/43c8f7b58097ca3fa1ec/maintainability)](https://codeclimate.com/github/vpayno/powerful-cli-apps-in-go-workspace/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/43c8f7b58097ca3fa1ec/test_coverage)](https://codeclimate.com/github/vpayno/powerful-cli-apps-in-go-workspace/test_coverage)
-![Code2Test Ratio](./reports/.octocov-ratio.svg)
+![Code2Test Ratio](./reports/.octocov-ratio.svg?branch=main)
 
 [![made-with-Go](https://img.shields.io/badge/Made%20with-Go-1f425f.svg)](https://go.dev/)
-[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/vpayno/powerful-cli-apps-in-go-workspace.svg)](https://github.com/gomods/athens)
-[![Version](https://badge.fury.io/gh/vpayno%2Fpowerful-cli-apps-in-go-workspace.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/tags)
+[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/vpayno/powerful-cli-apps-in-go-workspace.svg?branch=main)](https://github.com/gomods/athens)
+[![Version](https://badge.fury.io/gh/vpayno%2Fpowerful-cli-apps-in-go-workspace.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/tags)
 
-[![Go Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/go.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/go.yml)
-[![CodeQL Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/codeql-analysis.yml)
-[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B33315%2Fgithub.com%2Fvpayno%2Fpowerful-cli-apps-in-go-workspace.svg?type=shield)](https://app.fossa.com/projects/custom%2B33315%2Fgithub.com%2Fvpayno%2Fpowerful-cli-apps-in-go-workspace?ref=badge_shield)
+[![Go Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/go.yml)
+[![CodeQL Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/codeql-analysis.yml)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B33315%2Fgithub.com%2Fvpayno%2Fpowerful-cli-apps-in-go-workspace.svg?branch=main&type=shield)](https://app.fossa.com/projects/custom%2B33315%2Fgithub.com%2Fvpayno%2Fpowerful-cli-apps-in-go-workspace?ref=badge_shield)
 
-[![Bash Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/bash.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/bash.yml)
-[![Git Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/git.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/git.yml)
-[![Link Check Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/links.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/links.yml)
-[![Woke Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/woke.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/woke.yml)
+[![Bash Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/bash.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/bash.yml)
+[![Git Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/git.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/git.yml)
+[![Link Check Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/links.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/links.yml)
+[![Woke Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/woke.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/woke.yml)
 
-[![Spelling Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/misspell.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/misspell.yml)
+[![Spelling Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/misspell.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/misspell.yml)
 
 [![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg)
 [![macOS](https://svgshare.com/i/ZjP.svg)](https://svgshare.com/i/ZjP.svg)
