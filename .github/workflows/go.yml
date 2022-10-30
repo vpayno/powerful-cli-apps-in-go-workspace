@@ -102,12 +102,14 @@ jobs:
         go version
 
     - name: Checkout PR Branch
-      id: checkout-branch
+      id: checkout-pr-branch
       run: |
-        git status
-        git fetch origin "${GH_HEAD_REF}"
-        git switch "${GH_HEAD_REF}"
-        git status
+        if ! git branch --show-current | grep -q -E '^(main|develop)$'; then
+          git status
+          git fetch origin "${GH_HEAD_REF}"
+          git switch "${GH_HEAD_REF}"
+          git status
+        fi
 
     - name: Run go generate
       id: go-generate
