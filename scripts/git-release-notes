@@ -147,9 +147,11 @@ create_release_notes() {
 		open_fold_flag=""
 	done
 
-	printf "Running misspell -w CHANGELOG.md...\n"
-	misspell -w CHANGELOG*.md
-	printf "done\n"
+	{
+		printf "Running misspell -w CHANGELOG.md...\n"
+		misspell -w CHANGELOG*.md
+		printf "done\n"
+	} 1>&2
 } # create_release_notes()
 
 if [[ ${mode} =~ ^(|latest|release-(short|full:v[0-9]+[.][0-9]+[.][0-9]+)|all|v[0-9]+[.][0-9]+[.][0-9]+)$ ]]; then
