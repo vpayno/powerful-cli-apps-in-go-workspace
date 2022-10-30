@@ -385,7 +385,7 @@
 ### feat
 
 - add verboseMode
-- add versionMode functionallity to -V flag
+- add versionMode functionality to -V flag
 - add word counter
 - create application skeleton
 - implement byteMode counter
