@@ -1,3 +1,4 @@
+// Package appwc is the module with the cli logic for the wc main application.
 package appwc
 
 import (
