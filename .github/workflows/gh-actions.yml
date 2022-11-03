@@ -73,7 +73,8 @@ jobs:
 
     runs-on: "${{ matrix.os }}"
 
-    needs: [ stage1 ]
+    needs:
+      - stage1
     if: needs.stage1.outputs.docs_changed == 'True'
 
     steps:
