@@ -233,6 +233,12 @@ jobs:
           go install golang.org/x/tools/cmd/cover@latest
           gotest -v -covermode=count -coverprofile=./reports/.coverage.out ./...
 
+      - name: Generate coverage.xml
+        id: go-test-run
+        run: |
+          go install github.com/t-yuki/gocover-cobertura@latest
+          gocover-cobertura < ./reports/coverage.txt > ./reports/coverage.xml
+
       - name: Test Coverage Report (txt)
         id: go-test-coverage-txt
         if: matrix.os == 'ubuntu-latest'
