@@ -5,7 +5,7 @@
 
 name: Deploy Hugo site to GitHub Pages
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - 'pages-pr'
