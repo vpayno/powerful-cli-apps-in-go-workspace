@@ -3,6 +3,7 @@
 #
 
 # https://github.com/fossas/fossa-action
+---
 
 name: FOSSA Check
 

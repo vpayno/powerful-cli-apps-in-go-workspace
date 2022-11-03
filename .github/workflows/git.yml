@@ -3,6 +3,7 @@
 #
 
 # https://github.com/13rac1/block-fixup-merge-action
+---
 
 name: Git Workflow
 

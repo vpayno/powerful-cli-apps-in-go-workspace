@@ -1,6 +1,7 @@
 #
 # .github/workflows/go.yml
 #
+---
 
 name: Go Workflow
 

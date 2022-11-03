@@ -3,6 +3,7 @@
 #
 
 # https://github.com/github/codeql
+---
 
 name: "CodeQL Workflow"
 

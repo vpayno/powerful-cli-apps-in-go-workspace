@@ -3,6 +3,7 @@
 #
 
 # https://github.com/reviewdog/action-misspell
+---
 
 name: Spelling Workflow
 

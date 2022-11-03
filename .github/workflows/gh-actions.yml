@@ -3,6 +3,7 @@
 #
 
 # https://github.com/reviewdog/action-actionlint
+---
 
 name: GitHub Action Workflow
 
