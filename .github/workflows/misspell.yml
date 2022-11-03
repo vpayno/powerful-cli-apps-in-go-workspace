@@ -28,14 +28,14 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v2
 
-    - name: Run misspell
-      uses: reviewdog/action-misspell@v1
-      with:
-        fail_on_error: true
-        github_token: ${{ secrets.github_token }}
-        level: error
-        locale: "US"
-        reporter: github-check
+      - name: Run misspell
+        uses: reviewdog/action-misspell@v1
+        with:
+          fail_on_error: true
+          github_token: ${{ secrets.github_token }}
+          level: error
+          locale: "US"
+          reporter: github-check

@@ -32,38 +32,38 @@ jobs:
       docs_changed: ${{ steps.check_file_changed.outputs.docs_changed }}
 
     steps:
-    - name: Checkout Repo
-      id: checkout-repo
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        ref: ${{ github.ref }}
-        submodules: recursive
+      - name: Checkout Repo
+        id: checkout-repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+          submodules: recursive
 
-    - name: Get Change List
-      id: check_file_changed
-      run: |
-        # Diff HEAD with the previous commit then output to stdout.
-        printf "=== Which files changed? ===\n"
-        GIT_DIFF="$(git diff --name-only HEAD^ HEAD)"
-        printf "%s\n" "${GIT_DIFF}"
-        printf "\n"
+      - name: Get Change List
+        id: check_file_changed
+        run: |
+          # Diff HEAD with the previous commit then output to stdout.
+          printf "=== Which files changed? ===\n"
+          GIT_DIFF="$(git diff --name-only HEAD^ HEAD)"
+          printf "%s\n" "${GIT_DIFF}"
+          printf "\n"
 
-        # Check if the files are present in the changed file list (added, modified, deleted) then output to stdout.
-        HAS_DIFF=false
-        printf "=== Which Golang files changed? ===\n"
-        if printf "%s\n" "${GIT_DIFF}" | grep -E '^(.*[.]go|go[.](mod|sum)|.github/workflows/codeql-analysis-go.yml)$'; then
-          HAS_DIFF=true
-        fi
-        printf "\n"
+          # Check if the files are present in the changed file list (added, modified, deleted) then output to stdout.
+          HAS_DIFF=false
+          printf "=== Which Golang files changed? ===\n"
+          if printf "%s\n" "${GIT_DIFF}" | grep -E '^(.*[.]go|go[.](mod|sum)|.github/workflows/codeql-analysis-go.yml)$'; then
+            HAS_DIFF=true
+          fi
+          printf "\n"
 
-        # Did Golang files change?
-        printf "=== Did Golang files change? ===\n"
-        printf "%s\n" "${HAS_DIFF}"
-        printf "\n"
+          # Did Golang files change?
+          printf "=== Did Golang files change? ===\n"
+          printf "%s\n" "${HAS_DIFF}"
+          printf "\n"
 
-        # Set the output named "docs_changed"
-        printf "%s=%s\n" "docs_changed" "${HAS_DIFF}" >> "${GITHUB_OUTPUT}"
+          # Set the output named "docs_changed"
+          printf "%s=%s\n" "docs_changed" "${HAS_DIFF}" >> "${GITHUB_OUTPUT}"
 
   stage2-analyze:
     name: CodeQL Analyze
@@ -87,44 +87,44 @@ jobs:
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        ref: ${{ github.ref }}
-        submodules: recursive
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+          submodules: recursive
 
-    # Initializes the CodeQL tools for scanning.
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
-        # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
-        # queries: security-extended,security-and-quality
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+          # queries: security-extended,security-and-quality
 
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
-    # - name: Autobuild
-    #   uses: github/codeql-action/autobuild@v2
+      # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
+      # - name: Autobuild
+      #   uses: github/codeql-action/autobuild@v2
 
-    # ℹ️ Command-line programs to run using the OS shell.
-    # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
+      # ℹ️ Command-line programs to run using the OS shell.
+      # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
 
-    # Adding this because the image has a dead version of Go.
-    - name: Set up Go ${{ matrix.go-version }}
-      id: setup-go
-      uses: actions/setup-go@v3
-      with:
-        go-version: ${{ matrix.go-version }}
+      # Adding this because the image has a dead version of Go.
+      - name: Set up Go ${{ matrix.go-version }}
+        id: setup-go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go-version }}
 
-    - name: Install Dependencies
-      run: |
-        go version
-        go install github.com/goreleaser/goreleaser@latest
+      - name: Install Dependencies
+        run: |
+          go version
+          go install github.com/goreleaser/goreleaser@latest
 
-    - name: Manual Build
-      run: |
-        echo "Run, Build Application using script"
-        goreleaser build --rm-dist --single-target --snapshot
+      - name: Manual Build
+        run: |
+          echo "Run, Build Application using script"
+          goreleaser build --rm-dist --single-target --snapshot
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2

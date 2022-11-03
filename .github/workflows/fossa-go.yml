@@ -32,38 +32,38 @@ jobs:
       docs_changed: ${{ steps.check_file_changed.outputs.docs_changed }}
 
     steps:
-    - name: Checkout Repo
-      id: checkout-repo
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        ref: ${{ github.ref }}
-        submodules: recursive
+      - name: Checkout Repo
+        id: checkout-repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+          submodules: recursive
 
-    - name: Get Change List
-      id: check_file_changed
-      run: |
-        # Diff HEAD with the previous commit then output to stdout.
-        printf "=== Which files changed? ===\n"
-        GIT_DIFF="$(git diff --name-only HEAD^ HEAD)"
-        printf "%s\n" "${GIT_DIFF}"
-        printf "\n"
+      - name: Get Change List
+        id: check_file_changed
+        run: |
+          # Diff HEAD with the previous commit then output to stdout.
+          printf "=== Which files changed? ===\n"
+          GIT_DIFF="$(git diff --name-only HEAD^ HEAD)"
+          printf "%s\n" "${GIT_DIFF}"
+          printf "\n"
 
-        # Check if the files are present in the changed file list (added, modified, deleted) then output to stdout.
-        HAS_DIFF=false
-        printf "=== Which Golang files changed? ===\n"
-        if printf "%s\n" "${GIT_DIFF}" | grep -E '^(LICENSE|go[.](mod|sum)|.github/workflows/fossa-go.yml)$'; then
-          HAS_DIFF=true
-        fi
-        printf "\n"
+          # Check if the files are present in the changed file list (added, modified, deleted) then output to stdout.
+          HAS_DIFF=false
+          printf "=== Which Golang files changed? ===\n"
+          if printf "%s\n" "${GIT_DIFF}" | grep -E '^(LICENSE|go[.](mod|sum)|.github/workflows/fossa-go.yml)$'; then
+            HAS_DIFF=true
+          fi
+          printf "\n"
 
-        # Did Golang files change?
-        printf "=== Did Golang files change? ===\n"
-        printf "%s\n" "${HAS_DIFF}"
-        printf "\n"
+          # Did Golang files change?
+          printf "=== Did Golang files change? ===\n"
+          printf "%s\n" "${HAS_DIFF}"
+          printf "\n"
 
-        # Set the output named "docs_changed"
-        printf "%s=%s\n" "docs_changed" "${HAS_DIFF}" >> "${GITHUB_OUTPUT}"
+          # Set the output named "docs_changed"
+          printf "%s=%s\n" "docs_changed" "${HAS_DIFF}" >> "${GITHUB_OUTPUT}"
 
   stage2-analyze:
     name: FOSSA Analyze
@@ -79,29 +79,29 @@ jobs:
       security-events: write
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        ref: ${{ github.ref }}
-        submodules: recursive
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+          submodules: recursive
 
-    - name: Install Dependencies
-      run: |
-        curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh | bash
+      - name: Install Dependencies
+        run: |
+          curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh | bash
 
-    - name: Show FOSSA Help Screen
-      run: |
-        fossa --help
+      - name: Show FOSSA Help Screen
+        run: |
+          fossa --help
 
-    - name: Show FOSSA Targets
-      run: |
-        fossa list-targets
+      - name: Show FOSSA Targets
+        run: |
+          fossa list-targets
 
-    - name: Run FOSSA Analyze
-      run: |
-        fossa analyze
+      - name: Run FOSSA Analyze
+        run: |
+          fossa analyze
 
-    - name: Run FOSSA Test
-      run: |
-        fossa test
+      - name: Run FOSSA Test
+        run: |
+          fossa test
