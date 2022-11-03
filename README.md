@@ -19,6 +19,7 @@
 [![Woke Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/woke.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/woke.yml)
 
 [![Spelling Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/misspell.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/misspell.yml)
+[![Yaml Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/yaml.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/yaml.yml)
 
 [![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg)
 [![macOS](https://svgshare.com/i/ZjP.svg)](https://svgshare.com/i/ZjP.svg)
