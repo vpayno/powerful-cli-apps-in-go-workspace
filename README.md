@@ -10,7 +10,7 @@
 [![Version](https://badge.fury.io/gh/vpayno%2Fpowerful-cli-apps-in-go-workspace.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/tags)
 
 [![Go Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/go.yml)
-[![CodeQL Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/codeql-analysis.yml)
+[![CodeQL Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/codeql-analysis-go.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/codeql-analysis-go.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B33315%2Fgithub.com%2Fvpayno%2Fpowerful-cli-apps-in-go-workspace.svg?branch=main&type=shield)](https://app.fossa.com/projects/custom%2B33315%2Fgithub.com%2Fvpayno%2Fpowerful-cli-apps-in-go-workspace?ref=badge_shield)
 
 [![Bash Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/bash.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/bash.yml)

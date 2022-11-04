@@ -1,5 +1,5 @@
 #
-# .github/workflows/codeql-analysis.yml
+# .github/workflows/codeql-analysis-go.yml
 #
 
 # https://github.com/github/codeql
