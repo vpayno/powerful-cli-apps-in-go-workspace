@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
 
     needs:
-      - stage1
+      - stage1-setup
     if: needs.stage1-setup.outputs.docs_changed == 'True'
 
     permissions:
