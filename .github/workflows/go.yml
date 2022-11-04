@@ -346,20 +346,3 @@ jobs:
           #git push origin ${{ github.ref }} # refs/pull/[0-9]+/merge
           git push origin "${GH_HEAD_REF}" # branch_name
           #git push origin ${{ github.base_ref }} # main
-
-        # https://github.com/codacy/codacy-coverage-reporter-action
-        # https://docs.codacy.com/coverage-reporter/alternative-ways-of-running-coverage-reporter/
-        # https://docs.codacy.com/v6.0/coverage-reporter/#submitting-coverage-for-golang
-
-      - name: Run codacy-coverage-reporter
-        id: codacy-reporter
-        if: matrix.os == 'ubuntu-latest'
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          # or
-          # api-token: ${{ secrets.CODACY_API_TOKEN }}
-
-          language: go
-          force-coverage-parser: go
-          coverage-reports: ./reports/coverage.xml

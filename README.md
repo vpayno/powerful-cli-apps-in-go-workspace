@@ -1,7 +1,6 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/vpayno/powerful-cli-apps-in-go-workspace)](https://goreportcard.com/report/github.com/vpayno/powerful-cli-apps-in-go-workspace)
 [![CodeFactor](https://www.codefactor.io/repository/github/vpayno/powerful-cli-apps-in-go-workspace/badge)](https://www.codefactor.io/repository/github/vpayno/powerful-cli-apps-in-go-workspace)
 [![Maintainability](https://api.codeclimate.com/v1/badges/43c8f7b58097ca3fa1ec/maintainability)](https://codeclimate.com/github/vpayno/powerful-cli-apps-in-go-workspace/maintainability)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/534a2d86a8f643e49ca399fd9dca0dd1)](https://www.codacy.com/gh/vpayno/powerful-cli-apps-in-go-workspace/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vpayno/powerful-cli-apps-in-go-workspace&amp;utm_campaign=Badge_Grade)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/43c8f7b58097ca3fa1ec/test_coverage)](https://codeclimate.com/github/vpayno/powerful-cli-apps-in-go-workspace/test_coverage)
 ![Code2Test Ratio](./reports/.octocov-ratio.svg?branch=main)
 
