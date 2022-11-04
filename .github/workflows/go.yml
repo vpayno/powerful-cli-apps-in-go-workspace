@@ -234,7 +234,7 @@ jobs:
           gotest -v -covermode=count -coverprofile=./reports/.coverage.out ./...
 
       - name: Generate coverage.xml
-        id: go-test-run
+        id: go-generate-coverage-xml
         run: |
           go install github.com/t-yuki/gocover-cobertura@latest
           gocover-cobertura < ./reports/coverage.txt > ./reports/coverage.xml
