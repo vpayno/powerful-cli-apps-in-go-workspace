@@ -238,7 +238,8 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           go install github.com/t-yuki/gocover-cobertura@latest
-          gocover-cobertura < ./reports/coverage.txt > ./reports/coverage.xml
+          gocover-cobertura < ./reports/.coverage.out > ./reports/coverage.xml
+          wc ./reports/coverage.xml
 
       - name: Test Coverage Report (txt)
         id: go-test-coverage-txt
