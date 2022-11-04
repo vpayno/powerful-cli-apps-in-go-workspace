@@ -103,6 +103,19 @@ jobs:
         run: |
           go version
 
+      - name: Install bash 5.0 under macOS for mapfile
+        id: update-bash-on-macos
+        if: contains( matrix.os, 'macos')
+        run: |
+          printf "Before:\n"
+          which bash
+          bash --version | head -n 1
+          printf "\n"
+          brew install bash
+          printf "After:\n"
+          which bash
+          bash --version | head -n 1
+
       - name: Checkout PR Branch
         id: checkout-pr-branch
         run: |
