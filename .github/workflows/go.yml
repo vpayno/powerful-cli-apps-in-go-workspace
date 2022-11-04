@@ -362,4 +362,4 @@ jobs:
 
           language: go
           force-coverage-parser: go
-          coverage-reports: reports/coverage.xml
+          coverage-reports: ./reports/coverage.xml
