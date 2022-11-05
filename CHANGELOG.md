@@ -1,10 +1,10 @@
 # "Powerful Cli Applications in Go" Workspace Release Notes
 
 <details open>
-	<summary>
+    <summary>
 <h2> [2022-10-24] Release v0.3.7: add repo name and section folds to change log
 </h2>
-	</summary>
+    </summary>
 
 ### chore
 
@@ -15,13 +15,14 @@
 - add repo name to change log
 - add section folds to the change log
 - the latest fold in the change log defaults to open
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-10-24] Release v0.3.6: release fixes and update change log when releasing
 </h2>
-	</summary>
+    </summary>
 
 ### build(deps)
 
@@ -41,13 +42,14 @@
 ### doc
 
 - manually add v0.3.5 change log
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-10-23] Release v0.3.5: ci and doc updates, code clean up
 </h2>
-	</summary>
+    </summary>
 
 ### build(tools)
 
@@ -127,13 +129,14 @@
 ### fix
 
 - simplify setup() with bit flags
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-10-05] Release v0.3.4: fix --version and --version + --verbose usage
 </h2>
-	</summary>
+    </summary>
 
 ### build(tools)
 
@@ -196,13 +199,14 @@
 - add basic TestMain(m) functions to test dirs
 - add test cases for cli arg flags
 - rename testCase to dataTestCase
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-09-03] Release v0.3.3: ci, doc and chore updates
 </h2>
-	</summary>
+    </summary>
 
 ### chore
 
@@ -242,24 +246,26 @@
 ### test
 
 - add unicode tests, test both short and long arg tests
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-08-30] Release v0.3.2: testing goreleaser
 </h2>
-	</summary>
+    </summary>
 
 ### ci(goreleaser)
 
 - add initial config file
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-08-22] Release v0.3.1: simplify version data
 </h2>
-	</summary>
+    </summary>
 
 ### chore
 
@@ -271,24 +277,26 @@
 ### fix
 
 - remove gitVersion and use version instead
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-08-14] Release v0.3.0: add --max-line-length option
 </h2>
-	</summary>
+    </summary>
 
 ### feat
 
 - add option to show the maximum line length
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-08-14] Release v0.2.1: fix count print order
 </h2>
-	</summary>
+    </summary>
 
 ### chore
 
@@ -307,13 +315,14 @@
 ### test
 
 - make tests easier to ready by using long cli options
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-08-13] Release v0.2.0: newline, word, byte and char fixes
 </h2>
-	</summary>
+    </summary>
 
 ### build(tools)
 
@@ -361,26 +370,28 @@
 ### test
 
 - make it easier to share common test setup and teardown code in test files
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-08-08] Release v0.1.1: fix bugs
 </h2>
-	</summary>
+    </summary>
 
 ### fix
 
 - add a wordMode config variable to simplify things
 - get rid of the side-effect friendly global logVerbose var
 - include new line characters in byte count
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-08-08] Release v0.1.0: version bump
 </h2>
-	</summary>
+    </summary>
 
 ### feat
 
@@ -398,13 +409,14 @@
 ### test
 
 - fix missing test coverage - at 100%
+
 </details>
 
 <details>
-	<summary>
+    <summary>
 <h2> [2022-08-07] Release v0.0.0: initial release
 </h2>
-	</summary>
+    </summary>
 
 ### build(go)
 
@@ -448,4 +460,5 @@
 ### doc
 
 - update readme with project intro
+
 </details>

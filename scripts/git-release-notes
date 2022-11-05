@@ -43,7 +43,7 @@ git_cl() {
 		git_ref="${tag_previous}..${tag_latest}"
 	fi
 
-	git log --pretty=format:'- %s' --abbrev-commit --decorate "${git_ref}"
+	git log --pretty=format:'    - %s' --abbrev-commit --decorate "${git_ref}"
 } # git_cl()
 
 get_release_heading() {
@@ -72,7 +72,7 @@ get_release_heading() {
 	if [[ ${tag} == v0.0.0^ ]]; then
 		printf "Release v0.0.0: initial release\n"
 	else
-		git_cl "${tag%%:*}" | head -n 1 | sed -r -e 's/^- release: (v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+) (- )?/Release \1: /g'
+		git_cl "${tag%%:*}" | head -n 1 | sed -r -e 's/^    - release: (v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+) (- )?/Release \1: /g'
 	fi
 
 	printf "%s\n" "${heading_end}"
@@ -87,13 +87,13 @@ get_release_body() {
 
 	local -a sections
 
-	mapfile -t sections < <(git_cl "${tag}" | grep -v -E "^- release: " | filter_commits | awk '{ print $2 }' | tr -d ":" | sort -Vu)
+	mapfile -t sections < <(git_cl "${tag}" | grep -v -E "^    - release: " | filter_commits | awk '{ print $2 }' | tr -d ":" | sort -Vu)
 
 	for section in "${sections[@]}"; do
 		printf "\n"
 		printf -- "### %s\n" "${section,,}"
 		printf "\n"
-		git_cl "${tag}" | grep -v -E "^- release: " | filter_commits | sort -k 2,2 -V | grep -- "- ${section}: " | sed -r -e 's/^- [[:alpha:]].*: /- /g'
+		git_cl "${tag}" | grep -v -E "^    - release: " | filter_commits | sort -k 2,2 -V | grep -- "- ${section}: " | sed -r -e 's/^    - [[:alpha:]].*: /- /g'
 	done
 }
 
@@ -138,11 +138,11 @@ create_release_notes() {
 			printf "\n"
 		fi
 
-		[[ ${mode} =~ ^all|release-full:v.*$ ]] && printf "<details%s>\n\t<summary>\n" "${open_fold_flag}"
+		[[ ${mode} =~ ^all|release-full:v.*$ ]] && printf "<details%s>\n    <summary>\n" "${open_fold_flag}"
 		get_release_heading "${tag}" "${mode}"
-		[[ ${mode} =~ ^all|release-full:v.*$ ]] &&	printf "\t</summary>\n"
+		[[ ${mode} =~ ^all|release-full:v.*$ ]] &&	printf "    </summary>\n"
 		get_release_body "${tag}" "${mode}"
-		[[ ${mode} =~ ^all|release-full:v.*$ ]] && printf "</details>\n"
+		[[ ${mode} =~ ^all|release-full:v.*$ ]] && printf "\n</details>\n"
 
 		open_fold_flag=""
 	done

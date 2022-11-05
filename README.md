@@ -1,3 +1,14 @@
+# "Powerful Cli Applications in Go" Workspace
+
+This isn't a "real" project in the sense that it accepts PRs or should be used or forked by anyone as a real application.
+
+This is my workspace for learing concepts from the book.
+
+This is also my "notebook" on how to do things in Go or how to manage a Go project.
+
+
+## Badges
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/vpayno/powerful-cli-apps-in-go-workspace)](https://goreportcard.com/report/github.com/vpayno/powerful-cli-apps-in-go-workspace)
 [![CodeFactor](https://www.codefactor.io/repository/github/vpayno/powerful-cli-apps-in-go-workspace/badge)](https://www.codefactor.io/repository/github/vpayno/powerful-cli-apps-in-go-workspace)
 [![Maintainability](https://api.codeclimate.com/v1/badges/43c8f7b58097ca3fa1ec/maintainability)](https://codeclimate.com/github/vpayno/powerful-cli-apps-in-go-workspace/maintainability)
@@ -24,14 +35,6 @@
 [![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg)
 [![macOS](https://svgshare.com/i/ZjP.svg)](https://svgshare.com/i/ZjP.svg)
 [![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg)
-
-# "Powerful Cli Applications in Go" Workspace
-
-This isn't a "real" project in the sense that it accepts PRs or should be used or forked by anyone as a real application.
-
-This is my workspace for learing concepts from the book.
-
-This is also my "notebook" on how to do things in Go or how to manage a Go project.
 
 
 ## Book Info
@@ -66,17 +69,17 @@ The hot-fix can be skipped if it's using processes learned in the current chapte
 Commit messages are used to create change logs.
 
 For this and many other reasons, commit messages:
-- must only contain a single type of change.
-- must never be squashed together.
-- must have properly formatted commit messages.
-- should be in the present tense.
+    - must only contain a single type of change.
+    - must never be squashed together.
+    - must have properly formatted commit messages.
+    - should be in the present tense.
 
 As for the single type of change, it can include a lot of related changes to the same form:
-- formatting changes
-- linter recommended fixes
-- documentation (docs, comments, examples, etc.)
-- adding/removing a feature
-- fixing a feature
+    - formatting changes
+    - linter recommended fixes
+    - documentation (docs, comments, examples, etc.)
+    - adding/removing a feature
+    - fixing a feature
 
 That way when a PR is reviewed, one can click on each commit to see what changed.
 If you mix code formatting changes with a fix to an existing feature, it makes it a lot harder to see what changed.
@@ -89,13 +92,13 @@ If you find a bug that tests missed while updating documentation, make that bug 
 
 If in doubt about what categories may apply to an existing file or what commit messages look like, you can use
 
-```
+```text
 git log ./path/to/file
 ```
 
 or
 
-```
+```text
 tig ./path/to/file
 ```
 
@@ -104,17 +107,17 @@ to browse all the commit messages associated with that file.
 It's always best to check instead of just guessing.
 
 Commit messages can also include more information in their bodies help others understand the changes.
-- What error was prompted the fix?
-- How to test for the error.
+    - What error was prompted the fix?
+    - How to test for the error.
 
 <details>
-	<summary><h3>Commit message formats:</h3></summary>
+    <summary><h3>Commit message formats:</h3></summary>
 
-```
+```text
 category: short message stating what changed
 ```
 
-```
+```text
 category(subcategory): short message stating what changed
 ```
 
@@ -168,13 +171,13 @@ The script `././scripts/git-release-notes` can be used to create change logs for
 
 - Single tag:
 
-```
+```text
 ./scripts/git-release-notes v1.2.3
 ```
 
 - All tags:
 
-```
+```text
 ./scripts/git-release-notes all
 ```
 
@@ -192,7 +195,7 @@ The commit message and the annotated tag also contain the change log for the new
 
 To create a new release, from the *main* branch or from a hot-fix branch, run:
 
-```
+```text
 ./tag-release v1.2.3 "added feature x"
 ```
 
@@ -203,9 +206,7 @@ These changes get a patch version bump:
 These changes get a minor version bump:
 
 - When a new feature is merged into main.
-
 - When build system updates are added.
-
 - When dependency or Go version bumps are made.
 
 These changes get a major version bump:
@@ -226,12 +227,14 @@ When dependencies are updated, Dependabot will open a new PR with the updates.
 GitHub actions/workflows that run in PRs when Go files change will test the new dependencies automatically.
 
 For this to work with a high degree of confidence, we need
+
 - 100% [test coverage](https://codeclimate.com/github/vpayno/powerful-cli-apps-in-go-workspace) and
 - dependencies need to be tested without mocking them out of existence.
 
 Note: When CI secrets are added, they also need to be added as [Dependabot secrets](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/settings/secrets/dependabot) for any workflow that will run for a Dependabot PR.
 
 After a Dependabot PR is opened, two human actions are required:
+
 - Start a review and approve the PR.
 - In the review comment add the string `@dependabot merge` to automatically merge the PR after the CI checks have passed.
 
@@ -241,7 +244,7 @@ Only GitHub can sign Dependabot commits and if you merge the PR, the commits wil
 Commits can be signed and merged by hand on the CLI; However, it's easier to just ask Dependabot to merge the PR.
 
 <details>
-	<summary><hr4>Dependabot commands and options</hr4></summary>
+    <summary><hr4>Dependabot commands and options</hr4></summary>
 
 You can trigger Dependabot actions by commenting on the PR:
 
@@ -263,14 +266,14 @@ You can trigger Dependabot actions by commenting on the PR:
 
 [Install GoReleaser](https://goreleaser.com/install/):
 
-```
-$ go install github.com/goreleaser/goreleaser@latest
+```text
+go install github.com/goreleaser/goreleaser@latest
 ```
 
 Build Linux, OSX and Windows binaries:
 
-```
-$ make build-all
+```text
+make build-all
 ```
 
 For instructions on how to install individual applications, check the applications section for `go install url@tag` command you need.
@@ -288,23 +291,23 @@ I'm adding `cli-` prefix to the binaries so I don't replace the system version o
 
 Using `go install`
 
-```
-$ go install github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc@latest
+```text
+go install github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc@latest
 ```
 
 or
 
-```
-$ git clone https://github.com/vpayno/powerful-cli-apps-in-go-workspace.git
-$ cd powerful-cli-apps-in-go-workspace
-$ go generate
-# go install ./cmd/cli-wc/cli-wc.go
+```text
+git clone https://github.com/vpayno/powerful-cli-apps-in-go-workspace.git
+cd powerful-cli-apps-in-go-workspace
+go generate
+go install ./cmd/cli-wc/cli-wc.go
 ```
 
 
 #### *cli-wc* Usage
 
-```
+```text
 $ cli-wc --help
 Usage: cli-wc [OPTION]...
 
@@ -329,12 +332,12 @@ Options:
 
 - Show Version
 
-```
+```text
 $ cli-wc --version
 v0.3.4
 ```
 
-```
+```text
 $ cli-wc --version --verbose
 
 Word Count Version: v0.3.4
@@ -342,13 +345,13 @@ Word Count Version: v0.3.4
 
 - Default Counts
 
-```
+```text
 $ printf "%s\n" one two 😂 four five | cli-wc
       5       5      23
 
 ```
 
-```
+```text
 $ printf "%s\n" one two 😂 four five | cli-wc --verbose
 Word Count Version v0.2.1
 
@@ -357,12 +360,12 @@ Word Count Version v0.2.1
 
 - Count Words
 
-```
+```text
 $ printf "%s\n" one two 😂 four five | cli-wc --words
 5
 ```
 
-```
+```text
 $ printf "%s\n" one two 😂 four five | cli-wc --words --verbose
 Word Count Version v0.2.1
 
@@ -371,12 +374,12 @@ Word Count Version v0.2.1
 
 - Count Lines
 
-```
+```text
 $ printf "%s\n" one two 😂 four five | cli-wc --lines
 5
 ```
 
-```
+```text
 $ printf "%s\n" one two 😂 four five | cli-wc -lines --verbose
 Word Count Version v0.2.1
 
@@ -385,12 +388,12 @@ Word Count Version v0.2.1
 
 - Count Bytes
 
-```
+```text
 $ printf "%s\n" one two 😂 four five | cli-wc --bytes
 23
 ```
 
-```
+```text
 $ printf "%s\n" one two 😂 four five | cli-wc --bytes --verbose
 Word Count Version v0.2.1
 
@@ -399,12 +402,12 @@ Word Count Version v0.2.1
 
 - Count Chars
 
-```
+```text
 $ printf "%s\n" one two 😂 four five | cli-wc --chars
 20
 ```
 
-```
+```text
 $ printf "%s\n" one two 😂 four five | cli-wc --chars --verbose
 Word Count Version v0.2.1
 
@@ -413,12 +416,12 @@ Word Count Version v0.2.1
 
 - Max Line Length
 
-```
+```text
 $ printf "0123456\n0123456789\n😂\n01234\n1234567890123\n\n" | ./cli-wc --bytes --chars --lines --words --max-line-length
       6       5      42      45      13
 ```
 
-```
+```text
 $ printf "0123456\n0123456789\n😂\n01234\n1234567890123\n\n" | ./cli-wc --bytes --chars --lines --words --max-line-length --verbose
 Word Count Version v0.3.0
 
@@ -427,12 +430,12 @@ Word Count Version v0.3.0
 
 - All Counts
 
-```
+```text
 $ printf "\n%s\n" one two 😂 four five | cli-wc --bytes --chars --lines --words --max-line-length
       2       1      12      12      10
 ```
 
-```
+```text
 $ printf "\n%s\n" one two 😂 four five | cli-wc --bytes --chars --lines --words --max-line-length --verbose
 Word Count Version v0.3.0
 
