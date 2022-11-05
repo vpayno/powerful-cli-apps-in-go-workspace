@@ -31,6 +31,7 @@ This is also my "notebook" on how to do things in Go or how to manage a Go proje
 [![Spelling Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/misspell.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/misspell.yml)
 [![Json Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/json.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/json.yml)
 [![Yaml Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/yaml.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/yaml.yml)
+[![Markdown Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/markdown.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/markdown.yml)
 
 [![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg)
 [![macOS](https://svgshare.com/i/ZjP.svg)](https://svgshare.com/i/ZjP.svg)
