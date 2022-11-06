@@ -4,3 +4,8 @@ for f in .github/workflows/*yml; do
 	echo Running: actionlint "${f}"
 	actionlint "${f}" || printf "\n"
 done
+
+for f in .github/workflows/*yml; do
+	echo Running: yamllint "${f}"
+	yamllint "${f}" || printf "\n"
+done
