@@ -1,0 +1,197 @@
+#
+# .github/workflows/golang-bump.yml
+#
+
+# https://github.com/crazy-max/ghaction-import-gpg
+# https://github.com/juliangruber/approve-pull-request-action
+# https://github.com/peter-evans/create-or-update-project-card
+# https://github.com/peter-evans/create-pull-request
+# https://github.com/peter-evans/enable-pull-request-automerge
+---
+
+name: "Golang Version Bump Workflow"
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - main
+
+  schedule:
+    #         ┌───────────── minute (0 - 59)
+    #         │ ┌───────────── hour (0 - 23)
+    #         │ │ ┌───────────── day of the month (1 - 31)
+    #         │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+    #         │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+    #         │ │ │ │ │
+    #         │ │ │ │ │
+    #         │ │ │ │ │
+    #         * * * * *
+    - cron: '30 8 * * 4'
+
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  version-bump:
+    name: Golang Version Bump
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: write
+      id-token: write  # Enable OIDC
+      pull-requests: write
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.ref }}
+          submodules: recursive
+
+      # Adding this because the image usually has a dead version of Go.
+      - name: Set up Go (using version in go.mod)
+        id: setup-go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: './go.mod'
+
+      - name: Install Dependencies
+        run: |
+          go version
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Import GPG key
+        if: false
+        uses: chainguard-dev/actions/setup-gitsign@main
+
+      - name: GPG/Git Setup
+        run: |
+          git config commit.gpgsign true
+          git config user.signingKey 0xF26ABEB8EFED47A7
+
+      - name: Check GPG setup
+        run: |
+          echo "${{ secrets.GPG_PUBLIC_KEY }}" | gpg --import
+          printf "\n"
+          gpg --list-secret-keys --keyid-format=long
+
+      - name: Bump Golang Version
+        run: |
+          # git config user.name 'Victor Payno (GitHub Action Bot)'
+          git config user.name 'Victor Payno [Bot]'
+          git config user.email 'vpayno@users.noreply.github.com'
+          # git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git remote -v
+          printf "\n"
+          printf "Original branch name: "; git branch --show-current
+          git checkout "${GITHUB_REF:11}"
+          printf "Current branch name: "; git branch --show-current
+          git checkout -B bump_golang_version
+          printf "\n"
+          printf "PR branch name: "; git branch --show-current
+          printf "\n"
+          printf "%s=%s\n" OLD_GO_VER "$(awk '/^go / { print $NF }' go.mod)" | tee -a "${GITHUB_ENV}"
+          ./scripts/go-version-bump --github-action
+          printf "%s=%s\n" NEW_GO_VER "$(awk '/^go / { print $NF }' go.mod)" | tee -a "${GITHUB_ENV}"
+          printf "\n"
+          git add --update .
+          git commit -S -m "build(go): bump golang version to $(awk '/^go / { print $NF }' go.mod)"
+          printf "\n"
+          git show
+          printf "\n"
+          git verify-commit --verbose HEAD~0
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: bump_golang_version
+          force: true
+          github_token: ${{ secrets.PAT }}
+          tags: true
+
+      - name: Create Pull Request
+        id: cpr-disabled
+        if: false
+        run: |
+          printf "PR branch name: "; git branch --show-current
+          printf "\n"
+          # gh label create "automated pr" || true
+          # gh label create bump:minor || true
+          pull_request_url="$(gh pr create \
+            --assignee vpayno \
+            --base main \
+            --body "Bump Golang Version from ${OLD_GO_VER} to ${NEW_GO_VER}." \
+            --head bump_golang_version \
+            --label "bump:minor" \
+            --label "automated pr" \
+            --reviewer vpayno \
+            --title "Bump Golang Version to ${NEW_GO_VER}" \
+            )"
+          printf "%s=%s\n" pull-request-number "${pull_request_url##*/}" | tee -a "${GITHUB_OUTPUT}"
+          printf "%s=%s\n" pull-request-url "${pull_request_url}" | tee -a "${GITHUB_OUTPUT}"
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.PAT }}
+          base: main
+          branch: bump_golang_version
+          delete-branch: true
+          title: Bump Golang Version to ${{ env.NEW_GO_VER }}
+          body: |
+            Bump Golang Version
+
+            - Auto-generated by [create-pull-request][1]
+            - Auto-approved by [approve-pull-request-action][2]
+
+            [1]: https://github.com/peter-evans/create-pull-request
+            [2]: https://github.com/juliangruber/approve-pull-request-action
+          labels: |
+            bump:minor
+            automated pr
+          assignees: vpayno
+          commit-message: "build(go): bump golang version to ${{ env.NEW_GO_VER }}"
+          committer: Victor Payno [Bot] <vpayno@users.noreply.github.com>
+          author: Victor Payno [Bot] <vpayno@users.noreply.github.com>
+
+      - name: Check PR outputs
+        if: ${{ steps.cpr.outputs.pull-request-number }}
+        run: |
+          {
+            printf "Pull Request Number: %s\n" "${{ steps.cpr.outputs.pull-request-number }}"
+            printf "Pull Request URL   : %s\n" "${{ steps.cpr.outputs.pull-request-url }}"
+          } | tee -a "${GITHUB_STEP_SUMMARY}"
+
+      - name: Auto approve
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: juliangruber/approve-pull-request-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ steps.cpr.outputs.pull-request-number }}
+
+      - name: Enable Pull Request Automerge
+        if: false && steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # Error: Personal access tokens with fine grained access do not support the GraphQL API
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: rebase
