@@ -2,6 +2,119 @@
 
 <details open>
     <summary>
+<h2> [2022-11-05] Release v0.3.8: ci updates and new ci checks
+</h2>
+    </summary>
+
+### chore
+
+- add new tasks to todo list and sort it
+- update todo list
+
+### chore(markdownlint)
+
+- fix change log markdown lint issues
+
+### chore(yamllint)
+
+- clean up 'brackets' lint errors
+- clean up comments lint warnings
+- clean up document-start lint errors
+- clean up 'indentation' lint errors
+- clean up truthy lint warnings
+
+### ci
+
+- clean up comments/headers for all workflows
+- set workflows to run on push and prs
+
+### ci(bash)
+
+- add develop branch to push list
+
+### ci(codeql)
+
+- fix stage1 dependency name
+- fix workflow file name
+
+### ci(fossa)
+
+- fix stage1 dependency name
+
+### ci(gha)
+
+- add -oneline argument to actionlint
+- fix comment typo
+
+### ci(git)
+
+- revert to only running on pull-requests
+
+### ci(go)
+
+- change reviewdog reporter from github-pr-check to github-check
+- exclude changelog.md and pages-gh from misspell results
+- fix checkout-pr-branch so it can run on main or develop
+- fix CodacyCoverageReporter error
+- fix duplicate step id
+- fix typos
+- generate coverage.xml file
+- only generate coverage.xml for linux build
+- output data getting sent to reviewdog
+- remove codacy coverage repoerter and badge
+- remove misspell check
+- upgrade bash on macos
+- use correct input file for gocover-cobertura
+
+### ci(json)
+
+- add initial json check workflow
+
+### ci(markdown)
+
+- add initial markdownlint checks workflow
+
+### ci(spelling)
+
+- add spellcheck workflow
+
+### ci(tools)
+
+- fix release change log regeneration
+- fix typo in tag-release
+- redirect misspell stdout to stderr when generating change log
+- run misspell on change log files after generating them
+
+### ci(yaml)
+
+- add yaml checks workflow
+- set badge to use results from main branch
+
+### doc
+
+- add codacy badge to readme
+- add dependabot notes to readme
+- change heading structure of readme
+- only report the git workflow badge status for pull-requests
+- update badges to reflect state of main branch
+
+### docs
+
+- add commit message format information to readme
+- add extra blank line before headings
+- add release information to readme
+- add version information to readme
+- update build releases section
+- update change log section in readme
+
+### fix(codacy)
+
+- add missing go package comment
+
+</details>
+
+<details>
+    <summary>
 <h2> [2022-10-24] Release v0.3.7: add repo name and section folds to change log
 </h2>
     </summary>
