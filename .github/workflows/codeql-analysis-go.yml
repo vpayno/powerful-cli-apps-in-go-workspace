@@ -82,7 +82,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        go-version: ["1.18"]
         language: ['go']
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
@@ -111,11 +110,11 @@ jobs:
       # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
 
       # Adding this because the image has a dead version of Go.
-      - name: Set up Go ${{ matrix.go-version }}
+      - name: Set up Go (using version in go.mod)
         id: setup-go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version-file: './go.mod'
 
       - name: Install Dependencies
         run: |
