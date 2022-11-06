@@ -1,0 +1,54 @@
+#!/bin/bash
+
+die() {
+	printf "ERROR: %s\n" "$@"
+	exit 1
+}
+
+if ! git diff --quiet; then
+	die "please commit or stash your existing changes before running this script"
+fi
+
+golang_show_dl_urls() {
+	curl -sS https://go.dev/dl/ | grep 'class="download"' | sed -r -e 's/^.*href="(.*)">.*$/https:\/\/go.dev\1/' | sort -V
+}
+
+golang_show_dl_versions() {
+	golang_show_dl_urls | sed -r -e 's:^.*/go(.*)[.](zip|msi|tar.gz|pkg)$:\1:' | grep '[..]src$' | sed -r -e 's:[.]src::g' | grep -v -E '(beta|rc)' | grep -E '^[0-9]+[.][0-9]+$' | sort -V
+}
+
+declare -a FILES
+declare old_go_ver
+declare new_go_ver
+declare current_branch
+
+old_go_ver="$(awk '/^go / { print $NF }' go.mod)"
+new_go_ver="$(golang_show_dl_versions | tail -n 1)"
+
+if [[ ${old_go_ver} == "${new_go_ver}" ]]; then
+	printf "Golang version, %s, is already up to date.\n" "${old_go_ver}"
+	exit
+fi
+
+mapfile -t FILES < <(git grep --name-only "\b${old_go_ver//[.]/[.]}\b")
+
+sed -r -i -e "s/${old_go_ver}/${new_go_ver}/g" "${FILES[@]}" || die "failed to change the golang version"
+
+if git diff --quiet; then
+	git status
+	printf "\n"
+
+	git diff
+	printf "\n"
+
+	git add --update . || die "failed to stage the script's changes"
+
+	git commit -S -m "build(go): bump golang version to ${new_go_ver}" || die "failed to create a golang version bump commit"
+
+	current_branch="$(git branch --show-current)"
+
+	git push origin "${current_branch}" || die "failed to push the commit to 'origin ${current_branch}'"
+
+	printf "\n"
+	git show
+fi
