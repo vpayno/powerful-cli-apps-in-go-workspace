@@ -28,7 +28,7 @@ defaults:
     shell: bash
 
 jobs:
-  stage1:
+  go-change-check:
     name: Change Check
 
     runs-on: 'ubuntu-latest'
@@ -70,8 +70,9 @@ jobs:
           # Set the output named "docs_changed"
           printf "%s=%s\n" "docs_changed" "${HAS_DIFF}" >> "${GITHUB_OUTPUT}"
 
-  stage2:
+  go_checks:
     name: Go Checks
+
     strategy:
       matrix:
         go-version: ["1.18"]
@@ -79,9 +80,12 @@ jobs:
 
     runs-on: "${{ matrix.os }}"
 
+    outputs:
+      checks_completed: ${{ steps.go_checks_end.outputs.checks_completed }}
+
     needs:
-      - stage1
-    if: needs.stage1.outputs.docs_changed == 'True'
+      - go-change-check
+    if: needs.go-change-check.outputs.docs_changed == 'True'
 
     steps:
       - name: Checkout Repo
@@ -359,3 +363,23 @@ jobs:
           #git push origin ${{ github.ref }} # refs/pull/[0-9]+/merge
           git push origin "${GH_HEAD_REF}" # branch_name
           #git push origin ${{ github.base_ref }} # main
+
+      - name: Last Go Check
+        id: go_checks_end
+        run: |
+          # Set the output named "checks_completed"
+          printf "%s=%s\n" "checks_completed" "true" >> "${GITHUB_OUTPUT}"
+
+  go-check-barrier:
+    name: go-check-barrier-job
+
+    runs-on: 'ubuntu-latest'
+
+    needs:
+      - go_checks
+    if: needs.go_checks.outputs.checks_completed == 'True'
+
+    steps:
+      - name: Do nothing step to mark this workflow as "completed"
+        run: |
+          true

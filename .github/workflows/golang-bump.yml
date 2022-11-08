@@ -181,8 +181,16 @@ jobs:
             printf "Pull Request URL   : %s\n" "${{ steps.cpr.outputs.pull-request-url }}"
           } | tee -a "${GITHUB_STEP_SUMMARY}"
 
+      - name: Wait for Go checks to succeed
+        uses: fountainhead/action-wait-for-check@v1.1.0
+        id: wait-for-go-checks
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: go-check-barrier-job
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
       - name: Auto approve
-        if: steps.cpr.outputs.pull-request-operation == 'created'
+        if: steps.cpr.outputs.pull-request-operation == 'created' && steps.wait-for-go-checks.outputs.conclusion == 'success'
         uses: juliangruber/approve-pull-request-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
