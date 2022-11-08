@@ -12,10 +12,6 @@
 name: "Golang Version Bump Workflow"
 
 on:  # yamllint disable-line rule:truthy
-  push:
-    branches:
-      - main
-
   schedule:
     #         ┌───────────── minute (0 - 59)
     #         │ ┌───────────── hour (0 - 23)
