@@ -217,6 +217,37 @@ These changes get a major version bump:
 Artifact releases, to save space, will only be created at the end of a chapter.
 
 
+## Go Version Auto Updates
+
+The project as a scheduled job that runs every Wednesday that looks for a new major version of Golang.
+It won't update to the next version until after the first patch release exists.
+
+For example, when Golang `1.20` (`1.20.0`) is released, the script won't update the version in `go.mod` to `1.20` until version `1.20.1` is released.
+
+When it successfully creates a Golang version bump commit, with the commit message `build(go): bump golang version to major.minor`,
+it will also create a PR titled `Bump Golang Version to major.minor`.
+
+If the `Go Workflow` checks pass (which will be triggered by the change to `go.mod`), the pull-request will be auto-approved.
+Still working on auto-merging.
+
+For this to work with a high degree of confidence, we need
+
+- 100% [test coverage](https://codeclimate.com/github/vpayno/powerful-cli-apps-in-go-workspace) and
+- dependencies need to be tested without mocking them out of existence.
+
+To trigger a run manually run:
+
+```text
+gh workflow run 'Golang Version Bump Workflow'
+```
+
+To watch the workflow run:
+
+```text
+gh run watch $(gh run list --workflow "Golang Version Bump Workflow" --limit 1 --json 'databaseId' --jq '.[].databaseId')
+```
+
+
 ## Dependabot
 
 Dependabot configuration: [.github/dependabot.yml](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/blob/main/.github/dependabot.yml)
