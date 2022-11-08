@@ -94,6 +94,7 @@ jobs:
           gpg --list-secret-keys --keyid-format=long
 
       - name: Bump Golang Version
+        id: bump-golang-version
         run: |
           # git config user.name 'Victor Payno (GitHub Action Bot)'
           git config user.name 'Victor Payno [Bot]'
@@ -112,12 +113,20 @@ jobs:
           ./scripts/go-version-bump --github-action
           printf "%s=%s\n" NEW_GO_VER "$(awk '/^go / { print $NF }' go.mod)" | tee -a "${GITHUB_ENV}"
           printf "\n"
-          git add --update .
-          git commit -S -m "build(go): bump golang version to $(awk '/^go / { print $NF }' go.mod)"
-          printf "\n"
-          git show
-          printf "\n"
-          git verify-commit --verbose HEAD~0
+          if ! git diff --quiet; then
+            git add --update .
+            git commit -S -m "build(go): bump golang version to $(awk '/^go / { print $NF }' go.mod)"
+            printf "\n"
+            git show
+            printf "\n"
+            git verify-commit --verbose HEAD~0
+            printf "%s=%s\n" create-pr true | tee -a "${GITHUB_OUTPUT}"
+          else
+            printf "%s=%s\n" create-pr false | tee -a "${GITHUB_OUTPUT}"
+            {
+              printf "Golang version is already up to date.\n"
+            } | tee -a "${GITHUB_STEP_SUMMARY}"
+          fi
 
       - name: Push changes
         uses: ad-m/github-push-action@master
@@ -129,7 +138,7 @@ jobs:
 
       - name: Create Pull Request
         id: cpr-disabled
-        if: false
+        if: false && steps.bump-golang-version.outputs.create-pr == 'true'
         run: |
           printf "PR branch name: "; git branch --show-current
           printf "\n"
@@ -150,6 +159,7 @@ jobs:
 
       - name: Create Pull Request
         id: cpr
+        if: steps.bump-golang-version.outputs.create-pr == 'true'
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.PAT }}
@@ -183,6 +193,7 @@ jobs:
 
       - name: Wait for Go checks to succeed
         uses: fountainhead/action-wait-for-check@v1.1.0
+        if: ${{ steps.cpr.outputs.pull-request-number }}
         id: wait-for-go-checks
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
