@@ -86,28 +86,37 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Check Node Version
+        id: npm-version-check
+        run: |
+          npm --version
+
       - name: Set up Go (using version in go.mod)
         id: setup-go
         uses: actions/setup-go@v3
         with:
           go-version-file: './go.mod'
 
-      - name: Check Node Version
-        id: npm-version-check
+      - name: Show Go version
+        id: go-version
         run: |
-          npm --version
+          go version
 
       - name: Install ReviewDog
         id: install-reviewdog
         run: |
           go install github.com/reviewdog/reviewdog/cmd/reviewdog@latest
+          printf "Version: "
+          reviewdog --version
 
       - name: Install jsonlint
         id: install-jsonlint
         run: |
-          npm install jsonlint -g
+          npm install -g jsonlint
+          printf "Version: "
+          jsonlint --version || true  # yep, it fails when you query the version
           printf "\n"
-          jsonlint -h
+          jsonlint --help
 
       - name: JsonLint with Reviewdog
         id: run-jsonlint
