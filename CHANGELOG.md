@@ -2,6 +2,63 @@
 
 <details open>
     <summary>
+<h2> [2022-11-08] Release v0.3.9: ci fixes, add codebeat ci job, and add job that auto updates golang version
+</h2>
+    </summary>
+
+### build(go)
+
+- bump golang version to 1.19
+- knock down the Golang version from 1.19 to 1.18 to test the bump up script
+- set golang version to 1.18
+
+### ci(codebeat)
+
+- add codebeat go code coverage workflow
+
+### ci(codeql)
+
+- use golang version from go.mod
+
+### ci(golang-bump)
+
+- add scheduled workflow that bump golang version
+- auto-approve after go checks pass
+- don't run on push
+- fix errors from runs after version bump
+
+### ci(go)
+
+- fix shellcheck issue with which command
+- use go.mod for go version
+
+### ci(json)
+
+- add step to check golang, npm, reviewdog, jsonlint versions
+- use golang version from go.mod
+
+### ci(markdown)
+
+- use golang version from go.mod
+
+### ci(tools)
+
+- add script to bump the golang version to latest version
+- add yamllint check to gha-checks
+
+### ci(yaml)
+
+- add step to check yamllint version
+
+### doc
+
+- add information about automatic golang version bumps
+- fix go version badge
+
+</details>
+
+<details>
+    <summary>
 <h2> [2022-11-05] Release v0.3.8: ci updates and new ci checks
 </h2>
     </summary>
