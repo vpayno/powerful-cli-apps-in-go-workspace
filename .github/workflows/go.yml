@@ -75,7 +75,6 @@ jobs:
 
     strategy:
       matrix:
-        go-version: ["1.18"]
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
 
     runs-on: "${{ matrix.os }}"
@@ -96,11 +95,11 @@ jobs:
           ref: ${{ github.ref }}
           submodules: recursive
 
-      - name: Set up Go ${{ matrix.go-version }}
+      - name: Set up Go (using version in go.mod)
         id: setup-go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version-file: './go.mod'
 
       - name: Show Go version
         id: go-version
