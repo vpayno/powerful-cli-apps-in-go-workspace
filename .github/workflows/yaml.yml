@@ -87,3 +87,8 @@ jobs:
           fail_on_error: true
           # yamllint command flags
           yamllint_flags: '.'
+
+      - name: Show yamllint Version
+        id: yamllint-version
+        run: |
+          yamllint --version
