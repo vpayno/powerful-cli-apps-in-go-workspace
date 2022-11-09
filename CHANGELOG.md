@@ -2,6 +2,26 @@
 
 <details open>
     <summary>
+<h2> [2022-11-09] Release v0.4.0: bump golang version to 1.19
+</h2>
+    </summary>
+
+### build(go)
+
+- bump golang version to 1.19
+
+### ci(golang-bump)
+
+- add steps to run tag-release
+
+### ci(tools)
+
+- don't edit markdown files when bumping the golang version number
+
+</details>
+
+<details>
+    <summary>
 <h2> [2022-11-08] Release v0.3.9: ci fixes, add codebeat ci job, and add job that auto updates golang version
 </h2>
     </summary>
