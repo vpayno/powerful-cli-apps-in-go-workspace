@@ -9,8 +9,8 @@
 ### build(go)
 
 - bump golang version to 1.19
-- knock down the Golang version from 1.19 to 1.18 to test the bump up script
-- set golang version to 1.18
+- knock down the Golang version from 1.19 to 1.19 to test the bump up script
+- set golang version to 1.19
 
 ### ci(codebeat)
 
