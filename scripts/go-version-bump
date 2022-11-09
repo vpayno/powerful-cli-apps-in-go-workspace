@@ -46,7 +46,7 @@ if ! golang_show_dl_patch_versions | grep -q -E "^${new_go_ver}[.]1$"; then
 	exit # 0 exit code since this isn't a workflow error condition
 fi
 
-mapfile -t FILES < <(git grep --name-only "\b${old_go_ver//[.]/[.]}\b")
+mapfile -t FILES < <(git grep --name-only "\b${old_go_ver//[.]/[.]}\b" | grep -v -E '[.]md$')
 
 sed -r -i -e "s/${old_go_ver}/${new_go_ver}/g" "${FILES[@]}" || die "failed to change the golang version"
 
