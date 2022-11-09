@@ -48,12 +48,16 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           persist-credentials: false
           ref: ${{ github.ref }}
           submodules: recursive
+
+      - name: Show BASH Version
+        run: |
+          bash --version
 
       # Adding this because the image usually has a dead version of Go.
       - name: Set up Go (using version in go.mod)
@@ -65,6 +69,7 @@ jobs:
       - name: Install Dependencies
         run: |
           go version
+          go install github.com/client9/misspell/cmd/misspell@latest
 
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v5
@@ -195,6 +200,64 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           checkName: go-check-barrier-job
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Tag Release
+        id: tag-release
+        run: |
+          {
+            printf "\n"
+          } | tee -a "${GITHUB_STEP_SUMMARY}"
+
+          tag_mode="$(gh pr view "${{ steps.cpr.outputs.pull-request-number }}" --json labels --jq '.labels[] | select(.name | startswith("bump:")).name' | cut -f2 -d:)"
+          {
+            printf "Tag Bump Mode: %s\n" "${tag_mode}"
+          } | tee -a "${GITHUB_STEP_SUMMARY}"
+
+          latest_tag="$(git tag | sort -V | grep -E "^v[0-9]+.[0-9]+.[0-9]+$" | tail -n 1)"
+          {
+            printf "Latest Tag: %s\n" "${latest_tag}"
+          } | tee -a "${GITHUB_STEP_SUMMARY}"
+
+          declare -i major=0 minor=0 hotfix=0
+          regex="^v([0-9]+)[.]([0-9]+)[.]([0-9]+)$"
+
+          if [[ ${latest_tag} =~ ${regex} ]]; then
+            # shellcheck disable=SC2004
+            {
+              # It seems that adding by 0 returns an error.
+              (( major += ${BASH_REMATCH[1]} )) || true
+              (( minor += ${BASH_REMATCH[2]} )) || true
+              (( hotfix += ${BASH_REMATCH[3]} )) || true
+            }
+          else
+            printf "ERROR: invalid tag mode [%s]\n" "${tag_mode:-not set}"
+          fi
+
+          if [[ ${tag_mode} == major ]]; then
+            (( major+=1 ))
+            minor=0
+            hotfix=0
+          elif [[ ${tag_mode} == minor ]]; then
+            (( minor+=1 ))
+            hotfix=0
+          elif [[ ${tag_mode} == patch ]]; then
+            (( hotfix+=1 ))
+          fi
+
+          printf -v next_tag "v%d.%d.%d" "${major}" "${minor}" "${hotfix}"
+          {
+            printf "  Next Tag: %s\n" "${next_tag}"
+          } | tee -a "${GITHUB_STEP_SUMMARY}"
+
+          ./tag-release "${next_tag}" "bump golang version to ${{ env.NEW_GO_VER }}"
+
+      - name: Push tag changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: bump_golang_version
+          force: false
+          github_token: ${{ secrets.PAT }}
+          tags: true
 
       - name: Auto approve
         if: steps.cpr.outputs.pull-request-operation == 'created' && steps.wait-for-go-checks.outputs.conclusion == 'success'
