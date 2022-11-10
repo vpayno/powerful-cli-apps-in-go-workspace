@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2022-11-10] Release v0.5.2: sort changelog entries
+</h2>
+    </summary>
+
+### ci(tools)
+
+- sort section entries
+
+</details>
+
+<details>
+    <summary>
 <h2> [2022-11-10] Release v0.5.1: more gh auto-bump golang version in go.mod experiments
 </h2>
     </summary>
@@ -145,11 +157,11 @@
 
 ### chore(yamllint)
 
-- clean up 'brackets' lint errors
 - clean up comments lint warnings
 - clean up document-start lint errors
-- clean up 'indentation' lint errors
 - clean up truthy lint warnings
+- clean up 'brackets' lint errors
+- clean up 'indentation' lint errors
 
 ### ci
 
@@ -182,8 +194,8 @@
 
 - change reviewdog reporter from github-pr-check to github-check
 - exclude changelog.md and pages-gh from misspell results
-- fix checkout-pr-branch so it can run on main or develop
 - fix CodacyCoverageReporter error
+- fix checkout-pr-branch so it can run on main or develop
 - fix duplicate step id
 - fix typos
 - generate coverage.xml file
@@ -363,8 +375,8 @@
 ### doc
 
 - add change log for existing releases
-- add collapsable section in ch01 for the examples
 - add collapsable sections for each chapter
+- add collapsable section in ch01 for the examples
 - update readme to show v0.3.4 version usage
 
 ### fix
@@ -416,8 +428,8 @@
 
 ### doc
 
-- add codefactor badge to readme
 - add Go version badge to readme
+- add codefactor badge to readme
 - add linux, macos, windows badges to readme
 - add made with go badge to readme
 
@@ -476,8 +488,8 @@
 
 ### doc
 
-- add code of conduct
 - add codeql badge and create a new badge row for the main checks
+- add code of conduct
 - add goreleaser installation and artifact build instructions
 - add latest version and release badges to readme
 - add security policy
@@ -587,20 +599,20 @@
 ### feat
 
 - add long command-line options
-- add -r rune mode
 - add usage help message
+- add -r rune mode
 - let -l, -w, -c, -b be used like they are in the coreutils wc cli
 
 ### fix
 
 - add more test cases, fix bugs with getCounts()
 - add -w argument and let -b and -l override -w
-- change -b to -c to match wc from coreutils
 - change non-verbose output to match wc from coreutils
-- change -r to -m to match wc from coreutils
-- change "rune" to "char" to match coreutils wc
-- change the help string for -l and -w to match wc from coreutils
 - change the help string for -V to match wc from coreutils
+- change the help string for -l and -w to match wc from coreutils
+- change "rune" to "char" to match coreutils wc
+- change -b to -c to match wc from coreutils
+- change -r to -m to match wc from coreutils
 - include new lines in byte count
 - make sure Usage() shows supported flags
 - properly define flags.Parse() side-effect behavior at run-time and during tests
@@ -669,9 +681,9 @@
 
 ### chore
 
-- add .editorconfig file
 - add inititial go directory skeleton
 - add todo list
+- add .editorconfig file
 - set coverage to 0%
 
 ### ci
