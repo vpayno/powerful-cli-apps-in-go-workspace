@@ -138,8 +138,8 @@ jobs:
           tags: true
 
       - name: Create Pull Request
-        id: cpr-disabled
-        if: false && steps.bump-golang-version.outputs.create-pr == 'true'
+        id: cpr
+        if: steps.bump-golang-version.outputs.create-pr == 'true'
         run: |
           printf "PR branch name: "; git branch --show-current
           printf "\n"
@@ -148,7 +148,12 @@ jobs:
           pull_request_url="$(gh pr create \
             --assignee vpayno \
             --base main \
-            --body "Bump Golang Version from ${OLD_GO_VER} to ${NEW_GO_VER}." \
+            --body "Bump Golang Version from ${OLD_GO_VER} to ${NEW_GO_VER}.
+
+            - Auto-approved by [approve-pull-request-action][1]
+
+            [1]: https://github.com/juliangruber/approve-pull-request-action
+            " \
             --head bump_golang_version \
             --label "bump:minor" \
             --label "automated pr" \
@@ -159,8 +164,8 @@ jobs:
           printf "%s=%s\n" pull-request-url "${pull_request_url}" | tee -a "${GITHUB_OUTPUT}"
 
       - name: Create Pull Request
-        id: cpr
-        if: steps.bump-golang-version.outputs.create-pr == 'true'
+        id: cpr-disabled
+        if: false && steps.bump-golang-version.outputs.create-pr == 'true'
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.PAT }}
