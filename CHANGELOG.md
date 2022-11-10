@@ -2,9 +2,22 @@
 
 <details open>
     <summary>
-<h2> [2022-11-09] Release v0.4.1: add govulncheck check
+<h2> [2022-11-10] Release v0.5.0: bump golang version to 1.19
 </h2>
     </summary>
+
+### build(go)
+
+- bump golang version to 1.19
+- downgrade golang version to 1.18
+
+### chore
+
+- update todo list
+
+### ci(golang-bump)
+
+- switch to using gh to create pr
 
 ### ci(go)
 
@@ -107,9 +120,9 @@
 ### chore(yamllint)
 
 - clean up 'brackets' lint errors
+- clean up 'indentation' lint errors
 - clean up comments lint warnings
 - clean up document-start lint errors
-- clean up 'indentation' lint errors
 - clean up truthy lint warnings
 
 ### ci
@@ -143,8 +156,8 @@
 
 - change reviewdog reporter from github-pr-check to github-check
 - exclude changelog.md and pages-gh from misspell results
-- fix checkout-pr-branch so it can run on main or develop
 - fix CodacyCoverageReporter error
+- fix checkout-pr-branch so it can run on main or develop
 - fix duplicate step id
 - fix typos
 - generate coverage.xml file
@@ -271,8 +284,8 @@
 
 ### ci(fossa)
 
-- add fossa test step
 - add --help and list-targets output
+- add fossa test step
 - rename action yaml file, fix set-output deprecation notice and convert from pwsh to bash
 - set the default run shell to bash
 
@@ -377,8 +390,8 @@
 
 ### doc
 
-- add codefactor badge to readme
 - add Go version badge to readme
+- add codefactor badge to readme
 - add linux, macos, windows badges to readme
 - add made with go badge to readme
 
@@ -547,21 +560,21 @@
 
 ### feat
 
-- add long command-line options
 - add -r rune mode
+- add long command-line options
 - add usage help message
 - let -l, -w, -c, -b be used like they are in the coreutils wc cli
 
 ### fix
 
-- add more test cases, fix bugs with getCounts()
 - add -w argument and let -b and -l override -w
-- change -b to -c to match wc from coreutils
-- change non-verbose output to match wc from coreutils
-- change -r to -m to match wc from coreutils
+- add more test cases, fix bugs with getCounts()
 - change "rune" to "char" to match coreutils wc
-- change the help string for -l and -w to match wc from coreutils
+- change -b to -c to match wc from coreutils
+- change -r to -m to match wc from coreutils
+- change non-verbose output to match wc from coreutils
 - change the help string for -V to match wc from coreutils
+- change the help string for -l and -w to match wc from coreutils
 - include new lines in byte count
 - make sure Usage() shows supported flags
 - properly define flags.Parse() side-effect behavior at run-time and during tests
