@@ -157,6 +157,8 @@ jobs:
             )"
           printf "%s=%s\n" pull-request-number "${pull_request_url##*/}" | tee -a "${GITHUB_OUTPUT}"
           printf "%s=%s\n" pull-request-url "${pull_request_url}" | tee -a "${GITHUB_OUTPUT}"
+          sleep 1s # to make sure the next command does find the pr
+          gh pr merge --auto --rebase --delete-branch "${pull_request_url##*/}"
 
       - name: Create Pull Request (peter-evans/create-pull-request)
         id: cpr-disabled
