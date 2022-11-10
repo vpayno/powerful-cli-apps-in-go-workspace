@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2022-11-09] Release v0.4.1: add govulncheck check
+</h2>
+    </summary>
+
+### ci(go)
+
+- add govulncheck check
+
+</details>
+
+<details>
+    <summary>
 <h2> [2022-11-09] Release v0.4.0: bump golang version to 1.19
 </h2>
     </summary>
