@@ -93,7 +93,7 @@ get_release_body() {
 		printf "\n"
 		printf -- "### %s\n" "${section,,}"
 		printf "\n"
-		git_cl "${tag}" | grep -v -E "^    - release: " | filter_commits | sort -k 2,2 -V | grep -- "- ${section}: " | sed -r -e 's/^    - [[:alpha:]].*: /- /g'
+		git_cl "${tag}" | grep -v -E "^    - release: " | filter_commits | sort -k 2,2 -V | grep -- "- ${section}: " | sed -r -e 's/^    - [[:alpha:]].*: /- /g' | sort -V
 	done
 }
 
