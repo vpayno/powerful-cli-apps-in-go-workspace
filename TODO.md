@@ -3,7 +3,6 @@
 ## Ch01: cli-wc
 
 - debug: play with debuggers
-- dependabot: badge?
 - doc: add auto-generated man/info pages
 - feat: add coroutines to speed up large file reads
 - feat: add file support
@@ -12,7 +11,6 @@
 - feat: add rest api
 - feat: add wasm interface
 - feat: use cobra&viper cli modules?
-- fossa: badge for other steps?
 - fossa: remove bootstrap and other dep it complains about
 - site: add github pages
 - site: add github wiki
