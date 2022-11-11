@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2022-11-10] Release v0.5.4: give up on the auto-tag and auto-merge dream for now
+</h2>
+    </summary>
+
+### ci(golang-bump)
+
+- disable auto-merge command
+
+</details>
+
+<details>
+    <summary>
 <h2> [2022-11-10] Release v0.5.3: give up on the auto-tag and auto-merge dream for now
 </h2>
     </summary>
