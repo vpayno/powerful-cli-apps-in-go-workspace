@@ -255,6 +255,7 @@ jobs:
             printf "  Next Tag: %s\n" "${next_tag}"
           } | tee -a "${GITHUB_STEP_SUMMARY}"
 
+          PR_COMMENT1="$(mktemp)"
           {
             printf "\n"
             printf "Merge the PR using git on the command-line to make sure the commits remain signed.\n"
@@ -284,6 +285,7 @@ jobs:
             printf "%s\n" '```'
           } | tee -a "${PR_COMMENT1}"
 
+          PR_COMMENT2="$(mktemp)"
           {
             printf "\n"
             printf "Command to run after merging the PR on the cli:\n"
