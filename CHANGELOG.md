@@ -2,6 +2,24 @@
 
 <details open>
     <summary>
+<h2> [2022-11-10] Release v0.6.0: bump golang version to 1.19
+</h2>
+    </summary>
+
+### build(go)
+
+- bump golang version to 1.19
+
+### ci(golang-bump)
+
+- fix merge instructions comment
+- fix pr comment generation
+- put tag-release command comment in a code block
+
+</details>
+
+<details>
+    <summary>
 <h2> [2022-11-10] Release v0.5.4: give up on the auto-tag and auto-merge dream for now
 </h2>
     </summary>
