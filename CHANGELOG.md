@@ -2,6 +2,27 @@
 
 <details open>
     <summary>
+<h2> [2022-11-10] Release v0.5.3: give up on the auto-tag and auto-merge dream for now
+</h2>
+    </summary>
+
+### build(go)
+
+- bump golang version to 1.19
+- revert golang version to 1.18
+
+### ci(golang-bump)
+
+- don't auto-approve or auto-merge and add comments and summary with merge and tag commands
+
+### ci(tools)
+
+- check to see if the tag already exits before tagging a release
+
+</details>
+
+<details>
+    <summary>
 <h2> [2022-11-10] Release v0.5.2: sort changelog entries
 </h2>
     </summary>
