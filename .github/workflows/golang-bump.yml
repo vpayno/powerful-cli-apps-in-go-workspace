@@ -158,7 +158,7 @@ jobs:
           printf "%s=%s\n" pull-request-number "${pull_request_url##*/}" | tee -a "${GITHUB_OUTPUT}"
           printf "%s=%s\n" pull-request-url "${pull_request_url}" | tee -a "${GITHUB_OUTPUT}"
           sleep 1s # to make sure the next command does find the pr
-          gh pr merge --auto --rebase --delete-branch "${pull_request_url##*/}"
+          gh pr merge --auto --squash --delete-branch "${pull_request_url##*/}"
 
       - name: Create Pull Request (peter-evans/create-pull-request)
         id: cpr-disabled
@@ -196,7 +196,7 @@ jobs:
 
       - name: Wait for Go checks to succeed
         uses: fountainhead/action-wait-for-check@v1.1.0
-        if: ${{ steps.cpr.outputs.pull-request-number }}
+        if: false && ${{ steps.cpr.outputs.pull-request-number }}
         id: wait-for-go-checks
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -251,7 +251,48 @@ jobs:
             printf "  Next Tag: %s\n" "${next_tag}"
           } | tee -a "${GITHUB_STEP_SUMMARY}"
 
-          ./tag-release "${next_tag}" "bump golang version to ${{ env.NEW_GO_VER }}"
+          {
+            printf "\n"
+            printf "Merge the PR using git on the command-line to make sure the commits remain signed.\n"
+            printf "\n"
+            printf "%s\n" '```'
+            printf "$ %s\n" "git config --global alias.fetchpr '"'!'"pr() { git fetch origin pull/\$1/head:prs/\$1; git co prs/\$1; }; pr'"
+            printf "\n"
+            printf "%s\n" "$ git config --global alias.lg \"log --color=auto --graph --pretty=format:'%Cred%<(8)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an> [%ce] %Creset%C(cyan)[gpg: %G?]%Creset' --abbrev-commit --decorate\""
+            printf "\n"
+            printf "$ git checkout main\n"
+            printf "\n"
+            printf "$ git pull origin main\n"
+            printf "\n"
+            printf "$ git lg -n 5\n"
+            printf "\n"
+            printf "$ git fetchpr %s\n" "${{ steps.cpr.outputs.pull-request-url }}"
+            printf "\n"
+            printf "$ git lg -n 5\n"
+            printf "\n"
+            printf "$ git checkout main\n"
+            printf "\n"
+            printf "$ git merge --ff-only prs/%s\n" "${{ steps.cpr.outputs.pull-request-url }}"
+            printf "\n"
+            printf "$ git lg -n 5\n"
+            printf "\n"
+            printf "$ git push origin main\n"
+            printf "%s\n" '```'
+          } | tee -a "${PR_COMMENT1}"
+
+          {
+            printf "\n"
+            printf "Command to run after merging the PR on the cli:\n"
+            printf "\n"
+            printf "./tag-release %s \"bump golang version to %s\"\n" "${next_tag}" "${{ env.NEW_GO_VER }}"
+          } | tee -a "${PR_COMMENT2}"
+
+          cat "${PR_COMMENT1}" >> "${GITHUB_STEP_SUMMARY}"
+          cat "${PR_COMMENT2}" >> "${GITHUB_STEP_SUMMARY}"
+
+          gh pr comment "${{ steps.cpr.outputs.pull-request-url }}" --body-file "${PR_COMMENT1}"
+          sleep 1s
+          gh pr comment "${{ steps.cpr.outputs.pull-request-url }}" --body-file "${PR_COMMENT2}"
 
       - name: Push tag changes
         uses: ad-m/github-push-action@master
@@ -262,7 +303,7 @@ jobs:
           tags: true
 
       - name: Auto approve
-        if: steps.cpr.outputs.pull-request-operation == 'created' && steps.wait-for-go-checks.outputs.conclusion == 'success'
+        if: false && steps.cpr.outputs.pull-request-operation == 'created' && steps.wait-for-go-checks.outputs.conclusion == 'success'
         uses: juliangruber/approve-pull-request-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
