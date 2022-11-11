@@ -290,7 +290,9 @@ jobs:
             printf "\n"
             printf "Command to run after merging the PR on the cli:\n"
             printf "\n"
+            printf "%s\n" '```'
             printf "./tag-release %s \"bump golang version to %s\"\n" "${next_tag}" "${{ env.NEW_GO_VER }}"
+            printf "%s\n" '```'
           } | tee -a "${PR_COMMENT2}"
 
           cat "${PR_COMMENT1}" >> "${GITHUB_STEP_SUMMARY}"
