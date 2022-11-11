@@ -143,8 +143,10 @@ jobs:
         run: |
           printf "PR branch name: "; git branch --show-current
           printf "\n"
+
           # gh label create "automated pr" || true
           # gh label create bump:minor || true
+
           pull_request_url="$(gh pr create \
             --assignee vpayno \
             --base main \
@@ -155,10 +157,12 @@ jobs:
             --reviewer vpayno \
             --title "Bump Golang Version to ${NEW_GO_VER}" \
             )"
+
           printf "%s=%s\n" pull-request-number "${pull_request_url##*/}" | tee -a "${GITHUB_OUTPUT}"
           printf "%s=%s\n" pull-request-url "${pull_request_url}" | tee -a "${GITHUB_OUTPUT}"
-          sleep 1s # to make sure the next command does find the pr
-          gh pr merge --auto --squash --delete-branch "${pull_request_url##*/}"
+
+          # sleep 1s # to make sure the next command does find the pr
+          # gh pr merge --auto --rebase --delete-branch "${pull_request_url##*/}"
 
       - name: Create Pull Request (peter-evans/create-pull-request)
         id: cpr-disabled
