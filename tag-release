@@ -8,6 +8,11 @@ if [[ ! ${tag} =~ ^v[[:digit:]]+[.][[:digit:]]+[.][[:digit:]]+$ ]]; then
 	exit 1
 fi
 
+if git tag | grep -q -E "^${tag}$"; then
+	printf "ERROR: tag %s already exists!\n" "${tag}"
+	exit 1
+fi
+
 if [[ ${title} == not_set ]]; then
 	printf "ERROR: message is missing\n"
 	printf "\n"
