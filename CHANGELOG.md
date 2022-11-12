@@ -2,6 +2,41 @@
 
 <details open>
     <summary>
+<h2> [2022-11-11] Release v0.6.1: ci chore work
+</h2>
+    </summary>
+
+### build(tools)
+
+- generate coverage.xml
+
+### chore
+
+- add node package json files to git ignore
+- add proselint config
+
+### ci(codacy-go)
+
+- add initial codacy code coverage check
+- remove workflow
+
+### ci(draft-check)
+
+- move git fixup check to new workflow
+
+### ci(git)
+
+- new workflow that checks for convensional commit messages
+- run on push to main & develop branches
+
+### doc
+
+- set git workflow badge to track main branch
+
+</details>
+
+<details>
+    <summary>
 <h2> [2022-11-10] Release v0.6.0: bump golang version to 1.19
 </h2>
     </summary>
