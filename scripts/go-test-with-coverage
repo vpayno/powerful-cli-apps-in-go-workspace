@@ -1,7 +1,9 @@
 #!/bin/bash
 
 main() {
+	echo go generate ./...
 	go generate ./...
+	printf "\n"
 
 	echo gotest -v -covermode=count -coverprofile=./reports/.coverage.out -cover ./...
 	time gotest -v -covermode=count -coverprofile=./reports/.coverage.out -cover ./...
@@ -15,6 +17,10 @@ main() {
 
 	echo go tool cover -func=./reports/.coverage.out -o=reports/coverage.txt
 	time go tool cover -func=./reports/.coverage.out -o=reports/coverage.txt
+	printf "\n"
+
+	echo gocover-cobertura '<' ./reports/.coverage.out '>' ./reports/coverage.xml
+	time gocover-cobertura < ./reports/.coverage.out > ./reports/coverage.xml
 	printf "\n"
 
 	printf "=== ./reports/coverage.txt ===\n"
