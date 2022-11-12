@@ -1,0 +1,29 @@
+#
+# .github/workflows/git.yml
+#
+
+# https://www.conventionalcommits.org/en/v1.0.0/
+# https://github.com/webiny/action-conventional-commits
+---
+
+name: Git Workflow
+
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  block-fixup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        id: checkout-repo
+        uses: actions/checkout@v3
+
+      - name: Check for Conventional Commits
+        id: block-if-contains-bad-commit-messages
+        uses: webiny/action-conventional-commits@v1.1.0
