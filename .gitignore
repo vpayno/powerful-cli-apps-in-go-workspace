@@ -27,3 +27,7 @@ octocov
 *.lock
 site/
 public/
+
+# Node
+package-lock.json
+package.json
