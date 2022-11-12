@@ -1,0 +1,7 @@
+{
+	"checks": {
+		"leonard.exclamation.30ppm": false,
+		"typography.symbols": false,
+    "annotations.misc": false
+	}
+}
