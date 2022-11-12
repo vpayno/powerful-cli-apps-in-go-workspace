@@ -1,11 +1,11 @@
 #
-# .github/workflows/git.yml
+# .github/workflows/draft_check.yml
 #
 
 # https://github.com/13rac1/block-fixup-merge-action
 ---
 
-name: Git Workflow
+name: Draft Check Workflow
 
 on:  # yamllint disable-line rule:truthy
   pull_request:
