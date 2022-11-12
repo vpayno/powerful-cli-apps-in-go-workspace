@@ -26,7 +26,7 @@ This is also my "notebook" on how to do things in Go or how to manage a Go proje
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B33315%2Fgithub.com%2Fvpayno%2Fpowerful-cli-apps-in-go-workspace.svg?branch=main&type=shield)](https://app.fossa.com/projects/custom%2B33315%2Fgithub.com%2Fvpayno%2Fpowerful-cli-apps-in-go-workspace?ref=badge_shield)
 
 [![Bash Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/bash.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/bash.yml)
-[![Git Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/git.yml/badge.svg)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/git.yml)
+[![Git Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/git.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/git.yml)
 [![Link Check Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/links.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/links.yml)
 [![Woke Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/woke.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/woke.yml)
 
