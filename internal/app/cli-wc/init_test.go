@@ -30,13 +30,13 @@ func TestExitVerbose(t *testing.T) {
 	}()
 
 	// It's a silly test but I need the practice mocking.
-	code := 123
+	code := 1
 	msg := "testing Exit()"
 	want := fmt.Sprintf("%s\nCalling os.Exit(%d)...\n", msg, code)
 
 	OSExitBackup := OSExit
 	OSExit = func(code int) { fmt.Printf("Calling os.Exit(%d)...\n", code) }
-	Exit(code, msg)
+	Exit(fmt.Errorf("%s", msg))
 	OSExit = OSExitBackup
 
 	// Stop capturing stdout.

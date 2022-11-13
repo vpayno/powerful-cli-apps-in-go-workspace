@@ -5,8 +5,13 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
+	"regexp"
 	"strings"
 )
+
+// OSExit is used to Money Patch the Exit function during testing.
+var OSExit = os.Exit
 
 // This is used to disable side-effects like flag calling os.Exit() during tests when it encounters an error or the --help flag.
 var flagExitErrorBehavior = flag.ExitOnError
@@ -17,9 +22,12 @@ type appInfo struct {
 	version   string
 	gitHash   string
 	buildTime string
+	cliName   string
+	appData   string
 }
 
 var metadata = appInfo{
+	cliName: "cli-wc",
 	name:    "Word Count",
 	version: "0.0.0",
 }
@@ -39,6 +47,7 @@ var defaultFlags = byteFlag | wordFlag | lineFlag
 type config struct {
 	flags       uint64
 	modes       map[string]bool
+	updateMode  bool
 	verboseMode bool
 	versionMode bool
 }
@@ -62,6 +71,7 @@ Options:
   -l, --lines            print the newline counts
   -w, --words            print the word counts
   -h, --help             display this help and exit
+  -u, --update           update mode
   -v, --version          output version information and exit
   -V, --verbose          verbose mode
 `
@@ -103,6 +113,11 @@ func SetVersion(b []byte) {
 	}
 }
 
+// SetAppInfo is used by the main package to pass application information th the app package.
+func SetAppInfo(appData string) {
+	metadata.appData = appData
+}
+
 func showVersion(conf config) {
 	if !conf.verboseMode {
 		fmt.Printf("%s\n", metadata.version)
@@ -123,11 +138,80 @@ func showVersion(conf config) {
 	fmt.Println()
 }
 
-// OSExit is used to Money Patch the Exit function during testing.
-var OSExit = os.Exit
+func getInstallURL() string {
+	// reStrMatch := `^module .*$`
+	reStrMatch := `^.*$`
+	var srcURL string
 
-// Exit is used to prematurely end the application with an exit code and message to stdout.
-func Exit(code int, msg string) {
-	fmt.Println(msg)
+	for _, line := range strings.Split(metadata.appData, "\n") {
+		match, _ := regexp.MatchString(reStrMatch, line)
+
+		if match {
+			// reStrURL := `^(module )([a-z].*)(|/v[0-9]+)?$`
+			reStrURL := `^([a-z].*)(|/v[0-9]+)$`
+			r, _ := regexp.Compile(reStrURL)
+
+			// srcURL = r.ReplaceAllString(line, `$2`)
+			srcURL = r.ReplaceAllString(line, `$1`)
+
+			break
+		}
+	}
+
+	appName := metadata.cliName
+
+	return srcURL + "/cmd/" + appName + "@latest"
+}
+
+func updateApp() error {
+	installURL := getInstallURL()
+
+	fmt.Println("Running:", "go", "install", installURL)
+	fmt.Println()
+
+	out, err := exec.Command("go", "install", installURL).Output()
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	fmt.Println("No errors detected during installation.")
+	fmt.Println()
+	if len(string(out)) > 0 {
+		fmt.Println(string(out))
+		fmt.Println()
+	}
+
+	// TODO: add checks for Go environment variables
+
+	appName := metadata.cliName
+
+	fmt.Printf("Running '%s --version': ", appName)
+
+	out, err = exec.Command(appName, "--version").Output()
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	if len(string(out)) > 0 {
+		fmt.Println(string(out))
+		fmt.Println()
+	}
+
+	return nil
+}
+
+// Exit is used to end the application with an exit code and message to stderr.
+func Exit(err error) {
+	var code int
+
+	if err != nil {
+		code += 1
+		fmt.Println(err)
+	}
+
 	OSExit(code)
 }

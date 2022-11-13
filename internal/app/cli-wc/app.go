@@ -17,27 +17,33 @@ func showBanner() {
 }
 
 // RunApp is called my the main function. It's basically the main function of the app.
-func RunApp() {
+func RunApp() error {
 	conf, err := setup()
 
 	if err != nil {
 		fmt.Print("Error: ")
 		fmt.Println(err)
-		return
+		return nil
 	}
 
 	if conf.versionMode {
 		showVersion(conf)
-		return
+		return nil
 	}
 
 	if conf.verboseMode {
 		showBanner()
 	}
 
+	if conf.updateMode {
+		return updateApp()
+	}
+
 	counts := getCounts(os.Stdin, conf)
 
 	showCount(counts, conf)
+
+	return nil
 }
 
 // Usage prints the command-line usage help message.
@@ -64,9 +70,12 @@ func setup() (config, error) {
 	flagSet.BoolVar(&wordFlagPtr, "w", false, "print the word counts")
 	flagSet.BoolVar(&wordFlagPtr, "words", false, "print the word counts")
 
+	var updateFlagPtr bool
 	var verboseFlagPtr bool
 	var versionFlagPtr bool
 
+	flagSet.BoolVar(&updateFlagPtr, "u", false, "update mode")
+	flagSet.BoolVar(&updateFlagPtr, "update", false, "update mode")
 	flagSet.BoolVar(&verboseFlagPtr, "v", false, "verbose mode")
 	flagSet.BoolVar(&verboseFlagPtr, "verbose", false, "verbose mode")
 	flagSet.BoolVar(&versionFlagPtr, "V", false, "output version information and exit")
@@ -82,6 +91,7 @@ func setup() (config, error) {
 
 	conf := config{
 		flags:       defaultFlags,
+		updateMode:  updateFlagPtr,
 		verboseMode: verboseFlagPtr,
 		versionMode: versionFlagPtr,
 		modes:       defaultModes,

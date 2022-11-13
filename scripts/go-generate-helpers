@@ -1,0 +1,8 @@
+#!/bin/bash
+
+declare release_ver="${1:-not_set}"
+declare release_summary="${2:-not_set}"
+
+./scripts/go-generate-helper-git-version-info "${release_ver}" "${release_summary}" || exit 1
+
+./scripts/go-generate-helper-git-app-info "${release_ver}" "${release_summary}" || exit 1

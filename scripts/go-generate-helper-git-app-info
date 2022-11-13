@@ -1,0 +1,62 @@
+#!/bin/bash
+
+declare release_ver="${1:-not_set}"
+declare release_summary="${2:-not_set}"
+
+declare -i retval=0
+declare keep_ro=false
+declare -a targets
+declare is_release=false
+
+declare go_mod_path="go.mod"
+
+if [[ ! -f ${go_mod_path} ]]; then
+	if [[ -f ../../go.mod ]]; then
+		go_mod_path="../../go.mod"
+	fi
+fi
+
+if ! grep -q '^module ' "${go_mod_path}"; then
+	printf "ERROR: can't find module url line in %s\n" "${go_mod_path}"
+	exit 1
+fi
+
+if [[ ${release_ver} != not_set ]]; then
+	is_release=true
+
+	if ! git diff --quiet; then
+		printf "ERROR: Please commit/stage your changes before running this script in release mode.\n"
+		exit 1
+	fi
+fi
+
+mapfile -t targets < <(git grep --recursive --files-with-matches '^func main() {$' | xargs dirname)
+
+for target in "${targets[@]}"; do
+	if [[ ! -w . ]]; then
+		chmod a+w .
+		keep_ro=true
+	fi
+
+	printf "go generate: creating %s\n\n" "${PWD}/${target}/.app_info.txt"
+
+	tee "./${target}/.app_info.txt" < <(sed -r -e 's/^(module )([a-z].*)(|[/]v[0-9]+)$/\2/g' < <(grep ^module "${go_mod_path}"))
+
+	printf "\n"
+
+	${is_release} && git add -u . "./${target}/.app_info.txt"
+
+	if ${keep_ro}; then
+		chmod a-w .
+	fi
+done
+
+if ${is_release}; then
+	if grep -q "^release: ${release_ver} - ${release_summary}$" < <(); then
+		git commit -v --amend --no-edit
+	else
+		git commit -m "release: ${release_ver} - ${release_summary}"
+	fi
+fi
+
+exit "${retval}"

@@ -57,9 +57,9 @@
 				
 				<option value="file0">github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go (100.0%)</option>
 				
-				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (100.0%)</option>
+				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (98.9%)</option>
 				
-				<option value="file2">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go (100.0%)</option>
+				<option value="file2">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go (41.4%)</option>
 				
 				</select>
 			</div>
@@ -95,13 +95,23 @@ import (
 //go:embed .version.txt
 var version []byte
 
+//go:generate bash ../../scripts/go-generate-helper-git-app-info
+//go:embed .app_info.txt
+var goModData string
+
 func init() <span class="cov8" title="1">{
         appwc.SetVersion(version)
+        appwc.SetAppInfo(goModData)
 }</span>
 
 func main() <span class="cov8" title="1">{
-        appwc.RunApp()
-}</span>
+        var err error
+        defer func() </span><span class="cov8" title="1">{
+                appwc.Exit(err)
+        }</span>()
+
+        <span class="cov8" title="1">err = appwc.RunApp()</span>
+}
 </pre>
 		
 		<pre class="file" id="file1" style="display: none">// Package appwc is the module with the cli logic for the wc main application.
@@ -123,27 +133,33 @@ func showBanner() <span class="cov2" title="2">{
 }</span>
 
 // RunApp is called my the main function. It's basically the main function of the app.
-func RunApp() <span class="cov4" title="6">{
+func RunApp() error <span class="cov4" title="6">{
         conf, err := setup()
 
         if err != nil </span><span class="cov3" title="4">{
                 fmt.Print("Error: ")
                 fmt.Println(err)
-                return
+                return nil
         }</span>
 
         <span class="cov2" title="2">if conf.versionMode </span><span class="cov1" title="1">{
                 showVersion(conf)
-                return
+                return nil
         }</span>
 
         <span class="cov1" title="1">if conf.verboseMode </span><span class="cov1" title="1">{
                 showBanner()
         }</span>
 
+        <span class="cov1" title="1">if conf.updateMode </span><span class="cov0" title="0">{
+                return updateApp()
+        }</span>
+
         <span class="cov1" title="1">counts := getCounts(os.Stdin, conf)
 
-        showCount(counts, conf)</span>
+        showCount(counts, conf)
+
+        return nil</span>
 }
 
 // Usage prints the command-line usage help message.
@@ -170,9 +186,12 @@ func setup() (config, error) <span class="cov7" title="18">{
         flagSet.BoolVar(&amp;wordFlagPtr, "w", false, "print the word counts")
         flagSet.BoolVar(&amp;wordFlagPtr, "words", false, "print the word counts")
 
+        var updateFlagPtr bool
         var verboseFlagPtr bool
         var versionFlagPtr bool
 
+        flagSet.BoolVar(&amp;updateFlagPtr, "u", false, "update mode")
+        flagSet.BoolVar(&amp;updateFlagPtr, "update", false, "update mode")
         flagSet.BoolVar(&amp;verboseFlagPtr, "v", false, "verbose mode")
         flagSet.BoolVar(&amp;verboseFlagPtr, "verbose", false, "verbose mode")
         flagSet.BoolVar(&amp;versionFlagPtr, "V", false, "output version information and exit")
@@ -188,6 +207,7 @@ func setup() (config, error) <span class="cov7" title="18">{
 
         <span class="cov6" title="14">conf := config{
                 flags:       defaultFlags,
+                updateMode:  updateFlagPtr,
                 verboseMode: verboseFlagPtr,
                 versionMode: versionFlagPtr,
                 modes:       defaultModes,
@@ -297,14 +317,20 @@ func showCount(counts results, conf config) <span class="cov6" title="11">{
 }
 </pre>
 		
-		<pre class="file" id="file2" style="display: none">package appwc
+		<pre class="file" id="file2" style="display: none">// Package appwc is the module with the cli logic for the wc main application.
+package appwc
 
 import (
         "flag"
         "fmt"
         "os"
+        "os/exec"
+        "regexp"
         "strings"
 )
+
+// OSExit is used to Money Patch the Exit function during testing.
+var OSExit = os.Exit
 
 // This is used to disable side-effects like flag calling os.Exit() during tests when it encounters an error or the --help flag.
 var flagExitErrorBehavior = flag.ExitOnError
@@ -315,9 +341,12 @@ type appInfo struct {
         version   string
         gitHash   string
         buildTime string
+        cliName   string
+        appData   string
 }
 
 var metadata = appInfo{
+        cliName: "cli-wc",
         name:    "Word Count",
         version: "0.0.0",
 }
@@ -337,6 +366,7 @@ var defaultFlags = byteFlag | wordFlag | lineFlag
 type config struct {
         flags       uint64
         modes       map[string]bool
+        updateMode  bool
         verboseMode bool
         versionMode bool
 }
@@ -360,6 +390,7 @@ Options:
   -l, --lines            print the newline counts
   -w, --words            print the word counts
   -h, --help             display this help and exit
+  -u, --update           update mode
   -v, --version          output version information and exit
   -V, --verbose          verbose mode
 `
@@ -401,6 +432,11 @@ func SetVersion(b []byte) <span class="cov10" title="3">{
         }
 }
 
+// SetAppInfo is used by the main package to pass application information th the app package.
+func SetAppInfo(appData string) <span class="cov0" title="0">{
+        metadata.appData = appData
+}</span>
+
 func showVersion(conf config) <span class="cov10" title="3">{
         if !conf.verboseMode </span><span class="cov1" title="1">{
                 fmt.Printf("%s\n", metadata.version)
@@ -421,14 +457,83 @@ func showVersion(conf config) <span class="cov10" title="3">{
         <span class="cov6" title="2">fmt.Println()</span>
 }
 
-// OSExit is used to Money Patch the Exit function during testing.
-var OSExit = os.Exit
+func getInstallURL() string <span class="cov0" title="0">{
+        // reStrMatch := `^module .*$`
+        reStrMatch := `^.*$`
+        var srcURL string
 
-// Exit is used to prematurely end the application with an exit code and message to stdout.
-func Exit(code int, msg string) <span class="cov1" title="1">{
-        fmt.Println(msg)
-        OSExit(code)
-}</span>
+        for _, line := range strings.Split(metadata.appData, "\n") </span><span class="cov0" title="0">{
+                match, _ := regexp.MatchString(reStrMatch, line)
+
+                if match </span><span class="cov0" title="0">{
+                        // reStrURL := `^(module )([a-z].*)(|/v[0-9]+)?$`
+                        reStrURL := `^([a-z].*)(|/v[0-9]+)$`
+                        r, _ := regexp.Compile(reStrURL)
+
+                        // srcURL = r.ReplaceAllString(line, `$2`)
+                        srcURL = r.ReplaceAllString(line, `$1`)
+
+                        break</span>
+                }
+        }
+
+        <span class="cov0" title="0">appName := metadata.cliName
+
+        return srcURL + "/cmd/" + appName + "@latest"</span>
+}
+
+func updateApp() error <span class="cov0" title="0">{
+        installURL := getInstallURL()
+
+        fmt.Println("Running:", "go", "install", installURL)
+        fmt.Println()
+
+        out, err := exec.Command("go", "install", installURL).Output()
+
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return err
+        }</span>
+
+        <span class="cov0" title="0">fmt.Println("No errors detected during installation.")
+        fmt.Println()
+        if len(string(out)) &gt; 0 </span><span class="cov0" title="0">{
+                fmt.Println(string(out))
+                fmt.Println()
+        }</span>
+
+        // TODO: add checks for Go environment variables
+
+        <span class="cov0" title="0">appName := metadata.cliName
+
+        fmt.Printf("Running '%s --version': ", appName)
+
+        out, err = exec.Command(appName, "--version").Output()
+
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if len(string(out)) &gt; 0 </span><span class="cov0" title="0">{
+                fmt.Println(string(out))
+                fmt.Println()
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+// Exit is used to end the application with an exit code and message to stderr.
+func Exit(err error) <span class="cov1" title="1">{
+        var code int
+
+        if err != nil </span><span class="cov1" title="1">{
+                code += 1
+                fmt.Println(err)
+        }</span>
+
+        <span class="cov1" title="1">OSExit(code)</span>
+}
 </pre>
 		
 		</div>

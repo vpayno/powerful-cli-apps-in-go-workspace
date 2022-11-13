@@ -11,10 +11,20 @@ import (
 //go:embed .version.txt
 var version []byte
 
+//go:generate bash ../../scripts/go-generate-helper-git-app-info
+//go:embed .app_info.txt
+var goModData string
+
 func init() {
 	appwc.SetVersion(version)
+	appwc.SetAppInfo(goModData)
 }
 
 func main() {
-	appwc.RunApp()
+	var err error
+	defer func() {
+		appwc.Exit(err)
+	}()
+
+	err = appwc.RunApp()
 }

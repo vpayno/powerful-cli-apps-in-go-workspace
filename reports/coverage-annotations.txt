@@ -1,1 +1,104 @@
 
+20     	func RunApp() error {
+21     		conf, err := setup()
+22
+23     		if err != nil {
+24     			fmt.Print("Error: ")
+25     			fmt.Println(err)
+26     			return nil
+27     		}
+28
+29     		if conf.versionMode {
+30     			showVersion(conf)
+31     			return nil
+32     		}
+33
+34     		if conf.verboseMode {
+35     			showBanner()
+36     		}
+37
+38     		if conf.updateMode {
+39 MISS			return updateApp()
+40     		}
+41
+42     		counts := getCounts(os.Stdin, conf)
+43
+44     		showCount(counts, conf)
+45
+46     		return nil
+47     	}
+
+
+117     	func SetAppInfo(appData string) {
+118 MISS		metadata.appData = appData
+119     	}
+
+
+141     	func getInstallURL() string {
+142     		// reStrMatch := `^module .*$`
+143 MISS		reStrMatch := `^.*$`
+144 MISS		var srcURL string
+145
+146 MISS		for _, line := range strings.Split(metadata.appData, "\n") {
+147 MISS			match, _ := regexp.MatchString(reStrMatch, line)
+148
+149 MISS			if match {
+150     				// reStrURL := `^(module )([a-z].*)(|/v[0-9]+)?$`
+151 MISS				reStrURL := `^([a-z].*)(|/v[0-9]+)$`
+152 MISS				r, _ := regexp.Compile(reStrURL)
+153
+154     				// srcURL = r.ReplaceAllString(line, `$2`)
+155 MISS				srcURL = r.ReplaceAllString(line, `$1`)
+156
+157 MISS				break
+158     			}
+159     		}
+160
+161 MISS		appName := metadata.cliName
+162
+163 MISS		return srcURL + "/cmd/" + appName + "@latest"
+164     	}
+
+
+166     	func updateApp() error {
+167 MISS		installURL := getInstallURL()
+168
+169 MISS		fmt.Println("Running:", "go", "install", installURL)
+170 MISS		fmt.Println()
+171
+172 MISS		out, err := exec.Command("go", "install", installURL).Output()
+173
+174 MISS		if err != nil {
+175 MISS			fmt.Println(err)
+176 MISS			return err
+177     		}
+178
+179 MISS		fmt.Println("No errors detected during installation.")
+180 MISS		fmt.Println()
+181 MISS		if len(string(out)) > 0 {
+182 MISS			fmt.Println(string(out))
+183 MISS			fmt.Println()
+184     		}
+185
+186     		// TODO: add checks for Go environment variables
+187
+188 MISS		appName := metadata.cliName
+189
+190 MISS		fmt.Printf("Running '%s --version`: ", appName)
+191
+192 MISS		out, err = exec.Command(appName, "--version").Output()
+193
+194 MISS		if err != nil {
+195 MISS			fmt.Println(err)
+196 MISS			return err
+197     		}
+198
+199 MISS		if len(string(out)) > 0 {
+200 MISS			fmt.Println(string(out))
+201 MISS			fmt.Println()
+202     		}
+203
+204 MISS		return nil
+205     	}
+
+
