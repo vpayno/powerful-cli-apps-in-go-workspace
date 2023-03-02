@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2023-03-01] Release v0.6.2: bump github.com/stretchr/testify from 1.8.1 to 1.8.2
+</h2>
+    </summary>
+
+### build(deps)
+
+- bump github.com/stretchr/testify from 1.8.1 to 1.8.2
+
+</details>
+
+<details>
+    <summary>
 <h2> [2022-11-11] Release v0.6.1: ci chore work
 </h2>
     </summary>
