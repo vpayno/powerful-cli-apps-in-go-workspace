@@ -21,7 +21,7 @@ defaults:
     shell: bash
 
 jobs:
-  block-fixup:
+  git-commit-message-check:
     runs-on: ubuntu-latest
 
     steps:
