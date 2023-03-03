@@ -227,6 +227,13 @@ jobs:
           go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
           golangci-lint run --out-format=line-number ./... | reviewdog -tee -f=golangci-lint -reporter=github-check
 
+      - name: Testing with go-sumtype
+        id: go-test-go-sumtype
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          go install github.com/BurntSushi/go-sumtype@latest
+          go-sumtype $(go list ./... | grep -v -e vendor) | reviewdog -tee -f=golangci-lint -reporter=github-check
+
       - name: Testing with gosec
         id: go-test-security
         if: matrix.os == 'ubuntu-latest'
