@@ -2,6 +2,27 @@
 
 <details open>
     <summary>
+<h2> [2023-03-03] Release v0.6.3: bump golang from 1.19 to 1.20
+</h2>
+    </summary>
+
+### build(go)
+
+- bump golang version to 1.20
+
+### ci(git)
+
+- change job name from block-fixup to git-commit-message-check
+
+### ci(go)
+
+- add go-sumtype check
+- fix go-consistent error after updating to go 1.20.1
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-03-01] Release v0.6.2: bump github.com/stretchr/testify from 1.8.1 to 1.8.2
 </h2>
     </summary>
