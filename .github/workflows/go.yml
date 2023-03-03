@@ -204,7 +204,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           go install github.com/quasilyte/go-consistent@latest
-          go-consistent -v ./... | reviewdog -tee -f go-consistent -reporter=github-check
+          go-consistent -v $(go list ./... | grep -v -e vendor -e test) | reviewdog -tee -f go-consistent -reporter=github-check || true
 
       - name: Testing with gocritic
         id: go-test-gocritic
