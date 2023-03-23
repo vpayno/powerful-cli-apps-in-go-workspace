@@ -191,7 +191,7 @@ jobs:
           author: Victor Payno [Bot] <vpayno@users.noreply.github.com>
 
       - name: Check PR outputs
-        if: ${{ steps.cpr.outputs.pull-request-number }}
+        if: steps.cpr.outputs.pull-request-number > 0
         run: |
           {
             printf "Pull Request Number: %s\n" "${{ steps.cpr.outputs.pull-request-number }}"
@@ -208,6 +208,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Tag Release
+        if: steps.cpr.outputs.pull-request-number > 0
         id: tag-release
         run: |
           {
@@ -303,6 +304,7 @@ jobs:
           gh pr comment "${{ steps.cpr.outputs.pull-request-url }}" --body-file "${PR_COMMENT2}"
 
       - name: Push tag changes
+        if: steps.cpr.outputs.pull-request-number > 0
         uses: ad-m/github-push-action@master
         with:
           branch: bump_golang_version
