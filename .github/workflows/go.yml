@@ -204,6 +204,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           go install github.com/quasilyte/go-consistent@latest
+          # shellcheck disable=SC2046
           go-consistent -v $(go list ./... | grep -v -e vendor -e test) | reviewdog -tee -f go-consistent -reporter=github-check || true
 
       - name: Testing with gocritic
@@ -232,6 +233,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           go install github.com/BurntSushi/go-sumtype@latest
+          # shellcheck disable=SC2046
           go-sumtype $(go list ./... | grep -v -e vendor) | reviewdog -tee -f=golangci-lint -reporter=github-check
 
       - name: Testing with gosec
