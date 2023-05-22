@@ -2,6 +2,30 @@
 
 <details open>
     <summary>
+<h2> [2023-05-22] Release v0.6.4: bump github.com/stretchr/testify from 1.8.2 to 1.8.3
+</h2>
+    </summary>
+
+### build(deps)
+
+- bump github.com/stretchr/testify from 1.8.2 to 1.8.3
+
+### ci
+
+- add commitlint configuration file
+
+### ci(golang-bump)
+
+- fix checks for pr number
+
+### ci(go)
+
+- silence invalid shellcheck warnings
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-03-03] Release v0.6.3: bump golang from 1.19 to 1.20
 </h2>
     </summary>
