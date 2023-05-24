@@ -154,7 +154,7 @@ func TestShowVersionVerbose(t *testing.T) {
 	// It's a silly test but I need the practice.
 	want := "\n"
 	want += fmt.Sprintf("%s Version: %s\n\n", wantMetadata.name, wantMetadata.version)
-	want += fmt.Sprintf("	git hash: %s\n", wantMetadata.gitHash)
+	want += fmt.Sprintf("\tgit hash: %s\n", wantMetadata.gitHash)
 	want += fmt.Sprintf(" build time: %s\n", wantMetadata.buildTime)
 	want += "\n"
 

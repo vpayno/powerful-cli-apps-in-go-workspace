@@ -114,7 +114,7 @@ func showVersion(conf config) {
 	fmt.Printf("%s Version: %s\n\n", metadata.name, metadata.version)
 
 	if metadata.gitHash != "" {
-		fmt.Printf("   git hash: %s\n", metadata.gitHash)
+		fmt.Printf("\tgit hash: %s\n", metadata.gitHash)
 	}
 
 	if metadata.buildTime != "" {

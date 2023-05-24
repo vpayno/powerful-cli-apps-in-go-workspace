@@ -51,7 +51,7 @@ var testData = dataTestCases{
 	},
 	{
 		name:       "7 spaces",
-		input:      "		",
+		input:      "       ",
 		wantByte:   7,
 		wantChar:   7,
 		wantLength: 7,
@@ -60,7 +60,7 @@ var testData = dataTestCases{
 	},
 	{
 		name:       "3 spaces, nl, 3 spaces",
-		input:      "	\n	 ",
+		input:      "   \n   ",
 		wantByte:   7,
 		wantChar:   7,
 		wantLength: 7,
@@ -69,7 +69,7 @@ var testData = dataTestCases{
 	},
 	{
 		name:       "3 spaces, nl",
-		input:      "	\n",
+		input:      "   \n",
 		wantByte:   4,
 		wantChar:   4,
 		wantLength: 4,
@@ -168,7 +168,7 @@ var testData = dataTestCases{
 	},
 	{
 		name:       "3 spaces, word, 3 spaces, word, 3 spaces, word, 3 spaces",
-		input:      "	one   two	three	",
+		input:      "   one   two   three   ",
 		wantByte:   23,
 		wantChar:   23,
 		wantLength: 23,
