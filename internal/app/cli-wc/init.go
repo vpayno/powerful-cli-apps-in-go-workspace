@@ -56,14 +56,14 @@ The options below may be used to select which counts are printed, always in
 the following order: newline, word, character, byte.
 
 Options:
-  -c, --bytes            print the byte counts
-  -m, --chars            print the character counts
+  -c, --bytes			 print the byte counts
+  -m, --chars			 print the character counts
   -L, --max-line-length  print the maximum display width
-  -l, --lines            print the newline counts
-  -w, --words            print the word counts
-  -h, --help             display this help and exit
-  -v, --version          output version information and exit
-  -V, --verbose          verbose mode
+  -l, --lines			 print the newline counts
+  -w, --words			 print the word counts
+  -h, --help			 display this help and exit
+  -v, --version			 output version information and exit
+  -V, --verbose			 verbose mode
 `
 )
 
@@ -97,6 +97,7 @@ func SetVersion(b []byte) {
 		if slice[1] != "" {
 			metadata.gitHash = slice[1]
 		}
+
 		if slice[2] != "" {
 			metadata.buildTime = slice[2]
 		}

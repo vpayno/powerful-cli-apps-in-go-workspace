@@ -23,11 +23,13 @@ func RunApp() {
 	if err != nil {
 		fmt.Print("Error: ")
 		fmt.Println(err)
+
 		return
 	}
 
 	if conf.versionMode {
 		showVersion(conf)
+
 		return
 	}
 
@@ -46,11 +48,14 @@ func Usage() {
 }
 
 func setup() (config, error) {
-
 	var byteFlagPtr bool
+
 	var charFlagPtr bool
+
 	var lengthFlagPtr bool
+
 	var lineFlagPtr bool
+
 	var wordFlagPtr bool
 
 	flagSet.BoolVar(&byteFlagPtr, "c", false, "print the byte counts")
@@ -65,6 +70,7 @@ func setup() (config, error) {
 	flagSet.BoolVar(&wordFlagPtr, "words", false, "print the word counts")
 
 	var verboseFlagPtr bool
+
 	var versionFlagPtr bool
 
 	flagSet.BoolVar(&verboseFlagPtr, "v", false, "verbose mode")
@@ -157,6 +163,7 @@ func showCount(counts results, conf config) {
 	fieldSize := "7"
 
 	var modeCount int
+
 	for _, v := range conf.modes {
 		if v {
 			modeCount++

@@ -21,6 +21,7 @@ import (
 // This is the main test function. This is the gatekeeper of all the tests in the appwc package.
 func TestMain(m *testing.M) {
 	exitCode := m.Run()
+
 	os.Exit(exitCode)
 }
 
@@ -58,18 +59,22 @@ func TestFlags(t *testing.T) {
 
 		// Run the function who's output we want to capture.
 		os.Args = append([]string{"cli"}, tc.flags...)
+
 		RunApp()
 
 		// Stop capturing stdout.
 		writer.Close()
 
 		var buf bytes.Buffer
+
 		_, err = io.Copy(&buf, testStderr)
 		if err != nil {
 			t.Error(err)
 		}
+
 		got := buf.String()
 		got = strings.Split(got, "\n")[0]
+
 		if got != want {
 			t.Errorf("Usage(); want %q, got %q", want, got)
 		}
@@ -80,6 +85,7 @@ func TestFlags(t *testing.T) {
 
 func TestBadFlag(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStderr, writer, err := os.Pipe()
@@ -99,18 +105,22 @@ func TestBadFlag(t *testing.T) {
 
 	// Run the function who's output we want to capture.
 	os.Args = []string{"cli", "-x"}
+
 	RunApp()
 
 	// Stop capturing stdout.
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStderr)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	got = strings.Split(got, "\n")[0]
+
 	if got != want {
 		t.Errorf("Usage(); want %q, got %q", want, got)
 	}
@@ -118,6 +128,7 @@ func TestBadFlag(t *testing.T) {
 
 func TestShowUsage(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStderr, writer, err := os.Pipe()
@@ -138,19 +149,22 @@ func TestShowUsage(t *testing.T) {
 
 	// Run the function who's output we want to capture.
 	os.Args = []string{"cli", "-h"}
+
 	RunApp()
 
 	// Stop capturing stdout.
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStderr)
 	if err != nil {
 		t.Error(err)
 	}
-	got := buf.String()
 
+	got := buf.String()
 	got1 := strings.Split(got, "\n")[0]
+
 	if got1 != want1 {
 		t.Errorf("Usage(); want %q, got %q", want1, got1)
 	}
@@ -162,6 +176,7 @@ func TestShowUsage(t *testing.T) {
 
 func TestShowBanner(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -186,10 +201,12 @@ func TestShowBanner(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("showBanner(); want %q, got %q", want, got)
@@ -198,6 +215,7 @@ func TestShowBanner(t *testing.T) {
 
 func TestSetupFlagsDefaults(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	want := config{
@@ -217,20 +235,33 @@ func TestSetupFlagsDefaults(t *testing.T) {
 	}
 
 	if want.modes["byte"] != got.modes["byte"] {
-		t.Errorf("setup() returned the wrong byte mode value. want: %v, got %v", want.modes["byte"], got.modes["byte"])
+		t.Errorf(
+			"setup() returned the wrong byte mode value. want: %v, got %v",
+			want.modes["byte"],
+			got.modes["byte"],
+		)
 	}
 
 	if want.modes["line"] != got.modes["line"] {
-		t.Errorf("setup() returned the wrong line mode value. want: %v, got %v", want.modes["line"], got.modes["line"])
+		t.Errorf(
+			"setup() returned the wrong line mode value. want: %v, got %v",
+			want.modes["line"],
+			got.modes["line"],
+		)
 	}
 
 	if want.modes["word"] != got.modes["word"] {
-		t.Errorf("setup() returned the wrong word mode value. want: %v, got %v", want.modes["word"], got.modes["word"])
+		t.Errorf(
+			"setup() returned the wrong word mode value. want: %v, got %v",
+			want.modes["word"],
+			got.modes["word"],
+		)
 	}
 }
 
 func TestSetupFlagsWordMode(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	want := config{
@@ -248,12 +279,17 @@ func TestSetupFlagsWordMode(t *testing.T) {
 	}
 
 	if want.modes["word"] != got.modes["word"] {
-		t.Errorf("setup() returned the wrong word mode value. want: %v, got %v", want.modes["word"], got.modes["word"])
+		t.Errorf(
+			"setup() returned the wrong word mode value. want: %v, got %v",
+			want.modes["word"],
+			got.modes["word"],
+		)
 	}
 }
 
 func TestSetupFlagsLineMode(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	want := config{
@@ -271,12 +307,17 @@ func TestSetupFlagsLineMode(t *testing.T) {
 	}
 
 	if want.modes["line"] != got.modes["line"] {
-		t.Errorf("setup() returned the wrong line mode value. want: %v, got %v", want.modes["line"], got.modes["line"])
+		t.Errorf(
+			"setup() returned the wrong line mode value. want: %v, got %v",
+			want.modes["line"],
+			got.modes["line"],
+		)
 	}
 }
 
 func TestSetupFlagsByteMode(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	want := config{
@@ -294,12 +335,17 @@ func TestSetupFlagsByteMode(t *testing.T) {
 	}
 
 	if want.modes["byte"] != got.modes["byte"] {
-		t.Errorf("setup() returned the wrong byte mode value. want: %v, got %v", want.modes["byte"], got.modes["byte"])
+		t.Errorf(
+			"setup() returned the wrong byte mode value. want: %v, got %v",
+			want.modes["byte"],
+			got.modes["byte"],
+		)
 	}
 }
 
 func TestSetupFlagsMaxLineLengthMode(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	want := config{
@@ -317,12 +363,17 @@ func TestSetupFlagsMaxLineLengthMode(t *testing.T) {
 	}
 
 	if want.modes["length"] != got.modes["length"] {
-		t.Errorf("setup() returned the wrong max-line-length mode value. want: %v, got %v", want.modes["length"], got.modes["length"])
+		t.Errorf(
+			"setup() returned the wrong max-line-length mode value. want: %v, got %v",
+			want.modes["length"],
+			got.modes["length"],
+		)
 	}
 }
 
 func TestSetupFlagVersion(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	// -V
@@ -340,6 +391,7 @@ func TestSetupFlagVersion(t *testing.T) {
 
 func TestGetCounts(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	for _, tc := range testData {
@@ -366,6 +418,7 @@ func TestGetCounts(t *testing.T) {
 
 func TestGetWordCount(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	b := bytes.NewBufferString("one two three four five\n")
@@ -386,6 +439,7 @@ func TestGetWordCount(t *testing.T) {
 
 func TestGetLineCount(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	b := bytes.NewBufferString("one\ntwo\nthree\nfour\nfive\n")
@@ -406,6 +460,7 @@ func TestGetLineCount(t *testing.T) {
 
 func TestGetByteCount(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	b := bytes.NewBufferString("0123456789\n0123456789\n")
@@ -426,6 +481,7 @@ func TestGetByteCount(t *testing.T) {
 
 func TestGetCharCount(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	b := bytes.NewBufferString("0123456789\n0123456789\n")
@@ -446,6 +502,7 @@ func TestGetCharCount(t *testing.T) {
 
 func TestGetMaxLineLengthCount(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	b := bytes.NewBufferString("0123456\n0123456789\n01234\n")
@@ -466,6 +523,7 @@ func TestGetMaxLineLengthCount(t *testing.T) {
 
 func TestShowWordCountVerbose(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -501,10 +559,12 @@ func TestShowWordCountVerbose(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("show word count: want %q, got %q", want, got)
@@ -513,6 +573,7 @@ func TestShowWordCountVerbose(t *testing.T) {
 
 func TestShowLineCountVerbose(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -548,10 +609,12 @@ func TestShowLineCountVerbose(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("show line count: want %q, got %q", want, got)
@@ -592,10 +655,12 @@ func TestShowByteCountVerbose(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("show byte count: want %q, got %q", want, got)
@@ -604,6 +669,7 @@ func TestShowByteCountVerbose(t *testing.T) {
 
 func TestShowCharCountVerbose(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -639,10 +705,12 @@ func TestShowCharCountVerbose(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("show byte count: want %q, got %q", want, got)
@@ -651,6 +719,7 @@ func TestShowCharCountVerbose(t *testing.T) {
 
 func TestShowMaxLengthCountVerbose(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -686,10 +755,12 @@ func TestShowMaxLengthCountVerbose(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("show max-line-length count: want %q, got %q", want, got)
@@ -698,6 +769,7 @@ func TestShowMaxLengthCountVerbose(t *testing.T) {
 
 func TestShowWordCount(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -733,10 +805,12 @@ func TestShowWordCount(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("show word count: want %q, got %q", want, got)
@@ -745,6 +819,7 @@ func TestShowWordCount(t *testing.T) {
 
 func TestShowLineCount(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -780,10 +855,12 @@ func TestShowLineCount(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("show line count: want %q, got %q", want, got)
@@ -792,6 +869,7 @@ func TestShowLineCount(t *testing.T) {
 
 func TestShowByteCount(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -827,10 +905,12 @@ func TestShowByteCount(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("show byte count: want %q, got %q", want, got)
@@ -839,6 +919,7 @@ func TestShowByteCount(t *testing.T) {
 
 func TestShowCharCount(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -874,10 +955,12 @@ func TestShowCharCount(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("show char count: want %q, got %q", want, got)
@@ -886,6 +969,7 @@ func TestShowCharCount(t *testing.T) {
 
 func TestRunApp(_ *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	os.Args = []string{"test", "-v"}
@@ -895,6 +979,7 @@ func TestRunApp(_ *testing.T) {
 
 func TestRunAppFlagVersion(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -913,16 +998,19 @@ func TestRunAppFlagVersion(t *testing.T) {
 	want := "\nWord Count Version: " + metadata.version + "\n\n\n"
 
 	os.Args = []string{"test", "--version", "--verbose"}
+
 	RunApp()
 
 	// Stop capturing stdout.
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("RunApp (Flag -V): want %q, got %q", want, got)
@@ -931,6 +1019,7 @@ func TestRunAppFlagVersion(t *testing.T) {
 
 func TestRunAppFlagByteAndChar(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	want := config{
@@ -944,16 +1033,25 @@ func TestRunAppFlagByteAndChar(t *testing.T) {
 	got, _ := setup()
 
 	if got.modes["byte"] != want.modes["byte"] {
-		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["byte"], got.modes["byte"])
+		t.Errorf(
+			"setup flags --chars & --bytes: want %v, got %v",
+			want.modes["byte"],
+			got.modes["byte"],
+		)
 	}
 
 	if got.modes["char"] != want.modes["char"] {
-		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["char"], got.modes["char"])
+		t.Errorf(
+			"setup flags --chars & --bytes: want %v, got %v",
+			want.modes["char"],
+			got.modes["char"],
+		)
 	}
 }
 
 func TestRunAppFlagCharAndWord(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	want := config{
@@ -967,16 +1065,25 @@ func TestRunAppFlagCharAndWord(t *testing.T) {
 	got, _ := setup()
 
 	if got.modes["word"] != want.modes["word"] {
-		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["word"], got.modes["word"])
+		t.Errorf(
+			"setup flags --chars & --bytes: want %v, got %v",
+			want.modes["word"],
+			got.modes["word"],
+		)
 	}
 
 	if got.modes["char"] != want.modes["char"] {
-		t.Errorf("setup flags --chars & --bytes: want %v, got %v", want.modes["char"], got.modes["char"])
+		t.Errorf(
+			"setup flags --chars & --bytes: want %v, got %v",
+			want.modes["char"],
+			got.modes["char"],
+		)
 	}
 }
 
 func TestRunAppFlagByteCharWordAndLineShortOpts(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	want := config{
@@ -1010,6 +1117,7 @@ func TestRunAppFlagByteCharWordAndLineShortOpts(t *testing.T) {
 
 func TestRunAppFlagByteCharWordAndLineLongOpts(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	want := config{
@@ -1025,24 +1133,41 @@ func TestRunAppFlagByteCharWordAndLineLongOpts(t *testing.T) {
 	got, _ := setup()
 
 	if got.modes["byte"] != want.modes["byte"] {
-		t.Errorf("setup flags --chars --bytes --lines --words: want %v, got %v", want.modes["byte"], got.modes["byte"])
+		t.Errorf(
+			"setup flags --chars --bytes --lines --words: want %v, got %v",
+			want.modes["byte"],
+			got.modes["byte"],
+		)
 	}
 
 	if got.modes["char"] != want.modes["char"] {
-		t.Errorf("setup flags --chars --bytes --lines --words: want %v, got %v", want.modes["char"], got.modes["char"])
+		t.Errorf(
+			"setup flags --chars --bytes --lines --words: want %v, got %v",
+			want.modes["char"],
+			got.modes["char"],
+		)
 	}
 
 	if got.modes["line"] != want.modes["line"] {
-		t.Errorf("setup flags --chars --bytes --lines --words: want %v, got %v", want.modes["line"], got.modes["line"])
+		t.Errorf(
+			"setup flags --chars --bytes --lines --words: want %v, got %v",
+			want.modes["line"],
+			got.modes["line"],
+		)
 	}
 
 	if got.modes["word"] != want.modes["word"] {
-		t.Errorf("setup flags --chars --bytes --lines --words: want %v, got %v", want.modes["word"], got.modes["word"])
+		t.Errorf(
+			"setup flags --chars --bytes --lines --words: want %v, got %v",
+			want.modes["word"],
+			got.modes["word"],
+		)
 	}
 }
 
 func TestPrintOrder(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	testStdout, writer, err := os.Pipe()
@@ -1077,7 +1202,7 @@ func TestPrintOrder(t *testing.T) {
 		},
 	}
 
-	//       1 (line)       2 (word)       4 (char)       3 (byte)       5 (length)\n
+	//		 1 (line)		2 (word)	   4 (char)		  3 (byte)		 5 (length)\n
 	want := fmt.Sprintf("%7d (line)", counts["line"])
 	want += fmt.Sprintf("%8d (word)", counts["word"])
 	want += fmt.Sprintf("%8d (char)", counts["char"])
@@ -1092,10 +1217,12 @@ func TestPrintOrder(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("show line count:\n\twant %q\n\t got %q", want, got)

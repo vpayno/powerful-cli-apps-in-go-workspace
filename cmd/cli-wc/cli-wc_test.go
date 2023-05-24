@@ -10,6 +10,7 @@ import (
 // This is the main test function. This is the gatekeeper of all the tests in the main package.
 func TestMain(m *testing.M) {
 	exitCode := m.Run()
+
 	os.Exit(exitCode)
 }
 

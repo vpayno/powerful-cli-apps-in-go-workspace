@@ -36,17 +36,21 @@ func TestExitVerbose(t *testing.T) {
 
 	OSExitBackup := OSExit
 	OSExit = func(code int) { fmt.Printf("Calling os.Exit(%d)...\n", code) }
+
 	Exit(code, msg)
+
 	OSExit = OSExitBackup
 
 	// Stop capturing stdout.
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("Exit(); want %q, got %q", want, got)
@@ -55,6 +59,7 @@ func TestExitVerbose(t *testing.T) {
 
 func TestShowVersion(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	os.Args = []string{"test", "--version"}
@@ -98,10 +103,12 @@ func TestShowVersion(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("showVersion(); want %q, got %q", want, got)
@@ -110,6 +117,7 @@ func TestShowVersion(t *testing.T) {
 
 func TestShowVersionVerbose(t *testing.T) {
 	setupTestEnv()
+
 	defer teardownTestEnv()
 
 	os.Args = []string{"test", "--version", "--verbose"}
@@ -146,7 +154,7 @@ func TestShowVersionVerbose(t *testing.T) {
 	// It's a silly test but I need the practice.
 	want := "\n"
 	want += fmt.Sprintf("%s Version: %s\n\n", wantMetadata.name, wantMetadata.version)
-	want += fmt.Sprintf("   git hash: %s\n", wantMetadata.gitHash)
+	want += fmt.Sprintf("	git hash: %s\n", wantMetadata.gitHash)
 	want += fmt.Sprintf(" build time: %s\n", wantMetadata.buildTime)
 	want += "\n"
 
@@ -157,10 +165,12 @@ func TestShowVersionVerbose(t *testing.T) {
 	writer.Close()
 
 	var buf bytes.Buffer
+
 	_, err = io.Copy(&buf, testStdout)
 	if err != nil {
 		t.Error(err)
 	}
+
 	got := buf.String()
 	if got != want {
 		t.Errorf("showVersion(); want %q, got %q", want, got)
@@ -177,6 +187,7 @@ func TestSetVersion(t *testing.T) {
 
 	strSlice := []string{want.version, want.gitHash, want.buildTime}
 	b := []byte(strings.Join(strSlice, "\n") + "\n")
+
 	SetVersion(b)
 
 	got := metadata
