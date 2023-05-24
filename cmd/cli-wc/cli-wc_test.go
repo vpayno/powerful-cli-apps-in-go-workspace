@@ -14,7 +14,7 @@ func TestMain(m *testing.M) {
 }
 
 // The functions in main() are already tested. Just running them together with zero test questions.
-func TestMain_app(t *testing.T) {
+func TestMain_app(_ *testing.T) {
 	os.Args = []string{"test", "-V"}
 
 	appwc.SetVersion(version)

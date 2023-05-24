@@ -884,7 +884,7 @@ func TestShowCharCount(t *testing.T) {
 	}
 }
 
-func TestRunApp(t *testing.T) {
+func TestRunApp(_ *testing.T) {
 	setupTestEnv()
 	defer teardownTestEnv()
 
