@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2023-05-23] Release v0.6.5: fix git workflow
+</h2>
+    </summary>
+
+### ci(git)
+
+- use different action and update config file
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-05-22] Release v0.6.4: bump github.com/stretchr/testify from 1.8.2 to 1.8.3
 </h2>
     </summary>
