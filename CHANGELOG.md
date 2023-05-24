@@ -2,6 +2,23 @@
 
 <details open>
     <summary>
+<h2> [2023-05-23] Release v0.6.6: fix lint and formatting
+</h2>
+    </summary>
+
+### chore
+
+- clean up format errors
+- clean up lint errors
+
+### fix
+
+- fixing tests that broke after formatting
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-05-23] Release v0.6.5: fix git workflow
 </h2>
     </summary>
