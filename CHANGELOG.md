@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2023-06-05] Release v0.6.7: dependabot testify update
+</h2>
+    </summary>
+
+### build(deps)
+
+- bump github.com/stretchr/testify from 1.8.3 to 1.8.4
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-05-23] Release v0.6.6: fix lint and formatting
 </h2>
     </summary>
