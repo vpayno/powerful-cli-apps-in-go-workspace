@@ -2,6 +2,28 @@
 
 <details open>
     <summary>
+<h2> [2023-11-16] Release v0.7.0: bump golang version to 1.21
+</h2>
+    </summary>
+
+### build(go)
+
+- bump golang version to 1.21
+- bump golang version to 1.21.0
+
+### ci(tools)
+
+- fix next version detection bug in scripts/go-version-bump
+- fix next version detection bug in scripts/go-version-bump - continued
+
+### revert
+
+- bump golang version to 1.21.0"
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-06-05] Release v0.6.7: dependabot testify update
 </h2>
     </summary>
