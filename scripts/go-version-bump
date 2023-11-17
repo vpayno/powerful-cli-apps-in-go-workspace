@@ -21,7 +21,8 @@ golang_show_dl_urls() {
 }
 
 golang_show_dl_versions() {
-	golang_show_dl_urls | sed -r -e 's:^.*/go(.*)[.](zip|msi|tar.gz|pkg)$:\1:' | grep '[..]src$' | sed -r -e 's:[.]src::g' | grep -v -E '(beta|rc)' | grep -E '^[0-9]+[.][0-9]+$' | sort -V
+	# starting with version 1.21 the first version is now 1.21.0
+	golang_show_dl_urls | sed -r -e 's:^.*/go(.*)[.](zip|msi|tar.gz|pkg)$:\1:' | grep '[..]src$' | sed -r -e 's:[.]src::g' | grep -v -E '(beta|rc)' | grep -E '^[0-9]+[.][0-9]+[.]0$' | sort -V
 }
 
 golang_show_dl_patch_versions() {
@@ -41,8 +42,9 @@ if [[ ${old_go_ver} == "${new_go_ver}" ]]; then
 	exit # 0 exit code since this isn't a workflow error condition
 fi
 
-if ! golang_show_dl_patch_versions | grep -q -E "^${new_go_ver}[.]1$"; then
-	printf "Golang version >%s.0 not found. Skipping update.\n" "${new_go_ver}"
+# starting with version 1.21 the first version is now 1.21.0
+if ! golang_show_dl_patch_versions | grep -q -E "^${new_go_ver%.*}[.][1-9]$"; then
+	printf "Golang version >%s not found. Skipping update.\n" "${new_go_ver}"
 	exit # 0 exit code since this isn't a workflow error condition
 fi
 
