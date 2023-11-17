@@ -1,6 +1,6 @@
 module github.com/vpayno/powerful-cli-apps-in-go-workspace
 
-go 1.21.0
+go 1.20
 
 require github.com/stretchr/testify v1.8.4
 
