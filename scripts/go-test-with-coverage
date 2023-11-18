@@ -20,7 +20,7 @@ main() {
 	printf "\n"
 
 	echo gocover-cobertura '<' ./reports/.coverage.out '>' ./reports/coverage.xml
-	time gocover-cobertura < ./reports/.coverage.out > ./reports/coverage.xml
+	time gocover-cobertura <./reports/.coverage.out >./reports/coverage.xml
 	printf "\n"
 
 	printf "=== ./reports/coverage.txt ===\n"

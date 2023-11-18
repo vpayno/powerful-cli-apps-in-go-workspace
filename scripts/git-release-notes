@@ -112,7 +112,10 @@ create_release_notes() {
 		printf "# %s Release Notes\n" '"Powerful Cli Applications in Go" Workspace'
 		printf "\n"
 
-		mapfile -t tags < <(printf "%s\n" "${mode}"; git_get_tags | sort -Vr)
+		mapfile -t tags < <(
+			printf "%s\n" "${mode}"
+			git_get_tags | sort -Vr
+		)
 	elif [[ ${mode} =~ ^v[0-9]+[.][0-9]+[.][0-9]+$ ]]; then
 		if ! git tag | grep -q -E "^${mode##*:}$"; then
 			printf "ERROR: tag [%s] doesn't exist!\n" "${mode}"
@@ -140,7 +143,7 @@ create_release_notes() {
 
 		[[ ${mode} =~ ^all|release-full:v.*$ ]] && printf "<details%s>\n    <summary>\n" "${open_fold_flag}"
 		get_release_heading "${tag}" "${mode}"
-		[[ ${mode} =~ ^all|release-full:v.*$ ]] &&	printf "    </summary>\n"
+		[[ ${mode} =~ ^all|release-full:v.*$ ]] && printf "    </summary>\n"
 		get_release_body "${tag}" "${mode}"
 		[[ ${mode} =~ ^all|release-full:v.*$ ]] && printf "\n</details>\n"
 
