@@ -44,6 +44,10 @@ if ./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"; then
 		git tag -s -a -m "${message_tag//### /}" "${tag}"
 	fi
 
+	printf "\n"
+	printf "Don't forget to push the commits and tag!\n"
+	printf "\t%s\n" "git push --tags upstream main" "git push --tags fork main"
+	printf "\n"
 else
 
 	printf "ERROR: error encountered in go-generate-helper-git-version-info script\n"
