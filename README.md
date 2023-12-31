@@ -36,7 +36,6 @@ This is also my "notebook" on how to do things in Go or how to manage a Go proje
 
 - [Website](https://pragprog.com/titles/rggo/powerful-command-line-applications-in-go/)
 
-
 ## Versions
 
 Versions tags have two formats:
@@ -57,7 +56,6 @@ Once a new chapter is started, changes to a previous chapter need to be hot-fixe
 If it's a new feature or fix of the chapter's application, it should be tagged in both locations.
 It may seem like unnecessary work but it's good practice for real applications that have to be maintained over long periods of time.
 The hot-fix can be skipped if it's using processes learned in the current chapter since the changes are related to only that chapter.
-
 
 ## Commit Messages
 
@@ -153,7 +151,6 @@ Categories that can be further subdivided, like build and ci, can have many subc
 
 </details>
 
-
 ## Change Log
 
 The script `./scripts/git-release-notes` can be used to extract the change log from the commit message summaries/titles.
@@ -177,7 +174,6 @@ The script `././scripts/git-release-notes` can be used to create change logs for
 ```
 
 [Change Log](./CHANGELOG.md)
-
 
 ## Creating a Release
 
@@ -210,7 +206,6 @@ These changes get a major version bump:
 
 Artifact releases, to save space, will only be created at the end of a chapter.
 
-
 ## Go Version Auto Updates
 
 The project as a scheduled job that runs every Wednesday that looks for a new major version of Golang.
@@ -240,7 +235,6 @@ To watch the workflow run:
 ```text
 gh run watch $(gh run list --workflow "Golang Version Bump Workflow" --limit 1 --json 'databaseId' --jq '.[].databaseId')
 ```
-
 
 ## Dependabot
 
@@ -287,7 +281,6 @@ You can trigger Dependabot actions by commenting on the PR:
 
 </details>
 
-
 ## Build Releases
 
 [Install GoReleaser](https://goreleaser.com/install/):
@@ -304,12 +297,10 @@ make build-all
 
 For instructions on how to install individual applications, check the applications section for `go install url@tag` command you need.
 
-
 ## Chapters|Apps
 
 <details id=1>
     <summary><h3>Chapter 01: Your First Command-Line Program in Go - wordcount/wc</h3></summary>
-
 
 #### How to Install *cli-wc*
 
@@ -329,7 +320,6 @@ cd powerful-cli-apps-in-go-workspace
 go generate
 go install ./cmd/cli-wc/cli-wc.go
 ```
-
 
 #### *cli-wc* Usage
 
