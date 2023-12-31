@@ -1,0 +1,39 @@
+---
+#
+# .gitlab-ci.yml
+#
+# https://docs.dagger.io/cookbook/#gitlab-ci
+# https://hub.docker.com/_/golang/tags?page=1&name=alpine
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+      when: always
+    - when: never
+
+.docker:
+  image: golang:1-alpine
+  services:
+    - docker:${DOCKER_VERSION}-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_VERIFY: '1'
+    DOCKER_TLS_CERTDIR: '/certs'
+    DOCKER_CERT_PATH: '/certs/client'
+    DOCKER_DRIVER: overlay2
+    DOCKER_VERSION: '20.10.16'
+
+.dagger:
+  extends: [.docker]
+  before_script:
+    - apk add docker-cli curl bash
+    - ./scripts/dagger-install-cli
+
+lint:
+  extends: [.dagger]
+  script:
+    - ./scripts/dagger-run-lint
+
+test:
+  extends: [.dagger]
+  script:
+    - ./scripts/dagger-run-test
