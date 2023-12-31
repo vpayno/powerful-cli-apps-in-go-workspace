@@ -1,4 +1,4 @@
-// Dagger CI Tooling
+// Dagger CI Tooling - Linting
 package main
 
 import (
@@ -41,8 +41,7 @@ func main() {
 		WithExec([]string{"staticcheck", "./..."})
 
 	// run application tests
-	out, err := runner.WithExec([]string{"./scripts/go-test-with-coverage"}).
-		Stderr(ctx)
+	out, err := runner.Stderr(ctx)
 	if err != nil {
 		panic(err)
 	}

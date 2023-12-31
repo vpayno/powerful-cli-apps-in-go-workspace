@@ -26,5 +26,7 @@ jobs:
           go-version-file: './go.mod'
       - name: Install Dagger CLI
         run: (cd /usr/local && curl -L https://dl.dagger.io/dagger/install.sh | sh; )
+      - name: Lint with Dagger
+        run: dagger run go run ci/lint/main.go
       - name: Test with Dagger
-        run: dagger run go run ci/test.go
+        run: dagger run go run ci/test/main.go
