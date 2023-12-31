@@ -1,0 +1,30 @@
+---
+#
+# .github/workflows/dagger-go.yml
+#
+name: 'Dagger CI - Go'
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  dagger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+          submodules: recursive
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: './go.mod'
+      - name: Install Dagger CLI
+        run: (cd /usr/local && curl -L https://dl.dagger.io/dagger/install.sh | sh; )
+      - name: Test with Dagger
+        run: dagger run go run ci/test.go

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+{
+	echo Ruinning: go run ./ci/test.go
+	time go run ./ci/test.go
+} | tee -a "${GITHUB_STEP_SUMMARY:-/dev/stdout}"
+printf  "\n"
