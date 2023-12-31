@@ -2,6 +2,7 @@
 #
 # .github/workflows/dagger-go.yml
 #
+# https://docs.dagger.io/cookbook/#github-actions
 name: 'Dagger CI - Go'
 on:  # yamllint disable-line rule:truthy
   push:
