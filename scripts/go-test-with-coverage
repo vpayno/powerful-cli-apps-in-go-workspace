@@ -29,6 +29,10 @@ main() {
 	printf "=== ./reports/coverage.txt ===\n"
 	cat reports/coverage.txt
 	printf "\n"
+
+	echo Running: ./scripts/go-badges-coverage
+	./scripts/go-badges-coverage
+	printf "\n"
 }
 
 time main

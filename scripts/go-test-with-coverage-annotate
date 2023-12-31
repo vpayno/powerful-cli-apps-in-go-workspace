@@ -23,6 +23,10 @@ main() {
 	echo jq . .coverage.json '|' gocov report '|' tee reports/coverage-summary.txt
 	time jq . .coverage.json | gocov report | tee reports/coverage-summary.txt
 	printf "\n"
+
+	echo Running: ./scripts/go-badges-coverage
+	./scripts/go-badges-coverage
+	printf "\n"
 }
 
 time main
