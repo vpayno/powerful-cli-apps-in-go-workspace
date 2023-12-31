@@ -3,8 +3,11 @@
 main() {
 	go generate ./...
 
-	echo gotest -v -covermode=count -coverprofile=./reports/.coverage.out -cover ./...
-	time gotest -v -covermode=count -coverprofile=./reports/.coverage.out -cover ./...
+	# shellcheck disable=SC2046
+	{
+		echo gotest -v -covermode=count -coverprofile=./reports/.coverage.out -cover $(go list ./... | grep -v /ci/)
+		time gotest -v -covermode=count -coverprofile=./reports/.coverage.out -cover $(go list ./... | grep -v /ci/)
+	}
 	printf "\n"
 
 	# go install github.com/axw/gocov/gocov@latest
