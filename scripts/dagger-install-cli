@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+declare INSTALL_PATH="/usr/local"
+
+if [[ -d ${HOME}/bin && :${PATH}: == *":${HOME}/bin:"* ]]; then
+	INSTALL_PATH="${HOME}/bin"
+fi
+
+declare SUDO_CMD=""
+
+if [[ ${USER} == root ]]; then
+	SUDO_CMD="sudo"
+fi
+
+printf "Installing dagger cli\n"
+cd "${INSTALL_PATH}" || exit
+time curl -sS -L https://dl.dagger.io/dagger/install.sh | ${SUDO_CMD} sh
+printf "\n"
+
+echo Running: dagger version
+dagger version
+printf "\n"
