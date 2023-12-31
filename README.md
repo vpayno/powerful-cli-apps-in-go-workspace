@@ -1,14 +1,5 @@
 # "Powerful Cli Applications in Go" Workspace
 
-This isn't a "real" project in the sense that it accepts PRs or should be used or forked by anyone as a real application.
-
-This is my workspace for learing concepts from the book.
-
-This is also my "notebook" on how to do things in Go or how to manage a Go project.
-
-
-## Badges
-
 [![Go Report Card](https://goreportcard.com/badge/github.com/vpayno/powerful-cli-apps-in-go-workspace)](https://goreportcard.com/report/github.com/vpayno/powerful-cli-apps-in-go-workspace)
 [![CodeFactor](https://www.codefactor.io/repository/github/vpayno/powerful-cli-apps-in-go-workspace/badge)](https://www.codefactor.io/repository/github/vpayno/powerful-cli-apps-in-go-workspace)
 [![Maintainability](https://api.codeclimate.com/v1/badges/43c8f7b58097ca3fa1ec/maintainability)](https://codeclimate.com/github/vpayno/powerful-cli-apps-in-go-workspace/maintainability)
@@ -35,6 +26,11 @@ This is also my "notebook" on how to do things in Go or how to manage a Go proje
 [![Yaml Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/yaml.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/yaml.yml)
 [![Markdown Workflow](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/markdown.yml/badge.svg?branch=main)](https://github.com/vpayno/powerful-cli-apps-in-go-workspace/actions/workflows/markdown.yml)
 
+This isn't a "real" project in the sense that it accepts PRs or should be used or forked by anyone as a real application.
+
+This is my workspace for learing concepts from the book.
+
+This is also my "notebook" on how to do things in Go or how to manage a Go project.
 
 ## Book Info
 
