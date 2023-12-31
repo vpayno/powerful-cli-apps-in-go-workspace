@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+set -o pipefail
+
+md_code_tag() {
+	if [[ -n ${GITHUB_STEP_SUMMARY} ]]; then
+		printf "\`\`\`%s\n" "${1}"
+
+		if [[ -z ${1} ]]; then
+			printf "\n"
+		fi
+	fi
+} # md_code_tag()
+
 declare INSTALL_PATH="/usr/local"
 
 if [[ -d ${HOME}/bin && :${PATH}: == *":${HOME}/bin:"* ]]; then
@@ -12,11 +24,17 @@ if [[ ${USER} == root ]]; then
 	SUDO_CMD="sudo"
 fi
 
-printf "Installing dagger cli\n"
-cd "${INSTALL_PATH}" || exit
-time curl -sS -L https://dl.dagger.io/dagger/install.sh | ${SUDO_CMD} sh
-printf "\n"
+{
+	md_code_tag text
 
-echo Running: dagger version
-dagger version
-printf "\n"
+	printf "Installing dagger cli\n"
+	cd "${INSTALL_PATH}" || exit
+	time curl -sS -L https://dl.dagger.io/dagger/install.sh | ${SUDO_CMD} sh
+	printf "\n"
+
+	echo Running: dagger version
+	dagger version
+
+	md_code_tag
+} |& tee -a "${GITHUB_STEP_SUMMARY:-/dev/null}"
+printf  "\n"

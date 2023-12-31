@@ -1,7 +1,21 @@
 #!/usr/bin/env bash
 
+md_code_tag() {
+	if [[ -n ${GITHUB_STEP_SUMMARY} ]]; then
+		printf "\`\`\`%s\n" "${1}"
+
+		if [[ -z ${1} ]]; then
+			printf "\n"
+		fi
+	fi
+} # md_code_tag()
+
 {
+	md_code_tag text
+
 	echo Ruinning: dagger run go run ./ci/lint/main.go
 	time dagger run go run ./ci/lint/main.go
-} | tee -a "${GITHUB_STEP_SUMMARY:-/dev/stdout}"
+
+	md_code_tag
+} |& tee -a "${GITHUB_STEP_SUMMARY:-/dev/null}"
 printf  "\n"
