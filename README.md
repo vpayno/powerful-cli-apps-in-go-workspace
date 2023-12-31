@@ -318,7 +318,7 @@ or
 git clone https://github.com/vpayno/powerful-cli-apps-in-go-workspace.git
 cd powerful-cli-apps-in-go-workspace
 go generate
-go install ./cmd/cli-wc/cli-wc.go
+go install ./cmd/cli-wc/main.go
 ```
 
 #### *cli-wc* Usage

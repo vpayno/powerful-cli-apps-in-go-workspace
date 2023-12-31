@@ -1,42 +1,42 @@
 
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>cli-wc: Go Coverage Report</title>
-		<style>
-			body {
-				background: black;
-				color: rgb(80, 80, 80);
-			}
-			body, pre, #legend span {
-				font-family: Menlo, monospace;
-				font-weight: bold;
-			}
-			#topbar {
-				background: black;
-				position: fixed;
-				top: 0; left: 0; right: 0;
-				height: 42px;
-				border-bottom: 1px solid rgb(80, 80, 80);
-			}
-			#content {
-				margin-top: 50px;
-			}
-			#nav, #legend {
-				float: left;
-				margin-left: 10px;
-			}
-			#legend {
-				margin-top: 12px;
-			}
-			#nav {
-				margin-top: 10px;
-			}
-			#legend span {
-				margin: 0 5px;
-			}
-			.cov0 { color: rgb(192, 0, 0) }
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>cli-wc: Go Coverage Report</title>
+    <style>
+      body {
+        background: black;
+        color: rgb(80, 80, 80);
+      }
+      body, pre, #legend span {
+        font-family: Menlo, monospace;
+        font-weight: bold;
+      }
+      #topbar {
+        background: black;
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: 42px;
+        border-bottom: 1px solid rgb(80, 80, 80);
+      }
+      #content {
+        margin-top: 50px;
+      }
+      #nav, #legend {
+        float: left;
+        margin-left: 10px;
+      }
+      #legend {
+        margin-top: 12px;
+      }
+      #nav {
+        margin-top: 10px;
+      }
+      #legend span {
+        margin: 0 5px;
+      }
+      .cov0 { color: rgb(192, 0, 0) }
 .cov1 { color: rgb(128, 128, 128) }
 .cov2 { color: rgb(116, 140, 131) }
 .cov3 { color: rgb(104, 152, 134) }
@@ -48,41 +48,41 @@
 .cov9 { color: rgb(32, 224, 152) }
 .cov10 { color: rgb(20, 236, 155) }
 
-		</style>
-	</head>
-	<body>
-		<div id="topbar">
-			<div id="nav">
-				<select id="files">
-				
-				<option value="file0">github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go (100.0%)</option>
-				
-				<option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (100.0%)</option>
-				
-				<option value="file2">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go (100.0%)</option>
-				
-				</select>
-			</div>
-			<div id="legend">
-				<span>not tracked</span>
-			
-				<span class="cov0">no coverage</span>
-				<span class="cov1">low coverage</span>
-				<span class="cov2">*</span>
-				<span class="cov3">*</span>
-				<span class="cov4">*</span>
-				<span class="cov5">*</span>
-				<span class="cov6">*</span>
-				<span class="cov7">*</span>
-				<span class="cov8">*</span>
-				<span class="cov9">*</span>
-				<span class="cov10">high coverage</span>
-			
-			</div>
-		</div>
-		<div id="content">
-		
-		<pre class="file" id="file0" style="display: none">// Package main is the main module for the wc application.
+    </style>
+  </head>
+  <body>
+    <div id="topbar">
+      <div id="nav">
+        <select id="files">
+
+        <option value="file0">github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/main.go (100.0%)</option>
+
+        <option value="file1">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go (100.0%)</option>
+
+        <option value="file2">github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/init.go (100.0%)</option>
+
+        </select>
+      </div>
+      <div id="legend">
+        <span>not tracked</span>
+
+        <span class="cov0">no coverage</span>
+        <span class="cov1">low coverage</span>
+        <span class="cov2">*</span>
+        <span class="cov3">*</span>
+        <span class="cov4">*</span>
+        <span class="cov5">*</span>
+        <span class="cov6">*</span>
+        <span class="cov7">*</span>
+        <span class="cov8">*</span>
+        <span class="cov9">*</span>
+        <span class="cov10">high coverage</span>
+
+      </div>
+    </div>
+    <div id="content">
+
+    <pre class="file" id="file0" style="display: none">// Package main is the main module for the wc application.
 package main
 
 import (
@@ -103,8 +103,8 @@ func main() <span class="cov8" title="1">{
         appwc.RunApp()
 }</span>
 </pre>
-		
-		<pre class="file" id="file1" style="display: none">// Package appwc is the module with the cli logic for the wc main application.
+
+    <pre class="file" id="file1" style="display: none">// Package appwc is the module with the cli logic for the wc main application.
 package appwc
 
 import (
@@ -296,8 +296,8 @@ func showCount(counts results, conf config) <span class="cov6" title="11">{
         <span class="cov6" title="11">fmt.Println()</span>
 }
 </pre>
-		
-		<pre class="file" id="file2" style="display: none">package appwc
+
+    <pre class="file" id="file2" style="display: none">package appwc
 
 import (
         "flag"
@@ -430,34 +430,34 @@ func Exit(code int, msg string) <span class="cov1" title="1">{
         OSExit(code)
 }</span>
 </pre>
-		
-		</div>
-	</body>
-	<script>
-	(function() {
-		var files = document.getElementById('files');
-		var visible;
-		files.addEventListener('change', onChange, false);
-		function select(part) {
-			if (visible)
-				visible.style.display = 'none';
-			visible = document.getElementById(part);
-			if (!visible)
-				return;
-			files.value = part;
-			visible.style.display = 'block';
-			location.hash = part;
-		}
-		function onChange() {
-			select(files.value);
-			window.scrollTo(0, 0);
-		}
-		if (location.hash != "") {
-			select(location.hash.substr(1));
-		}
-		if (!visible) {
-			select("file0");
-		}
-	})();
-	</script>
+
+    </div>
+  </body>
+  <script>
+  (function() {
+    var files = document.getElementById('files');
+    var visible;
+    files.addEventListener('change', onChange, false);
+    function select(part) {
+      if (visible)
+        visible.style.display = 'none';
+      visible = document.getElementById(part);
+      if (!visible)
+        return;
+      files.value = part;
+      visible.style.display = 'block';
+      location.hash = part;
+    }
+    function onChange() {
+      select(files.value);
+      window.scrollTo(0, 0);
+    }
+    if (location.hash != "") {
+      select(location.hash.substr(1));
+    }
+    if (!visible) {
+      select("file0");
+    }
+  })();
+  </script>
 </html>

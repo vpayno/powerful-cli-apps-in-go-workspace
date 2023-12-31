@@ -1,6 +1,6 @@
 
-github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go init	 100.00% (1/1)
-github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/cli-wc.go main	 100.00% (1/1)
+github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/main.go	 init	 100.00% (1/1)
+github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc/main.go	 main	 100.00% (1/1)
 github.com/vpayno/powerful-cli-apps-in-go-workspace/cmd/cli-wc		 ----	 100.00% (2/2)
 
 github.com/vpayno/powerful-cli-apps-in-go-workspace/internal/app/cli-wc/app.go	 setup		 100.00% (30/30)
