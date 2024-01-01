@@ -2,6 +2,19 @@
 
 <details open>
     <summary>
+<h2> [2023-12-31] Release v0.7.2: add tag push and manual dagger-go workflow triggers
+</h2>
+    </summary>
+
+### ci(dagger-go)
+
+- add manual trigger
+- add tag push trigger
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-12-31] Release v0.7.1: testing dagger ci and creating releases
 </h2>
     </summary>
