@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2023-12-31] Release v0.7.5: one more tag-release fix
+</h2>
+    </summary>
+
+### ci(tools)
+
+- more tag-release fixes
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-12-31] Release v0.7.4: fix pushing of git notes when releasing
 </h2>
     </summary>
