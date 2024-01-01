@@ -23,7 +23,7 @@ func main() {
 
 	// go1.21.5
 	golangVer := runtime.Version()
-	golangVer = strings.Replace(golangVer, "go", "", -1)
+	golangVer = strings.ReplaceAll(golangVer, "go", "")
 	fmt.Println("Golang Ver: " + golangVer)
 
 	// use a node:16-slim container
