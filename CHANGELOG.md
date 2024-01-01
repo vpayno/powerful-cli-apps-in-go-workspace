@@ -2,6 +2,23 @@
 
 <details open>
     <summary>
+<h2> [2023-12-31] Release v0.7.3: release trigger fixes, use git notes for release message
+</h2>
+    </summary>
+
+### ci(dagger-go)
+
+- fix git tag trigger pattern
+- use git notes for release message body
+
+### ci(tools)
+
+- add a git note when tagging
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-12-31] Release v0.7.2: add tag push and manual dagger-go workflow triggers
 </h2>
     </summary>
