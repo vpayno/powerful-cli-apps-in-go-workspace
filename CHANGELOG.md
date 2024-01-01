@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2023-12-31] Release v0.7.4: fix pushing of git notes when releasing
+</h2>
+    </summary>
+
+### ci(tools)
+
+- fix pushing of git notes and tags
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-12-31] Release v0.7.3: release trigger fixes, use git notes for release message
 </h2>
     </summary>
