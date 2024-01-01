@@ -1,0 +1,5 @@
+release: v0.7.6 - fix workflow to download git notes
+
+ci(dagger-go)
+
+- fetch git notes when releasing
