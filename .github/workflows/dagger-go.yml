@@ -9,6 +9,7 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - main
       - develop
+    tags:
   pull_request:
 
 jobs:
