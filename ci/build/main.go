@@ -4,7 +4,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"runtime"
@@ -58,7 +57,7 @@ func main() {
 				WithEnvVariable("GOOS", goos).
 				WithEnvVariable("GOARCH", goarch)
 
-			entries, err := ioutil.ReadDir("./cmd/")
+			entries, err := os.ReadDir("./cmd/")
 			if err != nil {
 				log.Fatal(err)
 			}
