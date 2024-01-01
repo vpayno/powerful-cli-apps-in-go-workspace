@@ -40,3 +40,29 @@ jobs:
             tree ./build
             printf "\`\`\`\n"
           } | tee -a "${GITHUB_STEP_SUMMARY}"
+      - name: Create Release Artifacts
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |-
+          sudo apt install -y zip
+          {
+            printf "\`\`\`text\n"
+            echo Running: tar cvzf releases.tar.gz build/*/*
+            time tar cvzf releases.tar.gz build/*/*
+            printf "\`\`\`\n"
+            printf "\n"
+            printf "\`\`\`text\n"
+            echo Running: zip -r releases.zip build/*/*
+            time zip -r releases.zip build/*/*
+            printf "\`\`\`\n"
+            printf "\n"
+            printf "\`\`\`text\n"
+            echo Running: ./scripts/git-release-notes release-short "${GITHUB_REF_NAME}" '2>/dev/null' \| tee release_body.md
+            ./scripts/git-release-notes release-short "${GITHUB_REF_NAME}" 2>/dev/null | tee release_body.md
+            printf "\`\`\`\n"
+          } | tee -a "${GITHUB_STEP_SUMMARY}"
+      - name: Publish Release
+        uses: ncipollo/release-action@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          artifacts: "releases.tar.gz,releases.zip"
+          bodyFile: release_body.md
