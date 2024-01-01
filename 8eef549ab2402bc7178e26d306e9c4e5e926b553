@@ -1,0 +1,6 @@
+release: v0.7.2 - add tag push and manual dagger-go workflow triggers
+
+ci(dagger-go)
+
+- add manual trigger
+- add tag push trigger
