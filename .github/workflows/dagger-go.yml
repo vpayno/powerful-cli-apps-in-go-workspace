@@ -59,8 +59,8 @@ jobs:
             printf "\`\`\`\n"
             printf "\n"
             printf "\`\`\`text\n"
-            echo Running: ./scripts/git-release-notes release-short "${GITHUB_REF_NAME}" '2>/dev/null' \| tee release_body.md
-            ./scripts/git-release-notes release-short "${GITHUB_REF_NAME}" 2>/dev/null | tee release_body.md
+            echo Running: git notes show "${GITHUB_REF_NAME}" \| tee release_body.md
+            git notes show "${GITHUB_REF_NAME}" | tee release_body.md
             printf "\`\`\`\n"
           } | tee -a "${GITHUB_STEP_SUMMARY}"
       - name: Publish Release
