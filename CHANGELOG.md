@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2023-12-31] Release v0.7.6: fix workflow to download git notes
+</h2>
+    </summary>
+
+### ci(dagger-go)
+
+- fetch git notes when releasing
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-12-31] Release v0.7.5: one more tag-release fix
 </h2>
     </summary>
