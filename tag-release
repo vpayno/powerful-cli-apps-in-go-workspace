@@ -42,11 +42,14 @@ if ./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"; then
 	if git commit -v --amend --no-edit; then
 		# For some weird reason, the tag commit message ommits lines starting with '#'.
 		git tag -s -a -m "${message_tag//### /}" "${tag}"
+
+		git tag -d "${tag%%.*}"
+		git tag -s -a -m "${message_tag//### /}" "${tag%%.*}"
 	fi
 
 	printf "\n"
 	printf "Don't forget to push the commits and tag!\n"
-	printf "\t%s\n" "git push --tags upstream main" "git push --tags fork main"
+	printf "\t%s\n" "git push origin :refs/tags/${tag%%.*}" "git push --tags upstream main" "git push --tags fork main"
 	printf "\n"
 else
 
