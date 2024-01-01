@@ -2,6 +2,68 @@
 
 <details open>
     <summary>
+<h2> [2023-12-31] Release v0.7.1: testing dagger ci and creating releases
+</h2>
+    </summary>
+
+### build(tools)
+
+- exclude dagger ci go files from tests
+- run ./scripts/go-badges-coverage from go-test-with-coverage* scripts
+
+### chore
+
+- clean up golint errors
+- fix go-critic errors
+- format shell scripts with shfmt
+- md lint clean up
+- rename cmd/cli-wc/cli-wc.go to cmd/cli-wc/main.go
+- replace deprecated ioutil.ReadDir() with os.ReadDir()
+
+### ci(codeclimate)
+
+- ignore dagger ci code
+
+### ci(dagger)
+
+- add cli installation script and use it in github workflow
+- fix/update use of GITHUB_STEP_SUMMARY
+- split test and lint into separate ci jobs
+
+### ci(dagger-go)
+
+- add build step
+- add caching volumes
+- add create and publish release steps
+- add dagger go workflow
+- add documentation url link
+- fix helper scripts
+- use helper scripts in github workflow
+
+### ci(gitlab)
+
+- add gitlab dagger workflow
+
+### ci(golang-bump)
+
+- actionlint and yamlfmt clean up
+- add push commands after running tag-release script
+
+### ci(tools)
+
+- add comment showing how to push commits
+- add vX updating support
+- update tag-release to push vX and vX.Y.Z tags and release commit
+
+### docs
+
+- move top-level readme badges to top of file
+- remove lost platform svg badges
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-11-16] Release v0.7.0: bump golang version to 1.21
 </h2>
     </summary>
