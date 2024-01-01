@@ -22,9 +22,9 @@ func main() {
 	defer client.Close()
 
 	// go1.21.5
-	golang_ver := runtime.Version()
-	golang_ver = strings.Replace(golang_ver, "go", "", -1)
-	fmt.Println("Golang Ver: " + golang_ver)
+	golangVer := runtime.Version()
+	golangVer = strings.Replace(golangVer, "go", "", -1)
+	fmt.Println("Golang Ver: " + golangVer)
 
 	// use a node:16-slim container
 	// mount the source code directory on the host
@@ -38,9 +38,9 @@ func main() {
 	// set the working directory in the container
 	// install application dependencies
 	source = source.WithWorkdir("/src").
-		WithMountedCache("/go/pkg/mod", client.CacheVolume("go-mod-"+golang_ver)).
+		WithMountedCache("/go/pkg/mod", client.CacheVolume("go-mod-"+golangVer)).
 		WithEnvVariable("GOMODCACHE", "/go/pkg/mod").
-		WithMountedCache("/go/build-cache", client.CacheVolume("go-build"+golang_ver)).
+		WithMountedCache("/go/build-cache", client.CacheVolume("go-build"+golangVer)).
 		WithEnvVariable("GOCACHE", "/go/build-cache")
 
 	runner := source.

@@ -26,9 +26,9 @@ func main() {
 	}
 
 	// go1.21.5
-	golang_ver := runtime.Version()
-	golang_ver = strings.Replace(golang_ver, "go", "", -1)
-	fmt.Println("Golang Ver: " + golang_ver)
+	golangVer := runtime.Version()
+	golangVer = strings.Replace(golangVer, "go", "", -1)
+	fmt.Println("Golang Ver: " + golangVer)
 
 	// get reference to the local project
 	src := client.Host().Directory(".")
@@ -42,16 +42,16 @@ func main() {
 		// mount source code into golang image
 		WithDirectory("/src", src).
 		WithWorkdir("/src").
-		WithMountedCache("/go/pkg/mod", client.CacheVolume("go-mod-"+golang_ver)).
+		WithMountedCache("/go/pkg/mod", client.CacheVolume("go-mod-"+golangVer)).
 		WithEnvVariable("GOMODCACHE", "/go/pkg/mod").
-		WithMountedCache("/go/build-cache", client.CacheVolume("go-build"+golang_ver)).
+		WithMountedCache("/go/build-cache", client.CacheVolume("go-build"+golangVer)).
 		WithEnvVariable("GOCACHE", "/go/build-cache").
 		WithExec([]string{"rm", "-rf", "./build"})
 
 	for _, goos := range geese {
 		for _, goarch := range goarches {
 			// create a directory for each OS and architecture
-			output_path := fmt.Sprintf("build/%s/%s/", goos, goarch)
+			outputPath := fmt.Sprintf("build/%s/%s/", goos, goarch)
 
 			build := golang.
 				// set GOARCH and GOOS in the build environment
@@ -65,15 +65,15 @@ func main() {
 
 			for _, entry := range entries {
 				if entry.IsDir() {
-					main_file := "./cmd/" + entry.Name() + "/main.go"
+					mainFile := "./cmd/" + entry.Name() + "/main.go"
 					build = build.WithExec(
-						[]string{"go", "build", "-o", output_path + entry.Name(), main_file},
+						[]string{"go", "build", "-o", outputPath + entry.Name(), mainFile},
 					)
 				}
 			}
 
 			// add build to outputs
-			outputs = outputs.WithDirectory(output_path, build.Directory(output_path))
+			outputs = outputs.WithDirectory(outputPath, build.Directory(outputPath))
 		}
 	}
 
