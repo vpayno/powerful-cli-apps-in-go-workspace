@@ -47,10 +47,36 @@ if ./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"; then
 		git tag -s -a -m "${message_tag//### /}" "${tag%%.*}"
 	fi
 
-	printf "\n"
-	printf "Don't forget to push the commits and tag!\n"
-	printf "\t%s\n" "git push origin :refs/tags/${tag%%.*}" "git push --tags upstream main" "git push --tags fork main"
-	printf "\n"
+	if read -r -p "Press return to push release or Ctrl-C to abort."; then
+		if git remote | grep -q '^upstream$'; then
+			echo Running: git push upstream ":refs/tags/${tag%%.*}"
+			git push upstream ":refs/tags/${tag%%.*}"
+			printf "\n"
+
+			echo Running: git push --tags upstream main
+			git push --tags upstream main
+			printf "\n"
+		else
+			echo Running: git push origin ":refs/tags/${tag%%.*}"
+			git push origin ":refs/tags/${tag%%.*}"
+			printf "\n"
+
+			echo Running: git push --tags origin main
+			git push --tags origin main
+			printf "\n"
+		fi
+
+		if git remote | grep -q '^fork$'; then
+			echo Running: git push --tags fork main
+			git push --tags fork main
+			printf "\n"
+		fi
+	else
+		printf "\n"
+		printf "Don't forget to push the commits and tag!\n"
+		printf "\t%s\n" "git push origin :refs/tags/${tag%%.*}" "git push --tags upstream main" "git push --tags fork main"
+		printf "\n"
+	fi
 else
 
 	printf "ERROR: error encountered in go-generate-helper-git-version-info script\n"
