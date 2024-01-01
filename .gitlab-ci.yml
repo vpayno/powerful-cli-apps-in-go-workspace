@@ -37,3 +37,8 @@ test:
   extends: [.dagger]
   script:
     - ./scripts/dagger-run-test
+
+build:
+  extends: [.dagger]
+  script:
+    - ./scripts/dagger-run-build

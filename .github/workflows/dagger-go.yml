@@ -31,3 +31,12 @@ jobs:
         run: ./scripts/dagger-run-lint
       - name: Test with Dagger
         run: ./scripts/dagger-run-test
+      - name: Build with Dagger
+        run: |-
+          ./scripts/dagger-run-build
+          sudo apt install -y tree
+          {
+            printf "\`\`\`text\n"
+            tree ./build
+            printf "\`\`\`\n"
+          } | tee -a "${GITHUB_STEP_SUMMARY}"
