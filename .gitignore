@@ -31,3 +31,5 @@ public/
 # Node
 package-lock.json
 package.json
+
+/ci/*/.version.txt
