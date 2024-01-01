@@ -45,6 +45,8 @@ if ./scripts/go-generate-helper-git-version-info "${tag}" "${message_rel}"; then
 
 		git tag -d "${tag%%.*}"
 		git tag -s -a -m "${message_tag//### /}" "${tag%%.*}"
+
+		git notes add -m "${message_tag//### /}" "${tag}"
 	fi
 
 	if read -r -p "Press return to push release or Ctrl-C to abort."; then
