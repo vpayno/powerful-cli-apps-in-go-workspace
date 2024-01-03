@@ -2,6 +2,30 @@
 
 <details open>
     <summary>
+<h2> [2024-01-02] Release v0.7.7: add more build targets
+</h2>
+    </summary>
+
+### chore
+
+- add /ci/*/.version.txt to .gitignore
+
+### ci(dagger-go)
+
+- add more build targets
+
+### ci(git)
+
+- add 'site' commit message type
+
+### site
+
+- change download button to releases
+
+</details>
+
+<details>
+    <summary>
 <h2> [2023-12-31] Release v0.7.6: fix workflow to download git notes
 </h2>
     </summary>
