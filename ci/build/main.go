@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"slices"
 	"strings"
 
 	"dagger.io/dagger"
@@ -15,7 +16,31 @@ import (
 func main() {
 	// define build matrix
 	geese := []string{"linux", "darwin", "windows"}
-	goarches := []string{"amd64", "arm64"}
+	goarches := []string{
+		"386",
+		"amd64",
+		"arm64",
+		"mips",
+		"mips64",
+		"mips64le",
+		"mipsle",
+		"ppc64",
+		"ppc64le",
+	}
+
+	goosArchMap := map[string][]string{}
+	goosArchMap["linux"] = []string{
+		"386",
+		"amd64",
+		"arm",
+		"mips",
+		"mipsle",
+		"mips64le",
+		"ppc64",
+		"ppc64le",
+	}
+	goosArchMap["darwin"] = []string{"amd64", "arm64"}
+	goosArchMap["windows"] = []string{"amd64", "arm64"}
 
 	ctx := context.Background()
 	// initialize dagger client
@@ -49,6 +74,10 @@ func main() {
 
 	for _, goos := range geese {
 		for _, goarch := range goarches {
+			if !slices.Contains(goosArchMap[goos], goarch) {
+				continue
+			}
+
 			// create a directory for each OS and architecture
 			outputPath := fmt.Sprintf("build/%s/%s/", goos, goarch)
 
@@ -56,6 +85,12 @@ func main() {
 				// set GOARCH and GOOS in the build environment
 				WithEnvVariable("GOOS", goos).
 				WithEnvVariable("GOARCH", goarch)
+
+			fmt.Printf(
+				"GOOS: %s\tGOARCH: %s\n",
+				goos,
+				goarch,
+			)
 
 			entries, err := os.ReadDir("./cmd/")
 			if err != nil {
@@ -66,7 +101,13 @@ func main() {
 				if entry.IsDir() {
 					mainFile := "./cmd/" + entry.Name() + "/main.go"
 					build = build.WithExec(
-						[]string{"go", "build", "-o", outputPath + entry.Name(), mainFile},
+						[]string{
+							"go",
+							"build",
+							"-o",
+							outputPath + entry.Name(),
+							mainFile,
+						},
 					)
 				}
 			}
