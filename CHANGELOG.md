@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2024-01-03] Release v0.7.8: test new create-release-files wrapper script
+</h2>
+    </summary>
+
+### ci(dagger-go)
+
+- move release asset creation to a wrapper script
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-01-02] Release v0.7.7: add more build targets
 </h2>
     </summary>
