@@ -33,3 +33,6 @@ package-lock.json
 package.json
 
 /ci/*/.version.txt
+
+# ignore release files
+/release/

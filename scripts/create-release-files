@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+md_code_tag() {
+	if [[ -n ${GITHUB_STEP_SUMMARY} ]]; then
+		printf "\`\`\`%s\n" "${1}"
+
+		if [[ -z ${1} ]]; then
+			printf "\n"
+		fi
+	fi
+} # md_code_tag()
+
+if [[ ! -d ./release ]]; then
+	mkdir -pv "./release"
+fi
+
+if [[ -z ${GITHUB_REF_NAME:-${1}} ]]; then
+	GITHUB_REF_NAME="$(git tag | sort -V | tail -n 1)" || exit
+fi
+
+{
+	md_code_tag text
+	echo Running: tar cvzf ./release/releases.tar.gz build/*/*
+	time tar cvzf ./release/releases.tar.gz build/*/*
+	md_code_tag
+
+	md_code_tag text
+	echo Running: zip -r ./release/releases.zip build/*/*
+	time zip -r ./release/releases.zip build/*/*
+	md_code_tag
+
+	md_code_tag text
+	echo Running: git fetch origin 'refs/notes/*:refs/notes/*'
+	git fetch origin 'refs/notes/*:refs/notes/*'
+	md_code_tag
+
+	md_code_tag text
+	echo Running: git notes show "${GITHUB_REF_NAME:-${1}}" \| tee ./release/release_body.md
+	git notes show "${GITHUB_REF_NAME:-${1}}" | tee ./release/release_body.md
+	md_code_tag
+} |& tee -a "${GITHUB_STEP_SUMMARY:-/dev/null}"
+printf  "\n"

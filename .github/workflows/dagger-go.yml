@@ -47,26 +47,10 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |-
           sudo apt install -y zip
-          git fetch origin 'refs/notes/*:refs/notes/*'
-          {
-            printf "\`\`\`text\n"
-            echo Running: tar cvzf releases.tar.gz build/*/*
-            time tar cvzf releases.tar.gz build/*/*
-            printf "\`\`\`\n"
-            printf "\n"
-            printf "\`\`\`text\n"
-            echo Running: zip -r releases.zip build/*/*
-            time zip -r releases.zip build/*/*
-            printf "\`\`\`\n"
-            printf "\n"
-            printf "\`\`\`text\n"
-            echo Running: git notes show "${GITHUB_REF_NAME}" \| tee release_body.md
-            git notes show "${GITHUB_REF_NAME}" | tee release_body.md
-            printf "\`\`\`\n"
-          } | tee -a "${GITHUB_STEP_SUMMARY}"
+          ./scripts/create-release-files
       - name: Publish Release
         uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          artifacts: "releases.tar.gz,releases.zip"
-          bodyFile: release_body.md
+          artifacts: "release/releases.tar.gz,release/releases.zip"
+          bodyFile: release/release_body.md
