@@ -1,0 +1,5 @@
+release: v0.7.8 - test new create-release-files wrapper script
+
+ci(dagger-go)
+
+- move release asset creation to a wrapper script
