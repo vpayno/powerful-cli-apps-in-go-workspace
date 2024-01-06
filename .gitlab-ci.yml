@@ -42,3 +42,9 @@ build:
   extends: [.dagger]
   script:
     - ./scripts/dagger-run-build
+    - apk add zip
+    - ./scripts/create-release-files
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - ./release
