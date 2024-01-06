@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2024-01-06] Release v0.7.10: experiment with gitlab releases
+</h2>
+    </summary>
+
+### ci(gitlab)
+
+- allow manual/web execution
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-01-06] Release v0.7.9: experiment with go workspaces
 </h2>
     </summary>
