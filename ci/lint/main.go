@@ -32,7 +32,7 @@ func main() {
 	source := client.Container().
 		From("vpayno/ci-generic-debian:latest").
 		WithDirectory("/src", client.Host().Directory(".", dagger.HostDirectoryOpts{
-			Exclude: []string{"ci/", "build/"},
+			Exclude: []string{"build/"},
 		}))
 
 	// set the working directory in the container
