@@ -36,16 +36,19 @@ stages:
 
 lint:
   extends: [.dagger]
+  stage: lint
   script:
     - ./scripts/dagger-run-lint
 
 test:
   extends: [.dagger]
+  stage: test
   script:
     - ./scripts/dagger-run-test
 
 build:
   extends: [.dagger]
+  stage: build
   script:
     - ./scripts/dagger-run-build
     - apk add zip
