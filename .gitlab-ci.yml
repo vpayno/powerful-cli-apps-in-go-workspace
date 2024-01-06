@@ -10,6 +10,12 @@ workflow:
       when: always
     - when: never
 
+stages:
+  - lint
+  - test
+  - build
+  - release
+
 .docker:
   image: golang:1-alpine
   services:
