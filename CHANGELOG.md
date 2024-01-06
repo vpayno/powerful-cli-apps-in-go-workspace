@@ -2,6 +2,35 @@
 
 <details open>
     <summary>
+<h2> [2024-01-06] Release v0.7.9: experiment with go workspaces
+</h2>
+    </summary>
+
+### chore
+
+- setup go workspaces for the project and the ci code
+
+### ci(dagger-ci)
+
+- show pwd and directory listing in lint, test & build jobs
+- stop excluding ./ci workspace member in lint & test jobs
+
+### ci(gitlab)
+
+- add artifact creation and retention to build step
+- add release step
+- add stages to lint, test & built steps
+- define pipeline stages
+
+### ci(go)
+
+- fix revive install error
+- format yaml file
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-01-03] Release v0.7.8: test new create-release-files wrapper script
 </h2>
     </summary>
