@@ -39,7 +39,9 @@ func main() {
 		WithMountedCache("/go/pkg/mod", client.CacheVolume("go-mod-"+golangVer)).
 		WithEnvVariable("GOMODCACHE", "/go/pkg/mod").
 		WithMountedCache("/go/build-cache", client.CacheVolume("go-build"+golangVer)).
-		WithEnvVariable("GOCACHE", "/go/build-cache")
+		WithEnvVariable("GOCACHE", "/go/build-cache").
+		WithExec([]string{"pwd"}).
+		WithExec([]string{"ls", "-lvh"})
 
 	// set the working directory in the container
 	// install application dependencies

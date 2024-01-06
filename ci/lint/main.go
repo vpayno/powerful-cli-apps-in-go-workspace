@@ -44,6 +44,8 @@ func main() {
 		WithEnvVariable("GOCACHE", "/go/build-cache")
 
 	runner := source.
+		WithExec([]string{"pwd"}).
+		WithExec([]string{"ls", "-lvh"}).
 		WithExec([]string{"gocritic", "check", "-enableAll", "./..."}).
 		WithExec([]string{"gocyclo", "-over", "15", "."}).
 		WithExec([]string{"golangci-lint", "run", "./..."}).

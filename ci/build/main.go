@@ -70,7 +70,9 @@ func main() {
 		WithEnvVariable("GOMODCACHE", "/go/pkg/mod").
 		WithMountedCache("/go/build-cache", client.CacheVolume("go-build"+golangVer)).
 		WithEnvVariable("GOCACHE", "/go/build-cache").
-		WithExec([]string{"rm", "-rf", "./build"})
+		WithExec([]string{"rm", "-rf", "./build"}).
+		WithExec([]string{"pwd"}).
+		WithExec([]string{"ls", "-lvh"})
 
 	for _, goos := range geese {
 		for _, goarch := range goarches {
