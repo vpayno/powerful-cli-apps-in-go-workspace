@@ -153,7 +153,7 @@ jobs:
         id: go-test-revive
         if: matrix.os == 'ubuntu-latest'
         run: |-
-          go install github.com/mgechev/revive@latest
+          go install github.com/mgechev/revive@latest || go install github.com/mgechev/revive@master
           revive ./... | reviewdog -tee -efm="%f:%l:%c: %m" -name="revive" -reporter=github-check
       - name: Analyzing the code with go vet
         id: go-vet
