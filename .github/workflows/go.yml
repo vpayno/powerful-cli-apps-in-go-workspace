@@ -1,16 +1,13 @@
+---
 #
 # .github/workflows/go.yml
 #
----
-
 name: Go Workflow
-
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - main
       - develop
-
   pull_request:
 
 env:
@@ -30,12 +27,9 @@ defaults:
 jobs:
   go-change-check:
     name: Change Check
-
     runs-on: 'ubuntu-latest'
-
     outputs:
       docs_changed: ${{ steps.check_file_changed.outputs.docs_changed }}
-
     steps:
       - name: Checkout Repo
         id: checkout-repo
@@ -44,10 +38,9 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
           submodules: recursive
-
       - name: Get Change List
         id: check_file_changed
-        run: |
+        run: |-
           # Diff HEAD with the previous commit then output to stdout.
           printf "=== Which files changed? ===\n"
           GIT_DIFF="$(git diff --name-only HEAD^ HEAD)"
@@ -69,23 +62,17 @@ jobs:
 
           # Set the output named "docs_changed"
           printf "%s=%s\n" "docs_changed" "${HAS_DIFF}" >> "${GITHUB_OUTPUT}"
-
   go_checks:
     name: Go Checks
-
     strategy:
       matrix:
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
-
     runs-on: "${{ matrix.os }}"
-
     outputs:
       checks_completed: ${{ steps.go_checks_end.outputs.checks_completed }}
-
     needs:
       - go-change-check
     if: needs.go-change-check.outputs.docs_changed == 'True'
-
     steps:
       - name: Checkout Repo
         id: checkout-repo
@@ -94,22 +81,19 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
           submodules: recursive
-
       - name: Set up Go (using version in go.mod)
         id: setup-go
         uses: actions/setup-go@v3
         with:
           go-version-file: './go.mod'
-
       - name: Show Go version
         id: go-version
-        run: |
+        run: |-
           go version
-
       - name: Install bash 5.0 under macOS for mapfile
         id: update-bash-on-macos
         if: contains( matrix.os, 'macos')
-        run: |
+        run: |-
           printf "Before:\n"
           command -v bash
           bash --version | head -n 1
@@ -118,26 +102,23 @@ jobs:
           printf "After:\n"
           command -v bash
           bash --version | head -n 1
-
       - name: Checkout PR Branch
         id: checkout-pr-branch
-        run: |
+        run: |-
           if ! git branch --show-current | grep -q -E '^(main|develop)$'; then
             git status
             git fetch origin "${GH_HEAD_REF}"
             git switch "${GH_HEAD_REF}"
             git status
           fi
-
       - name: Run go generate
         id: go-generate
-        run: |
+        run: |-
           go generate ./...
-
       - name: Commit go generate Artifacts
         id: commit-go-generate-artifacts
         if: false && matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           # TODO: add signed commit support
           if git diff --quiet .; then
             true
@@ -154,136 +135,117 @@ jobs:
           # shellcheck disable=SC2016
           git commit -m 'ci(go): commit CI `go generated` output files'
           git show
-          #git push origin "${GH_REF}" # refs/pull/[0-9]+/merge
-          git push origin "${GH_HEAD_REF}" # branch_name
-          #git push origin "${GH_BASE_REF}" # main
-
+          # git push origin "${GH_REF}"  #  refs/pull/[0-9]+/merge
+          git push origin "${GH_HEAD_REF}"  # branch_name
+          # git push origin "${GH_BASE_REF}"  #  main
       - name: Install Go Tools
         id: install-go-tools
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install github.com/reviewdog/reviewdog/cmd/reviewdog@latest
-
       - name: Analyzing the code with golint
         id: golint
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install golang.org/x/lint/golint@latest
           golint -set_exit_status ./... | reviewdog -tee -f golint -reporter=github-check
-
       - name: Testing with revive
         id: go-test-revive
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install github.com/mgechev/revive@latest
           revive ./... | reviewdog -tee -efm="%f:%l:%c: %m" -name="revive" -reporter=github-check
-
       - name: Analyzing the code with go vet
         id: go-vet
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go vet ./... | reviewdog -tee -f govet -reporter=github-check
-
       - name: Testing with ineffassign
         id: go-test-ineffassign
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install github.com/gordonklaus/ineffassign@latest
           ineffassign ./... | reviewdog -tee -efm="%f:%l:%c: %m" -name="ineffassign" -reporter=github-check
-
       - name: Testing with gocyclo
         id: go-test-gocyclo
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
           # 10 appwc getCounts internal/app/cli-wc/app.go:105:1
           gocyclo -over "${GOCYCLO_OVER_THRESHOLD}" . | reviewdog -tee -efm="%m %f:%l:%c" -name="gocyclo" -reporter=github-check
-
       - name: Testing with go-consistent
         id: go-test-go-consistent
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install github.com/quasilyte/go-consistent@latest
           # shellcheck disable=SC2046
           go-consistent -v $(go list ./... | grep -v -e vendor -e test) | reviewdog -tee -f go-consistent -reporter=github-check || true
-
       - name: Testing with gocritic
         id: go-test-gocritic
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install github.com/go-critic/go-critic/cmd/gocritic@latest
           gocritic check -enableAll ./... | reviewdog -tee -efm="%f:%l:%c: %m" -name="gocritic" -reporter=github-check
-
       - name: Testing with staticcheck
         id: go-test-staticcheck
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install honnef.co/go/tools/cmd/staticcheck@latest
           staticcheck ./... | reviewdog -tee -f staticcheck -reporter=github-check
-
       - name: Testing with golangci-lint
         id: go-test-golangci-lint
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
           golangci-lint run --out-format=line-number ./... | reviewdog -tee -f=golangci-lint -reporter=github-check
-
       - name: Testing with go-sumtype
         id: go-test-go-sumtype
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install github.com/BurntSushi/go-sumtype@latest
           # shellcheck disable=SC2046
           go-sumtype $(go list ./... | grep -v -e vendor) | reviewdog -tee -f=golangci-lint -reporter=github-check
-
       - name: Testing with gosec
         id: go-test-security
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install github.com/securego/gosec/v2/cmd/gosec@latest
           gosec ./... | reviewdog -tee -f gosec -reporter=github-check
-
       - name: Testing with govulncheck
         id: go-test-govulncheck
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install golang.org/x/vuln/cmd/govulncheck@latest
           govulncheck ./...
-
       - name: Code Climate Code Coverage Setup
         id: go-code-climate-code-coverage-setup
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod -v a+x ./cc-test-reporter
           ./cc-test-reporter before-build
-
       - name: Testing with gotest
         id: go-test-run
-        run: |
+        run: |-
           go install github.com/rakyll/gotest@latest
           go install golang.org/x/tools/cmd/cover@latest
           gotest -v -covermode=count -coverprofile=./reports/.coverage.out $(go list ./... | grep -v /ci/)
-
       - name: Generate coverage.xml
         id: go-generate-coverage-xml
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go install github.com/t-yuki/gocover-cobertura@latest
           gocover-cobertura < ./reports/.coverage.out > ./reports/coverage.xml
           wc ./reports/coverage.xml
-
       - name: Test Coverage Report (txt)
         id: go-test-coverage-txt
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           go tool cover -func=./reports/.coverage.out | tee reports/coverage.txt
-
       - name: Test Coverage Report (html)
         id: go-test-coverage-html
-        run: |
+        run: |-
           go tool cover -html=./reports/.coverage.out -o=reports/coverage.html
-
       - name: Upload coverage.html
         id: upload-coverage-html
         if: matrix.os == 'ubuntu-latest'
@@ -291,13 +253,11 @@ jobs:
         with:
           name: go-coverage-html
           path: reports/coverage.html
-
       - name: Show Missing Coverage
         id: go-test-coverage-annotate
-        run: |
+        run: |-
           go install github.com/axw/gocov/gocov@latest
           gocov convert ./reports/.coverage.out | gocov annotate -ceiling=100 -color - | tee reports/coverage-annotations.txt
-
       - name: Upload coverage-annotations.txt
         id: upload-coverage-annotations-txt
         if: matrix.os == 'ubuntu-latest'
@@ -305,12 +265,10 @@ jobs:
         with:
           name: go-coverage-annotations-txt
           path: reports/coverage-annotations.txt
-
       - name: gocov Coverage Report
         id: go-test-coverage-report
-        run: |
+        run: |-
           gocov convert ./reports/.coverage.out | gocov report | tee reports/coverage-summary.txt
-
       - name: Upload coverage-summary.txt
         id: upload-coverage-summary-txt
         if: matrix.os == 'ubuntu-latest'
@@ -318,35 +276,31 @@ jobs:
         with:
           name: go-coverage-summary-txt
           path: reports/coverage-summary.txt
-
       - name: Code Climate Code Coverage Report
         id: go-code-climate-code-coverage-report
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           cp -v ./reports/.coverage.out ./c.out
           ./cc-test-reporter after-build format-coverage -t gocov --prefix "${GH_REPO_URL}" ./reports/.coverage.out
-
       - name: Install octocov
         id: octocov-install
         if: false && matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           curl -sSL "https://github.com/k1LoW/octocov/releases/download/v${OCTOCOV_VERSION}/octocov_v${OCTOCOV_VERSION}_linux_amd64.tar.gz" | tar xvzf - octocov
           ls -lh octocov
           printf "\n"
           ./octocov --help
           printf "\n"
           ./octocov --version
-
       - name: Generate octocov Badges
         id: octocov-badges
         if: false && matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           ./scripts/go-badges-coverage
-
       - name: Action Summary
         id: gh-action-summary
         if: matrix.os == 'ubuntu-latest'
-        run: |
+        run: |-
           {
             printf "### Code Coverage Summary\n\n"
             printf '```\n'
@@ -361,12 +315,11 @@ jobs:
             printf '```\n'
             printf "\n"
           } >> "${GITHUB_STEP_SUMMARY}"
-
       - name: Commit Reports
         id: commit-reports
         if: false && matrix.os == 'ubuntu-latest'
-        run: |
-          git diff --quiet ./report && exit # stop if there's nothing to commit
+        run: |-
+          git diff --quiet ./report && exit  # stop if there's nothing to commit
           git config user.name github-actions
           git config user.email github-actions@github.com
           git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
@@ -375,26 +328,21 @@ jobs:
           git status
           git commit -m 'ci(reports): commit CI generated files'
           git show
-          #git push origin ${{ github.ref }} # refs/pull/[0-9]+/merge
-          git push origin "${GH_HEAD_REF}" # branch_name
-          #git push origin ${{ github.base_ref }} # main
-
+          # git push origin ${{ github.ref }}  #  refs/pull/[0-9]+/merge
+          git push origin "${GH_HEAD_REF}"  # branch_name
+          # git push origin ${{ github.base_ref }}  #  main
       - name: Last Go Check
         id: go_checks_end
-        run: |
+        run: |-
           # Set the output named "checks_completed"
           printf "%s=%s\n" "checks_completed" "true" >> "${GITHUB_OUTPUT}"
-
   go-check-barrier:
     name: go-check-barrier-job
-
     runs-on: 'ubuntu-latest'
-
     needs:
       - go_checks
     if: needs.go_checks.outputs.checks_completed == 'True'
-
     steps:
       - name: Do nothing step to mark this workflow as "completed"
-        run: |
+        run: |-
           true
