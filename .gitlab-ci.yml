@@ -56,7 +56,6 @@ build:
     - apk add git zip
     - ./scripts/create-release-files
     - printf "%s=%s\n" "BUILD_JOB_ID" "${CI_JOB_ID}" | tee -a DOTENV.env
-    - printf "%s=%s\n" "RELEASE_BODY" "$(cat release/release_body.md)" | tee -a DOTENV.env
   artifacts:
     expire_in: 1 week
     paths:
@@ -81,7 +80,7 @@ release:
   release:
     name: 'Release $CI_COMMIT_TAG'
     tag_name: '$CI_COMMIT_TAG'
-    description: '$RELEASE_BODY'
+    description: release/release_body.md
     assets:
       links:
         - name: 'releases.tar.gz'
