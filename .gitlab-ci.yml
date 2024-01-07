@@ -53,7 +53,7 @@ build:
   stage: build
   script:
     - ./scripts/dagger-run-build
-    - apk add zip
+    - apk add git zip
     - ./scripts/create-release-files
     - printf "%s=%s\n" "BUILD_JOB_ID" "${CI_JOB_ID}" | tee -a DOTENV.env
     - printf "%s=%s\n" "RELEASE_BODY" "$(cat release/release_body.md)" | tee -a DOTENV.env
