@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2024-01-07] Release v0.7.15: gitlab release fixes
+</h2>
+    </summary>
+
+### ci(gitlab)
+
+- dotenv doesn't support multiline variables
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-01-07] Release v0.7.13: gitlab release fixes
 </h2>
     </summary>
@@ -185,13 +197,17 @@
 
 <details>
     <summary>
-<h2> [2023-12-31] Release v0.7.12: experiment with gitlab releases
+<h2> [2023-12-31] Release v0.7.13: gitlab release fixes
 </h2>
     </summary>
 
+### build(tools)
+
+- make octocov happy in gitlab
+
 ### ci(gitlab)
 
-- fix release url and notes
+- add git dependency to build job
 
 </details>
 
