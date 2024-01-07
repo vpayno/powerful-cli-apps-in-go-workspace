@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ -n ${CI_PIPELINE_SOURCE} ]]; then
+	export GITHUB_EVENT_NAME="${CI_PIPELINE_SOURCE}"
+fi
+
 declare octocov_bin=octocov
 
 if [[ -x ./octocov ]]; then
