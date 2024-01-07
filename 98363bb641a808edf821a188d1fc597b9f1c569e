@@ -1,0 +1,5 @@
+release: v0.7.15 - gitlab release fixes
+
+ci(gitlab)
+
+- dotenv doesn't support multiline variables
