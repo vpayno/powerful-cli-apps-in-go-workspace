@@ -1,0 +1,9 @@
+release: v0.7.13 - gitlab release fixes
+
+build(tools)
+
+- make octocov happy in gitlab
+
+ci(gitlab)
+
+- add git dependency to build job
