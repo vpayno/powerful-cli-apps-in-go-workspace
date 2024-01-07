@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2024-01-07] Release v0.7.12: experiment with gitlab releases
+</h2>
+    </summary>
+
+### ci(gitlab)
+
+- fix release url and notes
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-01-07] Release v0.7.11: experiment with gitlab releases
 </h2>
     </summary>
@@ -157,13 +169,13 @@
 
 <details>
     <summary>
-<h2> [2023-12-31] Release v0.7.10: experiment with gitlab releases
+<h2> [2023-12-31] Release v0.7.11: experiment with gitlab releases
 </h2>
     </summary>
 
 ### ci(gitlab)
 
-- allow manual/web execution
+- release fixes
 
 </details>
 
