@@ -2,6 +2,23 @@
 
 <details open>
     <summary>
+<h2> [2024-03-09] Release v0.7.17: release: v0.7.17 - dependabot update
+</h2>
+    </summary>
+
+### build(deps)
+
+- bump github.com/stretchr/testify from 1.8.4 to 1.9.0
+
+### ci(go)
+
+- actionlint fixes
+- retry go-sumtype installation
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-03-09] Release v0.7.16: bump golang version to 1.22
 </h2>
     </summary>
@@ -215,13 +232,19 @@
 
 <details>
     <summary>
-<h2> [2023-12-31] Release v0.7.15: gitlab release fixes
+<h2> [2023-12-31] Release v0.7.16: bump golang version to 1.22
 </h2>
     </summary>
 
-### ci(gitlab)
+### build(go)
 
-- dotenv doesn't support multiline variables
+- bump golang version to 1.22
+
+### ci(tools)
+
+- fix to file detection and version string editing
+- update version bump commit title
+- use git to get latest golang versions, minor code improvements
 
 </details>
 
