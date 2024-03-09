@@ -1,0 +1,10 @@
+release: v0.7.17 - release: v0.7.17 - dependabot update
+
+build(deps)
+
+- bump github.com/stretchr/testify from 1.8.4 to 1.9.0
+
+ci(go)
+
+- actionlint fixes
+- retry go-sumtype installation
