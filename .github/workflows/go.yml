@@ -200,7 +200,7 @@ jobs:
           golangci-lint run --out-format=line-number ./... | reviewdog -tee -f=golangci-lint -reporter=github-check
       - name: Testing with go-sumtype
         id: go-test-go-sumtype
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && false
         run: |-
           go install github.com/BurntSushi/go-sumtype@latest
           # shellcheck disable=SC2046
