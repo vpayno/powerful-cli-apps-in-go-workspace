@@ -2,6 +2,24 @@
 
 <details open>
     <summary>
+<h2> [2024-03-09] Release v0.7.16: bump golang version to 1.22
+</h2>
+    </summary>
+
+### build(go)
+
+- bump golang version to 1.22
+
+### ci(tools)
+
+- fix to file detection and version string editing
+- update version bump commit title
+- use git to get latest golang versions, minor code improvements
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-01-07] Release v0.7.15: gitlab release fixes
 </h2>
     </summary>
@@ -197,17 +215,13 @@
 
 <details>
     <summary>
-<h2> [2023-12-31] Release v0.7.13: gitlab release fixes
+<h2> [2023-12-31] Release v0.7.15: gitlab release fixes
 </h2>
     </summary>
 
-### build(tools)
-
-- make octocov happy in gitlab
-
 ### ci(gitlab)
 
-- add git dependency to build job
+- dotenv doesn't support multiline variables
 
 </details>
 
