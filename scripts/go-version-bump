@@ -17,28 +17,59 @@ if ! git diff --quiet; then
 fi
 
 golang_show_dl_urls() {
-	curl -sS https://go.dev/dl/ | grep 'class="download"' | sed -r -e 's/^.*href="(.*)">.*$/https:\/\/go.dev\1/' | sort -V
+	curl -sS https://go.dev/dl/ |
+		grep 'class="download"' |
+		sed -r -e 's/^.*href="(.*)">.*$/https:\/\/go.dev\1/' |
+		sort -V
 }
 
 golang_show_dl_versions() {
 	# starting with version 1.21 the first version is now 1.21.0
-	golang_show_dl_urls | sed -r -e 's:^.*/go(.*)[.](zip|msi|tar.gz|pkg)$:\1:' | grep '[..]src$' | sed -r -e 's:[.]src::g' | grep -v -E '(beta|rc)' | grep -E '^[0-9]+[.][0-9]+[.][0-9]+$' | sort -V
+	golang_show_dl_urls |
+		sed -r -e 's:^.*/go(.*)[.](zip|msi|tar.gz|pkg)$:\1:' |
+		grep '[..]src$' |
+		sed -r -e 's:[.]src::g' |
+		grep -v -E '(beta|rc)' |
+		grep -E '^[0-9]+[.][0-9]+[.][0-9]+$' |
+		sort -V
+}
+
+golang_get_latest_version_full() {
+	git -c 'versionsort.suffi=-' ls-remote --tags --sort='v:refname' https://go.googlesource.com/go 'go*.*.*' |
+		tail --lines=1 |
+		cut --delimiter='/' --fields=3 |
+		sed -r -e 's/^.[a-z]+([0-9]+\.[0-9]+\.[0-9]+).*$/\1/g'
+}
+
+golang_get_latest_version_family() {
+	git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' https://go.googlesource.com/go 'go*.*.*' |
+		tail --lines=1 |
+		cut --delimiter='/' --fields=3 |
+		sed -r -e 's/^.[a-z]+([0-9]+\.[0-9]+).*$/\1/g'
 }
 
 golang_show_dl_patch_versions() {
-	golang_show_dl_urls | sed -r -e 's:^.*/go(.*)[.](zip|msi|tar.gz|pkg)$:\1:' | grep '[..]src$' | sed -r -e 's:[.]src::g' | grep -v -E '(beta|rc)' | grep -E '^[0-9]+[.][0-9]+[.][0-9]+$' | sort -V
+	golang_show_dl_urls |
+		sed -r -e 's:^.*/go(.*)[.](zip|msi|tar.gz|pkg)$:\1:' |
+		grep '[..]src$' |
+		sed -r -e 's:[.]src::g' |
+		grep -v -E '(beta|rc)' |
+		grep -E '^[0-9]+[.][0-9]+[.][0-9]+$' |
+		sort -V
 }
 
 declare -a FILES
 declare old_go_ver
 declare new_go_ver
+declare new_go_ver_full
 declare current_branch
 
 old_go_ver="$(awk '/^go / { print $NF }' go.mod)"
 
 # starting with version 1.21 the first version is now 1.21.0
-new_go_ver="$(golang_show_dl_versions | tail -n 1)"
-new_go_ver="${new_go_ver%.*}"
+new_go_ver="$(golang_get_latest_version_family)"
+
+new_go_ver_full="$(golang_get_latest_version_full)"
 
 if [[ ${old_go_ver} == "${new_go_ver}" ]]; then
 	printf "Golang version, %s, is already up to date.\n" "${old_go_ver}"
@@ -46,8 +77,9 @@ if [[ ${old_go_ver} == "${new_go_ver}" ]]; then
 fi
 
 # starting with version 1.21 the first version is now 1.21.0
-if ! golang_show_dl_patch_versions | grep -q -E "^${new_go_ver}.[1-9]+$"; then
-	printf "Golang version >%s not found. Skipping update.\n" "${new_go_ver}"
+# looking for micro/patch versions starting at 1 (don't trust .0 releases, I can wait for the >=.1 release)
+if [[ ! ${new_go_ver_full} =~ ^${new_go_ver}.[1-9]+$ ]]; then
+	printf "Golang version >%s not found. Skipping update.\n" "${new_go_ver}.0"
 	exit # 0 exit code since this isn't a workflow error condition
 fi
 
