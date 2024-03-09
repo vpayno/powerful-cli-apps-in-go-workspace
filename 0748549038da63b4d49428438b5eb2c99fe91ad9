@@ -1,0 +1,11 @@
+release: v0.7.16 - bump golang version to 1.22
+
+build(go)
+
+- bump golang version to 1.22
+
+ci(tools)
+
+- fix to file detection and version string editing
+- update version bump commit title
+- use git to get latest golang versions, minor code improvements
