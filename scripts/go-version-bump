@@ -83,9 +83,9 @@ if [[ ! ${new_go_ver_full} =~ ^${new_go_ver}.[1-9]+$ ]]; then
 	exit # 0 exit code since this isn't a workflow error condition
 fi
 
-mapfile -t FILES < <(git grep --name-only "\b${old_go_ver//[.]/[.]}\b" | grep -v -E '[.]md$')
+mapfile -t FILES < <(git grep --name-only "\b${old_go_ver}\b" | grep -E '\bgo\.(mod|work)$')
 
-sed -r -i -e "s/${old_go_ver}/${new_go_ver}/g" "${FILES[@]}" || die "failed to change the golang version"
+sed -r -i -e "s/${old_go_ver}(\.[0-9]+)?/${new_go_ver}/g" "${FILES[@]}" || die "failed to change the golang version"
 
 if ! git diff --quiet; then
 	git status
