@@ -97,7 +97,7 @@ if ! git diff --quiet; then
 	if ! ${in_gha}; then
 		git add --update . || die "failed to stage the script's changes"
 
-		git commit -S -m "build(go): bump golang version to ${new_go_ver}" || die "failed to create a golang version bump commit"
+		git commit -S -m "build(go): bump golang version from ${old_go_ver} to ${new_go_ver}" || die "failed to create a golang version bump commit"
 
 		current_branch="$(git branch --show-current)"
 
