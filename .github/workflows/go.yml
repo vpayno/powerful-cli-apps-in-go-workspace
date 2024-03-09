@@ -229,6 +229,7 @@ jobs:
         run: |-
           go install github.com/rakyll/gotest@latest
           go install golang.org/x/tools/cmd/cover@latest
+          # shellcheck disable=SC2046
           gotest -v -covermode=count -coverprofile=./reports/.coverage.out $(go list ./... | grep -v /ci/)
       - name: Generate coverage.xml
         id: go-generate-coverage-xml
