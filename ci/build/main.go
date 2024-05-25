@@ -55,7 +55,7 @@ func main() {
 	fmt.Println("Golang Ver: " + golangVer)
 
 	// get reference to the local project
-	src := client.Host().Directory(".")
+	repo := client.Host().Directory(".")
 
 	// create empty directory to put build outputs
 	outputs := client.Directory()
@@ -64,8 +64,8 @@ func main() {
 		// get golang image
 		From("golang:latest").
 		// mount source code into golang image
-		WithDirectory("/src", src).
-		WithWorkdir("/src").
+		WithDirectory("/repo", repo).
+		WithWorkdir("/repo").
 		WithMountedCache("/go/pkg/mod", client.CacheVolume("go-mod-"+golangVer)).
 		WithEnvVariable("GOMODCACHE", "/go/pkg/mod").
 		WithMountedCache("/go/build-cache", client.CacheVolume("go-build"+golangVer)).

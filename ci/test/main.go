@@ -28,14 +28,14 @@ func main() {
 
 	// use a node:16-slim container
 	// mount the source code directory on the host
-	// at /src in the container
+	// at /repo in the container
 	source := client.Container().
 		From("vpayno/ci-generic-debian:latest").
-		WithDirectory("/src", client.Host().Directory(".", dagger.HostDirectoryOpts{
+		WithDirectory("/repo", client.Host().Directory(".", dagger.HostDirectoryOpts{
 			Exclude: []string{"build/"},
 		}))
 
-	source = source.WithWorkdir("/src").
+	source = source.WithWorkdir("/repo").
 		WithMountedCache("/go/pkg/mod", client.CacheVolume("go-mod-"+golangVer)).
 		WithEnvVariable("GOMODCACHE", "/go/pkg/mod").
 		WithMountedCache("/go/build-cache", client.CacheVolume("go-build"+golangVer)).
