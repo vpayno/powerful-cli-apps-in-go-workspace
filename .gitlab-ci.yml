@@ -42,6 +42,12 @@ lint:
   script:
     - ./scripts/dagger-run-lint
 
+lint-parallel:
+  extends: [.dagger]
+  stage: lint
+  script:
+    - ./scripts/dagger-run-lint-parallel
+
 test:
   extends: [.dagger]
   stage: test
