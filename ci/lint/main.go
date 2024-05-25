@@ -55,10 +55,30 @@ func main() {
 		WithExec([]string{"revive", "./..."}).
 		WithExec([]string{"staticcheck", "./..."})
 
-	// run application tests
-	out, err := runner.Stderr(ctx)
+	stdout, err := runner.Stdout(ctx)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(out)
+
+	// run application tests
+	stderr, err := runner.Stderr(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(strings.Repeat("=", 79))
+	fmt.Println()
+	fmt.Println("Output for Job: ")
+	fmt.Println()
+	fmt.Println("[stdout]")
+	fmt.Println()
+	fmt.Println(stdout)
+	fmt.Println()
+	fmt.Println(strings.Repeat("-", 79))
+	fmt.Println()
+	fmt.Println("[stderr]")
+	fmt.Println()
+	fmt.Println(stderr)
+	fmt.Println()
+	fmt.Println(strings.Repeat("=", 79))
 }
