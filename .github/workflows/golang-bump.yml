@@ -8,6 +8,9 @@
 # https://github.com/peter-evans/create-or-update-project-card
 # https://github.com/peter-evans/create-pull-request
 # https://github.com/peter-evans/enable-pull-request-automerge
+#
+# yamllint disable rule:line-length
+#
 name: "Golang Version Bump Workflow"
 on:  # yamllint disable-line rule:truthy
   schedule:
@@ -244,13 +247,13 @@ jobs:
             printf "\n"
             printf "$ git fetchpr %s\n" "${{ steps.cpr.outputs.pull-request-number }}"
             printf "\n"
-            printf "$ git lg -n 5\n"
+            printf "$ git lg main..\n"
             printf "\n"
             printf "$ git checkout main\n"
             printf "\n"
             printf "$ git merge --ff-only prs/%s\n" "${{ steps.cpr.outputs.pull-request-number }}"
             printf "\n"
-            printf "$ git lg -n 5\n"
+            printf "$ git lg origin/main..\n"
             printf "\n"
             printf "$ git push origin main\n"
             printf "%s\n" '```'
@@ -262,10 +265,6 @@ jobs:
             printf "\n"
             printf "%s\n" '```'
             printf "$ ./tag-release %s \"bump golang version to %s\"\n" "${next_tag}" "${{ env.NEW_GO_VER }}"
-            printf "\n"
-            printf "$ git push --tags upstream main\n"
-            printf "\n"
-            printf "$ git push --tags fork main\n"
             printf "%s\n" '```'
           } | tee -a "${PR_COMMENT2}"
           cat "${PR_COMMENT1}" >> "${GITHUB_STEP_SUMMARY}"
