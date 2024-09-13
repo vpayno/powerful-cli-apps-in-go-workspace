@@ -1,0 +1,20 @@
+release: v0.8.0 - bump golang version to 1.23
+
+build(deps)
+
+- bump github.com/vektah/gqlparser/v2 in /ci
+
+build(go)
+
+- bump golang version to 1.23
+
+ci(dagger-ci)
+
+- add lint job that uses goroutines
+- switch from /src to /repo which is less confusing
+- update output in lint job
+- update output in test job
+
+workspace
+
+- commit go.work.sum
