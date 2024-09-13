@@ -2,6 +2,33 @@
 
 <details open>
     <summary>
+<h2> [2024-09-12] Release v0.8.0: bump golang version to 1.23
+</h2>
+    </summary>
+
+### build(deps)
+
+- bump github.com/vektah/gqlparser/v2 in /ci
+
+### build(go)
+
+- bump golang version to 1.23
+
+### ci(dagger-ci)
+
+- add lint job that uses goroutines
+- switch from /src to /repo which is less confusing
+- update output in lint job
+- update output in test job
+
+### workspace
+
+- commit go.work.sum
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-03-09] Release v0.7.17: release: v0.7.17 - dependabot update
 </h2>
     </summary>
@@ -232,19 +259,18 @@
 
 <details>
     <summary>
-<h2> [2023-12-31] Release v0.7.16: bump golang version to 1.22
+<h2> [2023-12-31] Release v0.7.17: release: v0.7.17 - dependabot update
 </h2>
     </summary>
 
-### build(go)
+### build(deps)
 
-- bump golang version to 1.22
+- bump github.com/stretchr/testify from 1.8.4 to 1.9.0
 
-### ci(tools)
+### ci(go)
 
-- fix to file detection and version string editing
-- update version bump commit title
-- use git to get latest golang versions, minor code improvements
+- actionlint fixes
+- retry go-sumtype installation
 
 </details>
 
