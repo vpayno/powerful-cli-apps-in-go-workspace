@@ -2,6 +2,26 @@
 
 <details open>
     <summary>
+<h2> [2024-10-08] Release v0.8.1: bump grpc and dagger deps
+</h2>
+    </summary>
+
+### build(deps)
+
+- bump google.golang.org/grpc from 1.64.0 to 1.64.1 in /ci
+
+### chore
+
+- update dagger to v0.13.0
+
+### ci(golang-bump)
+
+- update instruction commands
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-09-12] Release v0.8.0: bump golang version to 1.23
 </h2>
     </summary>
