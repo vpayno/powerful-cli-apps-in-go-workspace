@@ -1,0 +1,13 @@
+release: v0.8.1 - bump grpc and dagger deps
+
+build(deps)
+
+- bump google.golang.org/grpc from 1.64.0 to 1.64.1 in /ci
+
+chore
+
+- update dagger to v0.13.0
+
+ci(golang-bump)
+
+- update instruction commands
