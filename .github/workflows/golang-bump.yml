@@ -180,7 +180,7 @@ jobs:
             printf "Pull Request URL   : %s\n" "${{ steps.cpr.outputs.pull-request-url }}"
           } | tee -a "${GITHUB_STEP_SUMMARY}"
       - name: Wait for Go checks to succeed
-        uses: fountainhead/action-wait-for-check@v1.1.0
+        uses: fountainhead/action-wait-for-check@v1.2.0
         if: false && steps.cpr.outputs.pull-request-number
         id: wait-for-go-checks
         with:
