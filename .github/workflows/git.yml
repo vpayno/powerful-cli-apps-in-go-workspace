@@ -30,7 +30,7 @@ jobs:
         id: block-if-contains-bad-commit-messages
         uses: wagoid/commitlint-github-action@v6
         with:
-          configFile: .commitlint.config.js
+          configFile: .commitlint.config.mjs
           failOnErrors: true
           failOnWarnings: false
           firstParent: true

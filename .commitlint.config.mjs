@@ -1,6 +1,6 @@
 // https://raw.githubusercontent.com/conventional-changelog/commitlint/master/%40commitlint/config-conventional/index.js
 
-module.exports = {
+export default {
     // parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
         'body-leading-blank': [1, 'always'],
