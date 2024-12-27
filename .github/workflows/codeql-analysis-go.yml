@@ -1,20 +1,16 @@
+---
 #
 # .github/workflows/codeql-analysis-go.yml
 #
 
 # https://github.com/github/codeql
----
-
 name: "CodeQL Workflow"
-
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - main
       - develop
-
   pull_request:
-
   schedule:
     - cron: '15 08 * * 6'
 
@@ -25,12 +21,9 @@ defaults:
 jobs:
   stage1-setup:
     name: Change Check
-
     runs-on: 'ubuntu-latest'
-
     outputs:
       docs_changed: ${{ steps.check_file_changed.outputs.docs_changed }}
-
     steps:
       - name: Checkout Repo
         id: checkout-repo
@@ -39,7 +32,6 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
           submodules: recursive
-
       - name: Get Change List
         id: check_file_changed
         run: |
@@ -64,28 +56,22 @@ jobs:
 
           # Set the output named "docs_changed"
           printf "%s=%s\n" "docs_changed" "${HAS_DIFF}" >> "${GITHUB_OUTPUT}"
-
   stage2-analyze:
     name: CodeQL Analyze
-
     runs-on: ubuntu-latest
-
     needs:
       - stage1-setup
     if: needs.stage1-setup.outputs.docs_changed == 'True'
-
     permissions:
       actions: read
       contents: read
       security-events: write
-
     strategy:
       fail-fast: false
       matrix:
         language: ['go']
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -115,16 +101,13 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version-file: './go.mod'
-
       - name: Install Dependencies
         run: |
           go version
           go install github.com/goreleaser/goreleaser@latest
-
       - name: Manual Build
         run: |
           echo "Run, Build Application using script"
           goreleaser build --rm-dist --single-target --snapshot
-
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2

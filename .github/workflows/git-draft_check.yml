@@ -1,12 +1,10 @@
+---
 #
 # .github/workflows/draft_check.yml
 #
 
 # https://github.com/13rac1/block-fixup-merge-action
----
-
 name: Draft Check Workflow
-
 on:  # yamllint disable-line rule:truthy
   pull_request:
 
@@ -17,12 +15,10 @@ defaults:
 jobs:
   block-fixup:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repo
         id: checkout-repo
         uses: actions/checkout@v4
-
       - name: Block Fixup Commit Merge
         id: block-if-contains-fixups
         uses: 13rac1/block-fixup-merge-action@v2.0.0

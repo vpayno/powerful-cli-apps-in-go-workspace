@@ -1,18 +1,15 @@
+---
 #
 # .github/workflows/misspell.yml
 #
 
 # https://github.com/reviewdog/action-misspell
----
-
 name: Spelling Workflow
-
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - main
       - develop
-
   pull_request:
 
 env:
@@ -26,11 +23,9 @@ jobs:
   spelling:
     name: Spelling Check
     runs-on: "ubuntu-latest"
-
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-
       - name: Run misspell
         uses: reviewdog/action-misspell@v1
         with:

@@ -1,15 +1,12 @@
+---
 #
 #  .github/workflows/github-pages-hugo.yml
 #
----
-
 name: Deploy Hugo site to GitHub Pages
-
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - 'pages-pr'
-
   pull_request:
     branches:
       - 'pages-pr'
@@ -36,25 +33,21 @@ jobs:
   # Build job
   stage2-build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
-
       - name: Setup Hugo
         id: setup-hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: 'latest'
           extended: true
-
       - name: Setup Pages
         id: setup_pages
         uses: actions/configure-pages@v2
-
       - name: Setup NodeJS
         id: setup-nodejs
         uses: actions/setup-node@v3
@@ -67,7 +60,6 @@ jobs:
           npm install --save-dev postcss-cli
           npm install -D postcss
           (cd pages-gh/themes/docsy && npm install)
-
       - name: Build with Hugo
         env:
           # For maximum backward compatibility with Hugo modules
@@ -78,7 +70,6 @@ jobs:
           hugo \
             --minify \
             --baseURL "${{ steps.setup_pages.outputs.base_url }}/"
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
@@ -89,11 +80,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     runs-on: ubuntu-latest
-
     needs: stage2-build
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

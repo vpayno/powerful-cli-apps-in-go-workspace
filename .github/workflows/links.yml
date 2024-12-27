@@ -1,18 +1,15 @@
+---
 #
 # .github/workflows/links.yml
 #
 
 # https://github.com/lycheeverse/lychee-action
----
-
 name: Link Check Workflow
-
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - main
       - develop
-
   pull_request:
 
 defaults:

@@ -1,18 +1,15 @@
+---
 #
 # .github/woorkflows/gh-actions.yml
 #
 
 # https://github.com/reviewdog/action-actionlint
----
-
 name: GitHub Action Workflow
-
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - main
       - develop
-
   pull_request:
 
 env:
@@ -25,12 +22,9 @@ defaults:
 jobs:
   stage1:
     name: Change Check
-
     runs-on: 'ubuntu-latest'
-
     outputs:
       docs_changed: ${{ steps.check_file_changed.outputs.docs_changed }}
-
     steps:
       - name: Checkout Repo
         id: checkout-repo
@@ -39,7 +33,6 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
           submodules: recursive
-
       - name: Get Change List
         id: check_file_changed
         run: |
@@ -64,19 +57,15 @@ jobs:
 
           # Set the output named "docs_changed"
           printf "%s=%s\n" "docs_changed" "${HAS_DIFF}" >> "${GITHUB_OUTPUT}"
-
   stage2:
     name: GitHub Action Checks
     strategy:
       matrix:
         os: ["ubuntu-latest"]
-
     runs-on: "${{ matrix.os }}"
-
     needs:
       - stage1
     if: needs.stage1.outputs.docs_changed == 'True'
-
     steps:
       - name: Checkout Repo
         id: checkout-repo
@@ -85,38 +74,32 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
           submodules: recursive
-
       - name: Set up Go (using version from go.mod)
         id: setup-go
         uses: actions/setup-go@v3
         with:
           go-version-file: './go.mod'
-
       - name: Show Go version
         id: go-version-check
         run: |
           go version
-
       - name: Install Tools
         id: install-tools
         run: |
           go install github.com/reviewdog/reviewdog/cmd/reviewdog@latest
           go install github.com/rhysd/actionlint/cmd/actionlint@latest
           sudo apt install -y shellcheck
-
       - name: Reviewdog Version Checks
         id: version-check-reviewdog
         run: |
           reviewdog --version
-
       - name: Actionlint Version Checks
         id: version-check-actionlint
         run: |
           actionlint --version
-
       - name: Analyzing the code with actionlint
         id: actionlint
-        run: |
+        run: |-
           echo "::add-matcher::.github/actionlint-matcher.json"
           for f in ./.github/workflows/*yml; do
             printf "Running: actionlint %s\n" "${f}"

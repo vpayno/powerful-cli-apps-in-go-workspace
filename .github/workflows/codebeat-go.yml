@@ -1,16 +1,13 @@
+---
 #
 # .github/workflows/codebeat-go.yml
 #
----
-
 name: Codebeat Go Workflow
-
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - main
       - develop
-
   pull_request:
 
 env:
@@ -26,12 +23,9 @@ defaults:
 jobs:
   go-change-check:
     name: Change Check
-
     runs-on: 'ubuntu-latest'
-
     outputs:
       docs_changed: ${{ steps.check_file_changed.outputs.docs_changed }}
-
     steps:
       - name: Checkout Repo
         id: checkout-repo
@@ -40,7 +34,6 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
           submodules: recursive
-
       - name: Get Change List
         id: check_file_changed
         run: |
@@ -65,20 +58,15 @@ jobs:
 
           # Set the output named "docs_changed"
           printf "%s=%s\n" "docs_changed" "${HAS_DIFF}" >> "${GITHUB_OUTPUT}"
-
   go_checks:
     name: Go Checks
-
     strategy:
       matrix:
         os: ["ubuntu-latest"]
-
     runs-on: "${{ matrix.os }}"
-
     needs:
       - go-change-check
     if: needs.go-change-check.outputs.docs_changed == 'True'
-
     steps:
       - name: Checkout Repo
         id: checkout-repo
@@ -87,64 +75,53 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
           submodules: recursive
-
       - name: Install Node
         id: install-node
         uses: actions/setup-node@v3
         with:
           node-version: lts/*
-
       - name: Check Node Version
         id: npm-version-check
         run: |
           npm --version
-
       - name: Set up Go (using version in go.mod)
         id: setup-go
         uses: actions/setup-go@v3
         with:
           go-version-file: './go.mod'
-
       - name: Show Go version
         id: go-version
         run: |
           go version
-
       - name: Run go generate
         id: go-generate
         run: |
           go generate ./...
-
       - name: Testing with gotest
         id: go-test-run
         run: |
           go install github.com/rakyll/gotest@latest
           go install golang.org/x/tools/cmd/cover@latest
           gotest -v -covermode=count -coverprofile=./reports/.coverage.out ./...
-
       - name: Generate coverage.xml
         id: go-generate-coverage-xml
         run: |
           go install github.com/t-yuki/gocover-cobertura@latest
           gocover-cobertura < ./reports/.coverage.out > ./reports/coverage.xml
           wc ./reports/coverage.xml
-
       - name: Test Coverage Report (txt)
         id: go-test-coverage-txt
         run: |
           go tool cover -func=./reports/.coverage.out | tee reports/coverage.txt
-
       - name: Show Missing Coverage
         id: go-test-coverage-annotate
         run: |
           go install github.com/axw/gocov/gocov@latest
           gocov convert ./reports/.coverage.out | gocov annotate -ceiling=100 -color - | tee reports/coverage-annotations.txt
-
       - name: gocov Coverage Report
         id: go-test-coverage-report
         run: |
           gocov convert ./reports/.coverage.out | gocov report | tee reports/coverage-summary.txt
-
       - name: Codebeat Code Coverage Report
         id: go-codebeat-code-coverage-report
         run: |
@@ -154,10 +131,9 @@ jobs:
           codeclimate-test-reporter --version
           printf "\n"
           codeclimate-test-reporter < ./reports/.coverage.out
-
       - name: Action Summary
         id: gh-action-summary
-        run: |
+        run: |-
           {
             printf "### Code Coverage Summary\n\n"
             printf '```\n'

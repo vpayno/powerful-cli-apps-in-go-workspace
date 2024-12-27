@@ -1,19 +1,16 @@
+---
 #
 # .github/workflows/woke.yml
 #
 
 # https://github.com/get-woke/woke-action-reviewdog
 # https://github.com/get-woke/woke-action
----
-
 name: Woke Workflow
-
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - main
       - develop
-
   pull_request:
 
 defaults:
@@ -27,7 +24,6 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
-
       - name: Woke with Reviewdog
         uses: get-woke/woke-action-reviewdog@v0
         with:
