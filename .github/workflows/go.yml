@@ -250,7 +250,7 @@ jobs:
       - name: Upload coverage.html
         id: upload-coverage-html
         if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: go-coverage-html
           path: reports/coverage.html
@@ -262,7 +262,7 @@ jobs:
       - name: Upload coverage-annotations.txt
         id: upload-coverage-annotations-txt
         if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: go-coverage-annotations-txt
           path: reports/coverage-annotations.txt
@@ -273,7 +273,7 @@ jobs:
       - name: Upload coverage-summary.txt
         id: upload-coverage-summary-txt
         if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: go-coverage-summary-txt
           path: reports/coverage-summary.txt
