@@ -2,6 +2,43 @@
 
 <details open>
     <summary>
+<h2> [2024-12-27] Release v0.8.2: dep updates, ci uses updates
+</h2>
+    </summary>
+
+### build(deps)
+
+- bump github.com/stretchr/testify from 1.9.0 to 1.10.0
+
+### chore
+
+- format dependabot config
+- format github workflow files
+- update dagger to try to fix golang.org/x/net security alarmo
+- update go.work.sum
+
+### ci
+
+- bump actions/checkout to v4
+- bump actions/setup-go to v5
+- bump actions/setup-node to v4
+- bump actions/upload-artifact to v4
+- bump fountainhead/action-wait-for-check to v1.2.0
+- bump github/codeql-action to v3
+- bump lycheeverse/lychee-action to v2
+- bump peter-evans/create-pull-request to v7
+- bump peter-evans/enable-pull-request-automerge to v3
+- bump wagoid/commitlint-github-action to v6
+- fix code typo
+
+### ci(git)
+
+- cahnge configFile extension from .js to .mjs
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-10-08] Release v0.8.1: bump grpc and dagger deps
 </h2>
     </summary>
