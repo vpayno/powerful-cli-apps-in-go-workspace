@@ -120,12 +120,12 @@ func main() {
 	}
 
 	// write build artifacts to host
-	ok, err := outputs.Export(ctx, ".")
+	out, err := outputs.Export(ctx, ".")
 	if err != nil {
 		panic(err)
 	}
 
-	if !ok {
+	if out != "" {
 		panic("did not export files")
 	}
 }
