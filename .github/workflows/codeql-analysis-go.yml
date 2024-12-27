@@ -98,7 +98,7 @@ jobs:
       # Adding this because the image has a dead version of Go.
       - name: Set up Go (using version in go.mod)
         id: setup-go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version-file: './go.mod'
       - name: Install Dependencies
