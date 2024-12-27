@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
       - name: Check for Conventional Commits
         id: block-if-contains-bad-commit-messages
-        uses: wagoid/commitlint-github-action@v5
+        uses: wagoid/commitlint-github-action@v6
         with:
           configFile: .commitlint.config.js
           failOnErrors: true
