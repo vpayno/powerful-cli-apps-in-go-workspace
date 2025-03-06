@@ -2,6 +2,18 @@
 
 <details open>
     <summary>
+<h2> [2025-03-06] Release v0.8.3: bump golang to v1.24
+</h2>
+    </summary>
+
+### build(go)
+
+- bump golang version to 1.24
+
+</details>
+
+<details>
+    <summary>
 <h2> [2024-12-27] Release v0.8.2: dep updates, ci uses updates
 </h2>
     </summary>
