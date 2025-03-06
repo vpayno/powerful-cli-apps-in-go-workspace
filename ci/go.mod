@@ -1,6 +1,6 @@
 module ci
 
-go 1.23
+go 1.24
 
 require dagger.io/dagger v0.15.1
 
